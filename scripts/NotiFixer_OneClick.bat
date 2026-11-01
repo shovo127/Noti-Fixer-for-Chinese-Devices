@@ -13,29 +13,39 @@ echo ===========================================================================
 echo.
 echo   Targeting: Xiaomi HyperOS / MIUI | Vivo OriginOS | Oppo ColorOS | HarmonyOS
 echo.
-echo   [1] Full Automated 1-Click Notification Fix (Recommended)
-echo   [2] Live Diagnostic Audit (FCM Socket, Android Doze, Kernel Freezer)
-echo   [3] Device Fingerprint & Hardware/ROM Profile
-echo   [4] Push & Start HyperOS MILLET Watchdog Daemon
-echo   [5] Wireless ADB Port Scanner (Find new port after reboot)
-echo   [6] Setup Circle to Search Companion (MiCTS Integration)
-echo   [7] Revert Changes (Master 100%% Safe Rollback)
-echo   [8] Exit
+echo   [1] ⚡ Simple Wireless Wi-Fi Connect & Fix (No Cable Needed - Recommended)
+echo   [2] 🔌 USB Cable 1-Click Notification Fix
+echo   [3] 🔍 Live Diagnostic Audit (FCM Socket, Android Doze, Kernel Freezer)
+echo   [4] 📱 Device Fingerprint & Hardware/ROM Profile
+echo   [5] 🛡️ Push & Start HyperOS MILLET Watchdog Daemon
+echo   [6] 🔄 Wireless ADB Port Scanner (Find new port after reboot)
+echo   [7] 🎯 Setup Circle to Search Companion (MiCTS Integration)
+echo   [8] ⏪ Revert Changes (Master 100%% Safe Rollback)
+echo   [9] ❌ Exit
 echo.
 echo ==============================================================================
-set /p choice="Enter choice [1-8]: "
+set /p choice="Enter choice [1-9]: "
 
-if "%choice%"=="1" goto FIX
-if "%choice%"=="2" goto AUDIT
-if "%choice%"=="3" goto DETECT
-if "%choice%"=="4" goto WATCHDOG
-if "%choice%"=="5" goto SCAN
-if "%choice%"=="6" goto CTS
-if "%choice%"=="7" goto ROLLBACK
-if "%choice%"=="8" exit /b 0
+if "%choice%"=="1" goto WIRELESS
+if "%choice%"=="2" goto FIX
+if "%choice%"=="3" goto AUDIT
+if "%choice%"=="4" goto DETECT
+if "%choice%"=="5" goto WATCHDOG
+if "%choice%"=="6" goto SCAN
+if "%choice%"=="7" goto CTS
+if "%choice%"=="8" goto ROLLBACK
+if "%choice%"=="9" exit /b 0
 
 echo Invalid choice. Try again.
 pause
+goto MENU
+
+:WIRELESS
+cls
+python "%~dp0connect_phone.py"
+echo.
+echo Press any key to return to menu...
+pause >nul
 goto MENU
 
 :FIX

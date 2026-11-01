@@ -31,6 +31,7 @@ jobs:
           python -m py_compile scripts/audit_fcm_doze.py
           python -m py_compile scripts/apply_notification_fix.py
           python -m py_compile scripts/scan_ports.py
+          python -m py_compile scripts/connect_phone.py
 
       - name: Verify CLI Help Flags
         run: |

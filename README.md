@@ -17,7 +17,7 @@
   Noti-Fixer solves the root cause scientifically — repairing Android Doze, vendor freeze engines (MILLET, Athena, Jovi), and Linux cgroup socket kills automatically.
 </p>
 
-[Quick Start](#-quick-start-in-60-seconds) • [Architecture Guide](docs/ARCHITECTURE.md) • [Supported Devices](docs/SUPPORTED_DEVICES.md) • [Debloat Guide](docs/DEBLOAT_INTEGRATION.md) • [Safety & Trust](#-safety--trust-guarantees) • [AI Skill](#-antigravity--ai-agent-skill) • [FAQ](#-frequently-asked-questions)
+[Quick Start](#-super-simple-wireless-wi-fi-pairing-no-cable-needed) • [Wireless Guide](docs/WIRELESS_DEBUGGING_GUIDE.md) • [Architecture Guide](docs/ARCHITECTURE.md) • [Supported Devices](docs/SUPPORTED_DEVICES.md) • [Debloat Guide](docs/DEBLOAT_INTEGRATION.md) • [Safety & Trust](#-safety--trust-guarantees) • [FAQ](#-frequently-asked-questions)
 
 </div>
 
@@ -131,44 +131,57 @@ Chinese ROMs implement aggressive power management layers that silently kill Goo
 
 ---
 
-## ⚡ Quick Start in 60 Seconds
+## ⚡ Super Simple Wireless Wi-Fi Pairing (No Cable Needed)
 
-### Prerequisites
-1. A computer (Windows, macOS, or Linux) with Python 3.8+ installed.
-2. Android phone with **Developer Options** enabled.
-3. USB cable OR Wi-Fi for Wireless Debugging.
+Connect your phone and computer to the **same Wi-Fi network**, then follow this 30-second flow:
 
-### Step 1: Enable Debugging on Phone
-1. Open phone **Settings** -> **About Phone**.
-2. Tap **Build Number** (or **OS Version**) 7 times.
-3. Navigate to **Developer Options**:
-   - Turn **USB Debugging** ON.
-   - On Xiaomi: Turn **USB Debugging (Security settings)** ON.
-   - Alternatively: Turn **Wireless Debugging** ON.
-
-### Step 2: 1-Click Execution
-
-#### Windows Users:
-Double-click `scripts/NotiFixer_OneClick.bat` and select `[1]`.
-
-#### macOS / Linux Users:
-```bash
-chmod +x scripts/NotiFixer_OneClick.sh
-./scripts/NotiFixer_OneClick.sh
+```text
+  ┌─────────────────────────┐     ┌────────────────────────┐     ┌───────────────────────┐
+  │  1. Phone Settings      │     │  2. Run 1 Command      │     │  3. Enter 3 Things    │
+  │     Enable Wireless     │ ──► │     python scripts/    │ ──► │     • IP & Port       │
+  │     Debugging           │     │     connect_phone.py   │     │     • 6-Digit Code    │
+  │     Tap "Pair with code"│     │                        │     │     • Done! Auto-Fix! │
+  └─────────────────────────┘     └────────────────────────┘     └───────────────────────┘
 ```
 
-### Or Run via Cross-Platform CLI
+### Step 1: Open Wireless Debugging on Phone
+1. Go to **Settings** ➜ **About Phone** ➜ Tap **Build Number** 7 times to enable Developer Options.
+2. Go to **Settings** ➜ **Developer Options** ➜ Turn **ON** **Wireless Debugging**:
+   - *(Xiaomi/POCO/Redmi users: also turn ON "USB Debugging (Security settings)")*.
+3. Tap the words **"Wireless Debugging"**, then tap **"Pair device with pairing code"**.
+4. You will see a popup with:
+   - **IP address & Port** (e.g. `192.168.1.50:39481`)
+   - **6-Digit Pairing Code** (e.g. `849201`)
+
+### Step 2: Run the Connection Wizard
+Run this command on your computer (or choose `[1]` in `NotiFixer_OneClick.bat` / `.sh`):
 
 ```bash
-# 1. Device Profile & Diagnostics
-python scripts/detect_device.py
-
-# 2. Live FCM Socket Audit
-python scripts/audit_fcm_doze.py
-
-# 3. Apply Multi-Brand Fix Suite
-python scripts/apply_notification_fix.py --dns-adguard
+python scripts/connect_phone.py
 ```
+
+### Step 3: Enter the IP, Port & Code
+Type the 3 values shown on your phone screen when prompted:
+```text
+👉 Enter IP & Pairing Port: 192.168.1.50:39481
+👉 Enter the 6-Digit Pairing Code: 849201
+👉 Enter connect port (or press ENTER): [Press ENTER]
+```
+
+**That's it!** Noti-Fixer automatically connects to your phone, prints your device model, and applies the full notification fix in seconds!
+
+*(For full illustrated details, see [Wireless Debugging Guide](docs/WIRELESS_DEBUGGING_GUIDE.md))*
+
+---
+
+## 🔌 Or Connect via Standard USB Cable
+
+If you prefer using a USB cable:
+1. Connect phone with USB cable, select **File Transfer**, and accept the USB Debugging prompt on your screen.
+2. Run:
+   - **Windows:** Double-click `scripts/NotiFixer_OneClick.bat` and select `[2]`.
+   - **macOS / Linux:** Run `./scripts/NotiFixer_OneClick.sh` and select `[2]`.
+   - **Python CLI:** `python scripts/apply_notification_fix.py --dns-adguard`
 
 ---
 

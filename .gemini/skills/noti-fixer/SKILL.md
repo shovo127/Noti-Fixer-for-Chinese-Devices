@@ -53,12 +53,14 @@ When a user mentions delayed notifications, missed WhatsApp/Telegram calls, or b
 4. Enable **USB Debugging** (and on Xiaomi devices, also enable **USB Debugging (Security settings)**).
 
 #### B. Connection Mode (USB or Wireless ADB)
+- **Super Simple Wireless Pairing Wizard (Recommended):**
+  Ask the user for their IP, pairing port, and 6-digit code from the "Pair device with pairing code" popup, then execute:
+  ```bash
+  python scripts/connect_phone.py
+  ```
+  Or directly:
+  `adb pair <IP>:<Pairing_Port> <Code>` followed by `adb connect <IP>:<Connect_Port>`
 - **USB Cable:** Plug in cable, select *File Transfer*, and tap **Allow Always** on the USB debugging authorization popup.
-- **Wireless Debugging (Wi-Fi):**
-  1. Under Developer Options, enable **Wireless Debugging**.
-  2. Tap **Pair device with pairing code**. Note the IP, pairing port, and 6-digit code.
-  3. Run: `adb pair <IP>:<Pairing_Port> <Code>`
-  4. Run: `adb connect <IP>:<Connect_Port>`
 
 #### C. Post-Reboot Wireless Port Discovery
 If the phone reboots and the Wireless Debugging port changes dynamically:

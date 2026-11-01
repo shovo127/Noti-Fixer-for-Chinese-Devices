@@ -10,7 +10,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 BOLD='\033[1m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -24,17 +24,18 @@ show_menu() {
     echo ""
     echo -e "  Targeting: Xiaomi HyperOS / MIUI | Vivo OriginOS | Oppo ColorOS | HarmonyOS"
     echo ""
-    echo -e "  [1] Full Automated 1-Click Notification Fix (${GREEN}Recommended${NC})"
-    echo -e "  [2] Live Diagnostic Audit (FCM Socket, Android Doze, Kernel Freezer)"
-    echo -e "  [3] Device Fingerprint & Hardware/ROM Profile"
-    echo -e "  [4] Push & Start HyperOS MILLET Watchdog Daemon"
-    echo -e "  [5] Wireless ADB Port Scanner (Find new port after reboot)"
-    echo -e "  [6] Circle to Search Companion Setup Info"
-    echo -e "  [7] Revert Changes (Master 100% Safe Rollback)"
-    echo -e "  [8] Exit"
+    echo -e "  [1] ⚡ Simple Wireless Wi-Fi Connect & Fix (${GREEN}No Cable Needed - Recommended${NC})"
+    echo -e "  [2] 🔌 USB Cable 1-Click Notification Fix"
+    echo -e "  [3] 🔍 Live Diagnostic Audit (FCM Socket, Android Doze, Kernel Freezer)"
+    echo -e "  [4] 📱 Device Fingerprint & Hardware/ROM Profile"
+    echo -e "  [5] 🛡️ Push & Start HyperOS MILLET Watchdog Daemon"
+    echo -e "  [6] 🔄 Wireless ADB Port Scanner (Find new port after reboot)"
+    echo -e "  [7] 🎯 Circle to Search Companion Setup Info"
+    echo -e "  [8] ⏪ Revert Changes (Master 100% Safe Rollback)"
+    echo -e "  [9] ❌ Exit"
     echo ""
     echo -e "${CYAN}==============================================================================${NC}"
-    echo -n "Enter choice [1-8]: "
+    echo -n "Enter choice [1-9]: "
 }
 
 while true; do
@@ -42,6 +43,13 @@ while true; do
     read -r choice
     case "$choice" in
         1)
+            clear
+            python3 "$SCRIPT_DIR/connect_phone.py"
+            echo ""
+            echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
+            read -r
+            ;;
+        2)
             clear
             echo -e "${CYAN}[*] Checking ADB connection...${NC}"
             adb devices
@@ -52,7 +60,7 @@ while true; do
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
             read -r
             ;;
-        2)
+        3)
             clear
             echo -e "${CYAN}[*] Running FCM Socket & Doze Audit...${NC}"
             python3 "$SCRIPT_DIR/audit_fcm_doze.py"
@@ -60,7 +68,7 @@ while true; do
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
             read -r
             ;;
-        3)
+        4)
             clear
             echo -e "${CYAN}[*] Detecting Device Profile & ROM Subsystem...${NC}"
             python3 "$SCRIPT_DIR/detect_device.py"
@@ -68,7 +76,7 @@ while true; do
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
             read -r
             ;;
-        4)
+        5)
             clear
             echo -e "${CYAN}[*] Pushing millet_watchdog.sh to device /data/local/tmp/...${NC}"
             adb push "$SCRIPT_DIR/millet_watchdog.sh" /data/local/tmp/millet_watchdog.sh
@@ -80,7 +88,7 @@ while true; do
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
             read -r
             ;;
-        5)
+        6)
             clear
             echo -n "Enter your phone's Wi-Fi IP address (or leave empty to auto-discover): "
             read -r target_ip
@@ -93,7 +101,7 @@ while true; do
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
             read -r
             ;;
-        6)
+        7)
             clear
             echo -e "${CYAN}=== Circle to Search (Omnient) Setup ===${NC}"
             adb shell settings put secure assistant com.google.android.googlequicksearchbox/com.google.android.apps.search.assistant.surfaces.voice.OmnientActivity 2>/dev/null
@@ -102,7 +110,7 @@ while true; do
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
             read -r
             ;;
-        7)
+        8)
             clear
             echo -e "${YELLOW}Reverting all optimizations back to stock defaults...${NC}"
             adb shell device_config put activity_manager_native_boot use_freezer true
@@ -115,7 +123,7 @@ while true; do
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
             read -r
             ;;
-        8)
+        9)
             echo "Exiting Noti-Fixer. Have a great day!"
             exit 0
             ;;
@@ -125,4 +133,3 @@ while true; do
             ;;
     esac
 done
-
