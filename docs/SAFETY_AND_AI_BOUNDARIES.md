@@ -59,3 +59,4 @@ Reason: Noti-Fixer strictly forbids root, uninstalls, data wipes, or destructive
 ```
 
 The process halts immediately, protecting your phone before the command can even reach the ADB daemon.
+

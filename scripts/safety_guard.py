@@ -10,6 +10,14 @@ License: MIT License (Copyright (c) 2026)
 import sys
 from typing import List
 
+# Ensure safe UTF-8 output on all operating systems and CI environments
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 class SecurityViolationError(Exception):
     """Raised when an unsafe or destructive ADB/system command is intercepted."""
     pass
@@ -87,4 +95,5 @@ if __name__ == "__main__":
     except SecurityViolationError:
         pass
 
-    print("✔ Safety Guard self-test passed: All destructive patterns intercepted successfully.")
+    print("[PASS] Safety Guard self-test passed: All destructive patterns intercepted successfully.")
+
