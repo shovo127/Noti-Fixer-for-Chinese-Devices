@@ -17,7 +17,7 @@
   Noti-Fixer solves the root cause scientifically — repairing Android Doze, vendor freeze engines (MILLET, Athena, Jovi), and Linux cgroup socket kills automatically.
 </p>
 
-[Quick Start](#-super-simple-wireless-wi-fi-pairing-no-cable-needed) • [Wireless Guide](docs/WIRELESS_DEBUGGING_GUIDE.md) • [Architecture Guide](docs/ARCHITECTURE.md) • [Supported Devices](docs/SUPPORTED_DEVICES.md) • [Debloat Guide](docs/DEBLOAT_INTEGRATION.md) • [Safety & Trust](#-safety--trust-guarantees) • [FAQ](#-frequently-asked-questions)
+[Quick Start](#-super-simple-wireless-wi-fi-pairing-no-cable-needed) • [Wireless Guide](docs/WIRELESS_DEBUGGING_GUIDE.md) • [Safety & AI Boundaries](docs/SAFETY_AND_AI_BOUNDARIES.md) • [Architecture Guide](docs/ARCHITECTURE.md) • [Supported Devices](docs/SUPPORTED_DEVICES.md) • [Debloat Guide](docs/DEBLOAT_INTEGRATION.md) • [FAQ](#-frequently-asked-questions)
 
 </div>
 
@@ -49,16 +49,20 @@ Enter choice [1-8]: 1
 
 ---
 
-## 🛡️ Safety & Trust Guarantees
+## 🛡️ Safety & Trust Guarantees (Zero-Mistake AI Safeguards)
 
-Your smartphone holds your personal data, bank apps, and memories. Noti-Fixer is engineered with strict non-destructive enterprise safety standards:
+Your smartphone holds your personal data, bank apps, and memories. Noti-Fixer is engineered with strict non-destructive enterprise safety standards, programmatically enforced by `scripts/safety_guard.py`:
 
-- **100% Root-Free:** Does NOT require Magisk, KernelSU, or SuperSU.
-- **No Bootloader Unlock Needed:** Keeps Widevine L1, Google Pay / Wallet, and Knox intact.
+- **100% Root-Free:** Does NOT require Magisk, KernelSU, or SuperSU. Never escalates to root.
+- **No Bootloader Unlock Needed:** Keeps Widevine L1 (Netflix HD), Google Pay / Wallet, and Knox intact.
+- **Zero Factory Reset or Data Wipes:** Any command containing `wipe`, `format`, `factory_reset`, or `erase` is programmatically blocked at the interceptor level.
+- **Zero Package Deletions:** Never runs `pm uninstall` or `pm disable`. Your apps and system services are NEVER deleted.
+- **AI-Proof Safety Interceptor:** Hardware and software commands are vetted before execution. Even if an AI agent attempts an invalid command, `safety_guard.py` automatically blocks it.
 - **100% Reversible:** Every operation creates a timestamped snapshot in `backups/`. Revert instantly with one click.
 - **Zero Dependencies:** Runs on pure Python standard library. No pip installs, no bloat.
 - **Zero Telemetry / 100% Local:** All scripts run entirely on your local machine and your phone. No internet tracking.
-- **Non-Destructive:** Does not uninstall apps or delete system services blindly.
+
+*(Read our full [Safety & AI Boundaries Policy](docs/SAFETY_AND_AI_BOUNDARIES.md))*
 
 ---
 

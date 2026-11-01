@@ -12,12 +12,17 @@ This skill equips Antigravity, Cursor, Claude, and AI pairing agents with full a
 
 ---
 
-## 1. Operating Rules & Strict Safety Boundaries
+## 1. Operating Rules & Strict Safety Boundaries (Zero-Mistake Architecture)
 
-1. **Zero Root / Zero Bootloader Unlock:** Never ask the user to unlock the bootloader or flash custom ROMs. All repairs operate safely within Android's official ADB and AppOps subsystems.
-2. **Never Debloat Blindly:** Never uninstall or disable critical system services without user confirmation.
-3. **Always Backup First:** Every execution of `scripts/apply_notification_fix.py` automatically generates a timestamped recovery image in `backups/`.
-4. **Mandatory Post-Verification:** Never declare success until `scripts/audit_fcm_doze.py` confirms that the FCM socket (`mtalk.google.com:5228`) is connected and healthy.
+> **CRITICAL AI SAFETY DIRECTIVE:** AI pairing agents MUST NEVER execute or recommend destructive commands. The programmatic security interceptor (`scripts/safety_guard.py`) will automatically terminate any prohibited operations.
+
+1. **Zero Root / Zero Bootloader Unlock:** Never suggest or execute `su`, `magisk`, `kernelsu`, bootloader unlocking, or custom ROM flashing. All optimizations operate strictly through Android's sanctioned ADB AppOps/Doze whitelist APIs.
+2. **Zero Factory Reset or Data Wiping:** Never suggest or run `factory_reset`, `format`, `wipe`, `erase`, or `reboot recovery`. User data must remain 100% untouched.
+3. **Zero Package Deletions or Disablings:** Never execute `pm uninstall`, `pm clear`, or `pm disable-user`. Noti-Fixer only adds whitelists; it NEVER deletes user or system apps.
+4. **Always Route ADB Through Safety Guard:** All operations run through `scripts/safety_guard.py` which intercepts dangerous tokens before they can be sent to the device.
+5. **Always Backup First:** Every execution of `scripts/apply_notification_fix.py` automatically generates a timestamped recovery snapshot in `backups/`.
+6. **Mandatory Post-Verification:** Never declare success until `scripts/audit_fcm_doze.py` confirms that the FCM socket (`mtalk.google.com:5228`) is connected and healthy.
+7. *(Full security reference: [docs/SAFETY_AND_AI_BOUNDARIES.md](docs/SAFETY_AND_AI_BOUNDARIES.md))*
 
 ---
 

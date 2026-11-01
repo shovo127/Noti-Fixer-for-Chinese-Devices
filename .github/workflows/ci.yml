@@ -32,6 +32,11 @@ jobs:
           python -m py_compile scripts/apply_notification_fix.py
           python -m py_compile scripts/scan_ports.py
           python -m py_compile scripts/connect_phone.py
+          python -m py_compile scripts/safety_guard.py
+
+      - name: Run Non-Destructive Safety Guard Verification Tests
+        run: |
+          python scripts/safety_guard.py
 
       - name: Verify CLI Help Flags
         run: |

@@ -11,6 +11,10 @@ import sys
 import subprocess
 import time
 import re
+try:
+    from safety_guard import assert_command_safe
+except ImportError:
+    from scripts.safety_guard import assert_command_safe
 
 class Colors:
     CYAN = '\033[96m'
@@ -145,3 +149,4 @@ def interactive_wireless_pair():
 
 if __name__ == "__main__":
     interactive_wireless_pair()
+

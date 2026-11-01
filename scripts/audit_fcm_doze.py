@@ -13,6 +13,10 @@ import json
 import argparse
 import re
 from typing import Dict, Any, List, Optional
+try:
+    from safety_guard import assert_command_safe
+except ImportError:
+    from scripts.safety_guard import assert_command_safe
 
 class Colors:
     HEADER = '\033[95m'
@@ -39,6 +43,7 @@ KEY_PACKAGES = [
 ]
 
 def run_adb(cmd: List[str], serial: Optional[str] = None) -> subprocess.CompletedProcess:
+    assert_command_safe(cmd)
     base = ["adb"]
     if serial:
         base.extend(["-s", serial])

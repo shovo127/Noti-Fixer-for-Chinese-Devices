@@ -100,3 +100,4 @@ You do **NOT** need to re-pair! Just run:
 python scripts/scan_ports.py -ip 192.168.1.50
 ```
 It will scan the open ports on your phone and re-establish the connection in 2 seconds automatically.
+
