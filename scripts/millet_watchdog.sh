@@ -18,7 +18,8 @@ log_msg() {
     echo "[$timestamp] $1" >> "$LOG_FILE"
     
     # Rotate log if too big
-    if [ $(wc -l < "$LOG_FILE" 2>/dev/null || echo 0) -gt $MAX_LOG_LINES ]; then
+    lines_count=$(wc -l < "$LOG_FILE" 2>/dev/null || echo 0)
+    if [ "$lines_count" -gt "$MAX_LOG_LINES" ]; then
         tail -n 200 "$LOG_FILE" > "${LOG_FILE}.tmp" && mv "${LOG_FILE}.tmp" "$LOG_FILE"
     fi
 }

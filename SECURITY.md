@@ -24,3 +24,4 @@ If you discover any security concern or potential vulnerability in Noti-Fixer sc
 | Version | Supported | Security Updates |
 | :--- | :--- | :--- |
 | **1.x (Current / Main)** | ✅ Yes | Actively Maintained |
+

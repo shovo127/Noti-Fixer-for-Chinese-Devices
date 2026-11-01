@@ -49,6 +49,9 @@ jobs:
       - name: Check Shell Scripts with ShellCheck
         run: |
           bash -n scripts/millet_watchdog.sh
+          bash -n scripts/NotiFixer_OneClick.sh
           if command -v shellcheck >/dev/null 2>&1; then
-            shellcheck -e SC2086,SC2181 scripts/millet_watchdog.sh
+            shellcheck -e SC2086,SC2181,SC2046 scripts/millet_watchdog.sh
+            shellcheck -e SC2086,SC2181,SC2046 scripts/NotiFixer_OneClick.sh
           fi
+

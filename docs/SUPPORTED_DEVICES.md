@@ -46,3 +46,4 @@ Noti-Fixer has been systematically engineered and verified across the major Chin
 | :--- | :--- | :--- | :--- |
 | **Huawei Mate 50 / 60 / P60 / Pura 70**| HarmonyOS 3 / 4 | ✅ Verified | PowerGenie deep sleep exemption |
 | **Honor Magic 5 / Magic 6 Pro** | MagicOS 7 / 8 (Android 13/14) | ✅ Verified | MicroG / GMS FCM socket keepalive |
+

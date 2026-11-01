@@ -35,3 +35,4 @@ Thank you for your interest in contributing to **Noti-Fixer for Chinese Devices*
 
 ## 💬 Community Questions & Feedback
 If you have questions, please open a GitHub Issue or reach out via [GitHub Discussions](https://github.com/shovo127/Noti-Fixer-for-Chinese-Devices/issues).
+

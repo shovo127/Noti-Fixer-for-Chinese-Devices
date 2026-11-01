@@ -29,3 +29,4 @@ And paste the JSON block below:
 - Are notifications delayed with screen off? (Yes / No)
 - Does Google Play Services drop FCM socket `5228`? (Yes / No)
 - Any vendor battery saver messages?
+

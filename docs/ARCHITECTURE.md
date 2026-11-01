@@ -88,3 +88,4 @@ cmd netpolicy add restrict-background-whitelist <UID>
 dumpsys deviceidle whitelist +<PACKAGE>
 ```
 This guarantees bidirectional traffic routing to Google FCM and messaging push endpoints.
+

@@ -28,3 +28,4 @@ Paste terminal logs or audit outputs here
 
 ### Expected Behavior
 What should have happened (e.g., FCM socket staying connected, WhatsApp ringing on locked screen).
+

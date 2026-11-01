@@ -16,3 +16,4 @@ Please include a summary of the change, target ROM/device, and technical justifi
 - [ ] Does not require root access or bootloader unlocking.
 - [ ] Does not permanently brick or delete critical system components.
 - [ ] Fully reversible via `templates/master_restore_template.bat`.
+
