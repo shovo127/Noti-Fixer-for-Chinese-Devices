@@ -1,22 +1,51 @@
 <div align="center">
 
 # ⚡ Noti-Fixer for Chinese Devices
-### The Ultimate Push Notification, FCM Socket & Process Keeper Suite for Chinese Android ROMs
+### The Production-Grade Push Notification, FCM Socket & Process Keeper Suite for Chinese Android ROMs
 
+[![CI Validation](https://github.com/shovo127/Noti-Fixer-for-Chinese-Devices/actions/workflows/ci.yml/badge.svg)](https://github.com/shovo127/Noti-Fixer-for-Chinese-Devices/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Android Compatibility](https://img.shields.io/badge/Android-12%20%7C%2013%20%7C%2014%20%7C%2015%20%7C%2016-green.svg)](https://developer.android.com)
-[![Brand Support](https://img.shields.io/badge/Supported-HyperOS%20%7C%20OriginOS%20%7C%20ColorOS%20%7C%20HarmonyOS-orange.svg)](#supported-brands--systems)
+[![Python 3.8+](https://img.shields.io/badge/Python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-3776AB.svg?logo=python&logoColor=white)](https://python.org)
+[![Android Compatibility](https://img.shields.io/badge/Android-12%20%7C%2013%20%7C%2014%20%7C%2015%20%7C%2016-green.svg?logo=android&logoColor=white)](https://developer.android.com)
+[![Platform Support](https://img.shields.io/badge/Supported-HyperOS%20%7C%20OriginOS%20%7C%20ColorOS%20%7C%20HarmonyOS-orange.svg)](#-supported-brands--systems)
 [![Root Required](https://img.shields.io/badge/Root-NOT%20Required-brightgreen.svg)](#-safety--trust-guarantees)
-[![Author](https://img.shields.io/badge/Architect-Mohammed%20Thuhidul%20Islam%20Shovo-blueviolet.svg)](https://github.com/shovo127)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Architect](https://img.shields.io/badge/Architect-Mohammed%20Thuhidul%20Islam%20Shovo-blueviolet.svg)](https://github.com/shovo127)
 
 <p align="center">
   <b>Tired of missed WhatsApp/Telegram calls, delayed Gmail notifications, and frozen background apps on Xiaomi, Vivo, Oppo, or Huawei?</b><br>
   Noti-Fixer solves the root cause scientifically — repairing Android Doze, vendor freeze engines (MILLET, Athena, Jovi), and Linux cgroup socket kills automatically.
 </p>
 
-[Quick Start](#-quick-start-in-60-seconds) • [How It Works](#-the-science-behind-the-fix) • [Safety & Trust](#-safety--trust-guarantees) • [AI Skill Integration](#-antigravity--ai-agent-skill) • [FAQ](#-frequently-asked-questions)
+[Quick Start](#-quick-start-in-60-seconds) • [Architecture Guide](docs/ARCHITECTURE.md) • [Supported Devices](docs/SUPPORTED_DEVICES.md) • [Debloat Guide](docs/DEBLOAT_INTEGRATION.md) • [Safety & Trust](#-safety--trust-guarantees) • [AI Skill](#-antigravity--ai-agent-skill) • [FAQ](#-frequently-asked-questions)
 
 </div>
+
+---
+
+## 🖥️ Terminal Interface Preview
+
+```text
+==============================================================================
+        NOTI-FIXER FOR CHINESE DEVICES - PRODUCTION REPAIR SUITE
+             Architect: Mohammed Thuhidul Islam Shovo (shovo127)
+                         Open-Source MIT License
+==============================================================================
+
+  Targeting: Xiaomi HyperOS / MIUI | Vivo OriginOS | Oppo ColorOS | HarmonyOS
+
+  [1] Full Automated 1-Click Notification Fix (Recommended)
+  [2] Live Diagnostic Audit (FCM Socket, Android Doze, Kernel Freezer)
+  [3] Device Fingerprint & Hardware/ROM Profile
+  [4] Push & Start HyperOS MILLET Watchdog Daemon
+  [5] Wireless ADB Port Scanner (Find new port after reboot)
+  [6] Setup Circle to Search Companion (MiCTS Integration)
+  [7] Revert Changes (Master 100% Safe Rollback)
+  [8] Exit
+
+==============================================================================
+Enter choice [1-8]: 1
+```
 
 ---
 
@@ -27,16 +56,17 @@ Your smartphone holds your personal data, bank apps, and memories. Noti-Fixer is
 - **100% Root-Free:** Does NOT require Magisk, KernelSU, or SuperSU.
 - **No Bootloader Unlock Needed:** Keeps Widevine L1, Google Pay / Wallet, and Knox intact.
 - **100% Reversible:** Every operation creates a timestamped snapshot in `backups/`. Revert instantly with one click.
-- **Zero Telemetry / 100% Local:** All scripts run entirely on your local machine and your phone. No internet calls, no data tracking.
-- **Non-Destructive:** Does not uninstall apps or delete system bloatware blindly.
+- **Zero Dependencies:** Runs on pure Python standard library. No pip installs, no bloat.
+- **Zero Telemetry / 100% Local:** All scripts run entirely on your local machine and your phone. No internet tracking.
+- **Non-Destructive:** Does not uninstall apps or delete system services blindly.
 
 ---
 
 ## 🔬 The Science Behind the Fix
 
-Chinese ROMs implement extreme power management layers that silently kill Google Firebase Cloud Messaging (FCM) TCP sockets:
+Chinese ROMs implement aggressive power management layers that silently kill Google Firebase Cloud Messaging (FCM) TCP sockets:
 
-```
+```text
 [Screen Off / Standby]
          │
          ▼
@@ -54,7 +84,7 @@ Chinese ROMs implement extreme power management layers that silently kill Google
 
 ### The Noti-Fixer Scientific Remediation Pipeline
 
-```
+```text
   ┌────────────────────────────────────────────────────────┐
   │              NOTI-FIXER REMEDIATION SUITE              │
   ├────────────────────────────────────────────────────────┤
@@ -69,6 +99,8 @@ Chinese ROMs implement extreme power management layers that silently kill Google
                              ▼
   [RESULT: Instant <100ms Push Notifications 24/7, Exactly Like Stock Android!]
 ```
+
+*(For in-depth kernel analysis, read our full [Architecture Guide](docs/ARCHITECTURE.md))*
 
 ---
 
@@ -95,12 +127,14 @@ Chinese ROMs implement extreme power management layers that silently kill Google
 | **Huawei / Honor** | HarmonyOS 2, 3, 4, NEXT / MagicOS 7, 8 | PowerGenie, Deep Sleep Whitelist |
 | **Google / Samsung / Moto** | Stock Android 12, 13, 14, 15, 16 | Doze whitelist, cached_apps_freezer bypass |
 
+*(See full model compatibility in [Supported Devices](docs/SUPPORTED_DEVICES.md))*
+
 ---
 
 ## ⚡ Quick Start in 60 Seconds
 
 ### Prerequisites
-1. A Windows, Mac, or Linux computer.
+1. A computer (Windows, macOS, or Linux) with Python 3.8+ installed.
 2. Android phone with **Developer Options** enabled.
 3. USB cable OR Wi-Fi for Wireless Debugging.
 
@@ -112,13 +146,18 @@ Chinese ROMs implement extreme power management layers that silently kill Google
    - On Xiaomi: Turn **USB Debugging (Security settings)** ON.
    - Alternatively: Turn **Wireless Debugging** ON.
 
-### Step 2: 1-Click Execution (Windows)
-Double-click `scripts/NotiFixer_OneClick.bat` and select:
-```text
-[1] Full Automated 1-Click Notification Fix (Recommended)
+### Step 2: 1-Click Execution
+
+#### Windows Users:
+Double-click `scripts/NotiFixer_OneClick.bat` and select `[1]`.
+
+#### macOS / Linux Users:
+```bash
+chmod +x scripts/NotiFixer_OneClick.sh
+./scripts/NotiFixer_OneClick.sh
 ```
 
-### Or Run via Python CLI (Cross-Platform)
+### Or Run via Cross-Platform CLI
 
 ```bash
 # 1. Device Profile & Diagnostics
@@ -139,7 +178,7 @@ When using Wireless Debugging without a cable, Android dynamically assigns a new
 
 Simply run:
 ```bash
-python scripts/scan_ports.py -ip 192.168.1.50
+python scripts/scan_ports.py -ip <PHONE_IP_ADDRESS>
 ```
 It will automatically scan and reconnect ADB without needing to plug in a cable!
 
@@ -150,7 +189,7 @@ It will automatically scan and reconnect ADB without needing to plug in a cable!
 Missing Google's native Circle to Search on your Xiaomi, Vivo, or Oppo?  
 Noti-Fixer bundles the audited **CircleToSearch** trigger companion:
 
-1. Run `CircleToSearch/setup_cts.bat`.
+1. Run `CircleToSearch/setup_cts.bat` (or use option 6 in the interactive menu).
 2. Configure the Quick Settings tile or gesture shortcut.
 3. Circle anything on your screen to search with Google Lens instantly.
 
@@ -175,7 +214,7 @@ Simply run:
 ```bat
 call templates/master_restore_template.bat
 ```
-All system properties, DNS, and AppOps settings will instantly revert to factory stock.
+*(Or choose Option `[7]` in the 1-Click Interactive Menu)*. All system properties, DNS, and AppOps settings will instantly revert to factory stock.
 
 ---
 

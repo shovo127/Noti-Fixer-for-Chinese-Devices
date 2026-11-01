@@ -1,0 +1,8 @@
+# Noti-Fixer for Chinese Devices
+# Zero External Runtime Dependencies Required!
+# All core scripts use Python 3.8+ Standard Library:
+# (subprocess, json, argparse, socket, concurrent.futures, re, time, os, sys)
+
+# Optional Development & Quality Assurance:
+# flake8>=6.0.0
+# black>=23.0.0
