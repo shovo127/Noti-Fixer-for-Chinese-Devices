@@ -6,3 +6,4 @@
 
 # Windows batch scripts must use CRLF
 *.bat text eol=crlf
+
