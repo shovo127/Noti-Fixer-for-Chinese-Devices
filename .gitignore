@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+.venv/
+venv/
+ENV/
+
+# OS and Logs
+*.log
+Thumbs.db
+.DS_Store
+*.tmp
+
+# Dynamic Backups and Runtime Exports
+backups/
+backup_*.json
+*.apk.bak
+fcm_dump_*.txt
+
+# IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
