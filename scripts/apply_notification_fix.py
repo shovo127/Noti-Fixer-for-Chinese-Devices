@@ -65,7 +65,11 @@ RESTRICTED_BACKGROUND_PACKAGES = [
     "com.pathao.user",
     "com.global.foodpanda.android",
     "com.ubercab",
-    "com.daraz.android"
+    "com.daraz.android",
+    "com.othoba.android",
+    "us.zoom.videomeetings",
+    "com.facebook.katana",
+    "com.mfashiongallery.emag"
 ]
 
 def run_adb(cmd: List[str], serial: Optional[str] = None) -> subprocess.CompletedProcess:
@@ -257,6 +261,15 @@ def apply_universal_fixes(serial: Optional[str] = None, enable_dns: bool = False
                 run_adb(["shell", "cmd", "netpolicy", "remove", "restrict-background-whitelist", str(uid)], serial)
                 run_adb(["shell", "cmd", "netpolicy", "add", "restrict-background-blacklist", str(uid)], serial)
             print(f"       • Restricted Background Execution: {Colors.YELLOW}{pkg}{Colors.RESET}")
+
+    # Optimize Chrome (Safe Background Sleep, 100% Foreground Speed)
+    if "com.android.chrome" in installed:
+        run_adb(["shell", "dumpsys", "deviceidle", "whitelist", "-com.android.chrome"], serial)
+        run_adb(["shell", "cmd", "appops", "set", "com.android.chrome", "RUN_IN_BACKGROUND", "ignore"], serial)
+        run_adb(["shell", "cmd", "appops", "set", "com.android.chrome", "RUN_ANY_IN_BACKGROUND", "ignore"], serial)
+        run_adb(["shell", "cmd", "appops", "set", "com.android.chrome", "WAKE_LOCK", "ignore"], serial)
+        run_adb(["shell", "am", "set-standby-bucket", "com.android.chrome", "20"], serial)
+        print(f"       • Optimized Chrome: {Colors.GREEN}Safe background sleep, 100% foreground speed{Colors.RESET}")
 
     # 6. AdGuard Private DNS Configuration (Optional / Clean)
     if enable_dns:
