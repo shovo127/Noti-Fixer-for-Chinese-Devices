@@ -113,3 +113,4 @@ Upon completion, the diagnostic report must format findings in a clean Markdown/
 | **bKash / Nagad / Othoba** | Restricted | `45` (Restricted) | — | — | — | Blacklisted |
 | **Zoom / Facebook App** | Restricted | `45` (Restricted) | — | — | — | Blacklisted |
 | **Google Play Store** | Restricted | `45` (Restricted) | — | — | — | Blacklisted |
+

@@ -95,3 +95,4 @@ The watchdog is an asynchronous POSIX shell loop executing inside the device's n
 1. Every 15 seconds, inspects `settings get system MILLET_NO_RESTRICT_APP`.
 2. If `com.google.android.gms` or priority apps are stripped by PowerKeeper, it instantly re-injects the complete CSV string.
 3. Every 2 minutes, re-asserts `cached_apps_freezer disabled` and sends `com.google.android.intent.action.MCS_HEARTBEAT` to GMS to keep the GCM TCP socket live.
+

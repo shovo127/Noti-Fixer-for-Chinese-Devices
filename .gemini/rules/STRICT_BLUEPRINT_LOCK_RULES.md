@@ -42,3 +42,4 @@ Before making any proposal, executing any command, or writing code, the AI must 
 - Never claim success without live proof.
 - Verify that Google FCM socket (`mtalk.google.com:5228`) is connected.
 - Verify that Standby Buckets, AppOps, and Doze whitelists match the specifications in `docs/Schema.md`.
+

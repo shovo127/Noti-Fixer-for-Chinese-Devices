@@ -79,3 +79,4 @@ These aggressive vendor engines:
 * **NFR-2 (Zero Data Destruction):** No `factory_reset`, `format`, `wipe`, `pm clear`, or uninstalls of system apps.
 * **NFR-3 (Strict Command Interception):** All shell commands must be vetted by `safety_guard.py` before execution.
 * **NFR-4 (Idempotent Execution):** Scripts can be rerun multiple times safely without duplicate entries or state corruption.
+

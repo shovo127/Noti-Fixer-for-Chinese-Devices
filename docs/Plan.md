@@ -89,3 +89,4 @@ GitHub Actions CI (`.github/workflows/ci.yml`) runs across Python 3.8–3.12 and
 2. **Safety Guard Self-Test:** Executes `scripts/safety_guard.py` to verify that destructive tokens are intercepted.
 3. **CLI Help Flag Check:** Validates that `--help` flags return exit code 0 across all CLI modules.
 4. **ShellCheck:** Validates `millet_watchdog.sh` and `NotiFixer_OneClick.sh` for POSIX compliance.
+

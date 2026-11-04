@@ -25,16 +25,17 @@ show_menu() {
     echo -e "  Targeting: Xiaomi HyperOS / MIUI | Vivo OriginOS | Oppo ColorOS | HarmonyOS"
     echo ""
     echo -e "  [1] ⚡ Simple Wireless Wi-Fi Connect & Fix (${GREEN}No Cable Needed - Recommended${NC})"
-    echo -e "  [2] 🔌 USB Cable 1-Click Notification Fix"
+    echo -e "  [2] 🔌 USB Cable 1-Click Notification & Battery Fix"
     echo -e "  [3] 🔍 Live Diagnostic Audit (FCM Socket, Android Doze, Kernel Freezer)"
     echo -e "  [4] 📱 Device Fingerprint & Hardware/ROM Profile"
-    echo -e "  [5] 🛡️ Push & Start HyperOS MILLET Watchdog Daemon"
-    echo -e "  [6] 🔄 Wireless ADB Port Scanner (Find new port after reboot)"
-    echo -e "  [7] ⏪ Revert Changes (Master 100% Safe Rollback)"
-    echo -e "  [8] ❌ Exit"
+    echo -e "  [5] 🔋 Battery Drain Analysis & Culprit Inspector"
+    echo -e "  [6] 🛡️ Push & Start HyperOS MILLET Watchdog Daemon"
+    echo -e "  [7] 🔄 Wireless ADB Port Scanner (Find new port after reboot)"
+    echo -e "  [8] ⏪ Revert Changes (Master 100% Safe Rollback)"
+    echo -e "  [9] ❌ Exit"
     echo ""
     echo -e "${CYAN}==============================================================================${NC}"
-    echo -n "Enter choice [1-8]: "
+    echo -n "Enter choice [1-9]: "
 }
 
 while true; do
@@ -77,6 +78,14 @@ while true; do
             ;;
         5)
             clear
+            echo -e "${CYAN}[*] Analyzing Live Battery Drain & Wakelocks...${NC}"
+            python3 "$SCRIPT_DIR/inspect_battery.py"
+            echo ""
+            echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
+            read -r
+            ;;
+        6)
+            clear
             echo -e "${CYAN}[*] Pushing millet_watchdog.sh to device /data/local/tmp/...${NC}"
             adb push "$SCRIPT_DIR/millet_watchdog.sh" /data/local/tmp/millet_watchdog.sh
             adb shell chmod +x /data/local/tmp/millet_watchdog.sh
@@ -87,7 +96,7 @@ while true; do
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
             read -r
             ;;
-        6)
+        7)
             clear
             echo -n "Enter your phone's Wi-Fi IP address (or leave empty to auto-discover): "
             read -r target_ip
@@ -100,7 +109,7 @@ while true; do
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
             read -r
             ;;
-        7)
+        8)
             clear
             echo -e "${YELLOW}Reverting all optimizations back to stock defaults...${NC}"
             adb shell device_config put activity_manager_native_boot use_freezer true
@@ -113,7 +122,7 @@ while true; do
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
             read -r
             ;;
-        8)
+        9)
             echo "Exiting Noti-Fixer. Have a great day!"
             exit 0
             ;;
