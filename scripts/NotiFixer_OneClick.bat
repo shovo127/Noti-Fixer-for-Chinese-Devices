@@ -19,12 +19,11 @@ echo   [3] 🔍 Live Diagnostic Audit (FCM Socket, Android Doze, Kernel Freezer)
 echo   [4] 📱 Device Fingerprint & Hardware/ROM Profile
 echo   [5] 🛡️ Push & Start HyperOS MILLET Watchdog Daemon
 echo   [6] 🔄 Wireless ADB Port Scanner (Find new port after reboot)
-echo   [7] 🎯 Setup Circle to Search Companion (MiCTS Integration)
-echo   [8] ⏪ Revert Changes (Master 100%% Safe Rollback)
-echo   [9] ❌ Exit
+echo   [7] ⏪ Revert Changes (Master 100%% Safe Rollback)
+echo   [8] ❌ Exit
 echo.
 echo ==============================================================================
-set /p choice="Enter choice [1-9]: "
+set /p choice="Enter choice [1-8]: "
 
 if "%choice%"=="1" goto WIRELESS
 if "%choice%"=="2" goto FIX
@@ -32,9 +31,8 @@ if "%choice%"=="3" goto AUDIT
 if "%choice%"=="4" goto DETECT
 if "%choice%"=="5" goto WATCHDOG
 if "%choice%"=="6" goto SCAN
-if "%choice%"=="7" goto CTS
-if "%choice%"=="8" goto ROLLBACK
-if "%choice%"=="9" exit /b 0
+if "%choice%"=="7" goto ROLLBACK
+if "%choice%"=="8" exit /b 0
 
 echo Invalid choice. Try again.
 pause
@@ -101,11 +99,6 @@ if "%target_ip%"=="" (
 echo.
 echo Press any key to return to menu...
 pause >nul
-goto MENU
-
-:CTS
-cls
-call "%~dp0..\CircleToSearch\setup_cts.bat"
 goto MENU
 
 :ROLLBACK

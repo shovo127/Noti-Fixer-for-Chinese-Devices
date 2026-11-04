@@ -39,12 +39,11 @@
   [3] Device Fingerprint & Hardware/ROM Profile
   [4] Push & Start HyperOS MILLET Watchdog Daemon
   [5] Wireless ADB Port Scanner (Find new port after reboot)
-  [6] Setup Circle to Search Companion (MiCTS Integration)
-  [7] Revert Changes (Master 100% Safe Rollback)
-  [8] Exit
+  [6] Revert Changes (Master 100% Safe Rollback)
+  [7] Exit
 
 ==============================================================================
-Enter choice [1-8]: 1
+Enter choice [1-7]: 1
 ```
 
 ---
@@ -198,17 +197,6 @@ Simply run:
 python scripts/scan_ports.py -ip <PHONE_IP_ADDRESS>
 ```
 It will automatically scan and reconnect ADB without needing to plug in a cable!
-
----
-
-## 🔍 Circle to Search Companion (MiCTS)
-
-Missing Google's native Circle to Search on your Xiaomi, Vivo, or Oppo?  
-Noti-Fixer bundles the audited **CircleToSearch** trigger companion:
-
-1. Run `CircleToSearch/setup_cts.bat` (or use option 6 in the interactive menu).
-2. Configure the Quick Settings tile or gesture shortcut.
-3. Circle anything on your screen to search with Google Lens instantly.
 
 ---
 

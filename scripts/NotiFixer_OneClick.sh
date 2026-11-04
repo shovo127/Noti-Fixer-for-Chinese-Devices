@@ -30,12 +30,11 @@ show_menu() {
     echo -e "  [4] 📱 Device Fingerprint & Hardware/ROM Profile"
     echo -e "  [5] 🛡️ Push & Start HyperOS MILLET Watchdog Daemon"
     echo -e "  [6] 🔄 Wireless ADB Port Scanner (Find new port after reboot)"
-    echo -e "  [7] 🎯 Circle to Search Companion Setup Info"
-    echo -e "  [8] ⏪ Revert Changes (Master 100% Safe Rollback)"
-    echo -e "  [9] ❌ Exit"
+    echo -e "  [7] ⏪ Revert Changes (Master 100% Safe Rollback)"
+    echo -e "  [8] ❌ Exit"
     echo ""
     echo -e "${CYAN}==============================================================================${NC}"
-    echo -n "Enter choice [1-9]: "
+    echo -n "Enter choice [1-8]: "
 }
 
 while true; do
@@ -103,15 +102,6 @@ while true; do
             ;;
         7)
             clear
-            echo -e "${CYAN}=== Circle to Search (Omnient) Setup ===${NC}"
-            adb shell settings put secure assistant com.google.android.googlequicksearchbox/com.google.android.apps.search.assistant.surfaces.voice.OmnientActivity 2>/dev/null
-            echo -e "${GREEN}[✔] Default assistant set to Google Omnient Search.${NC}"
-            echo ""
-            echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
-            read -r
-            ;;
-        8)
-            clear
             echo -e "${YELLOW}Reverting all optimizations back to stock defaults...${NC}"
             adb shell device_config put activity_manager_native_boot use_freezer true
             adb shell setprop persist.sys.freezer true
@@ -123,7 +113,7 @@ while true; do
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
             read -r
             ;;
-        9)
+        8)
             echo "Exiting Noti-Fixer. Have a great day!"
             exit 0
             ;;
