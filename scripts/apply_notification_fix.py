@@ -71,10 +71,17 @@ def run_adb(cmd: List[str], serial: Optional[str] = None) -> subprocess.Complete
     assert_command_safe(cmd)
     base = ["adb"]
     if serial:
+        if ":" in serial and not getattr(run_adb, "_connected", False):
+            subprocess.run(["adb", "connect", serial], capture_output=True, text=True, check=False)
+            run_adb._connected = True
         base.extend(["-s", serial])
     base.extend(cmd)
     try:
-        return subprocess.run(base, capture_output=True, text=True, check=False)
+        res = subprocess.run(base, capture_output=True, text=True, check=False)
+        if serial and ":" in serial and "not found" in (res.stderr or "").lower():
+            subprocess.run(["adb", "connect", serial], capture_output=True, text=True, check=False)
+            res = subprocess.run(base, capture_output=True, text=True, check=False)
+        return res
     except FileNotFoundError:
         print(f"{Colors.RED}[!] Error: 'adb' executable not found in PATH.{Colors.RESET}")
         sys.exit(1)
