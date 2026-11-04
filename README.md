@@ -48,6 +48,21 @@ Enter choice [1-7]: 1
 
 ---
 
+## 🏛️ 6-Markdown Blueprint Lock Architecture (`/docs` ROOT)
+
+Noti-Fixer is governed by the **৬টি মার্কডাউন ব্লুপ্রিন্ট লক** standard. Any developer or autonomous AI agent working in this repository is strictly locked to these 6 architectural pillars:
+
+| # | Blueprint File | Category | Focus Area |
+| :---: | :--- | :--- | :--- |
+| **#01** | [`docs/PRD.md`](docs/PRD.md) | **Product Requirements** | Problem statement, target devices (HyperOS, OriginOS, ColorOS), functional requirements. |
+| **#02** | [`docs/AppFlow.md`](docs/AppFlow.md) | **Interaction Flow** | Deterministic pipeline, CLI execution flow, AI autonomous skill protocol. |
+| **#03** | [`docs/UI_Spec.md`](docs/UI_Spec.md) | **UI & CLI Spec** | 9-option interactive menu, ANSI color codes, visual progress bars, verification tables. |
+| **#04** | [`docs/TRD.md`](docs/TRD.md) | **Technical Requirements** | Cgroup v2 freezer, ActivityManager Standby Buckets, MIUI custom AppOps, PowerKeeper. |
+| **#05** | [`docs/Schema.md`](docs/Schema.md) | **Schemas & App Dictionary** | Tier 1 (Priority), Tier 2 (Restricted Drainers), Tier 3 (Protected Frameworks), backup schema. |
+| **#06** | [`docs/Plan.md`](docs/Plan.md) | **Execution & Safety Plan** | Phased execution roadmap, safety interceptor boundaries, automated CI test suites. |
+
+---
+
 ## 🛡️ Safety & Trust Guarantees (Zero-Mistake AI Safeguards)
 
 Your smartphone holds your personal data, bank apps, and memories. Noti-Fixer is engineered with strict non-destructive enterprise safety standards, programmatically enforced by `scripts/safety_guard.py`:
