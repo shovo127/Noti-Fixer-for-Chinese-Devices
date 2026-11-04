@@ -51,6 +51,41 @@ PROHIBITED_COMMAND_PATTERNS = [
     "setenforce 0"
 ]
 
+# Protected system packages that must NEVER be restricted or disabled under any circumstances
+PROTECTED_SYSTEM_PACKAGES = {
+    "android",
+    "com.android.systemui",
+    "com.android.phone",
+    "com.android.server.telecom",
+    "com.android.providers.telephony",
+    "com.android.settings",
+    "com.android.packageinstaller",
+    "com.google.android.packageinstaller",
+    "com.android.permissioncontroller",
+    "com.google.android.permissioncontroller",
+    "com.google.android.gms",          # Core Google Play Services framework
+    "com.google.android.gsf",          # Google Services Framework
+    "com.google.android.apps.adm",     # Google Find My Device
+    "com.android.emergency",
+    "com.android.dialer",
+    "com.google.android.dialer",
+    "com.android.mms",
+    "com.google.android.apps.messaging",
+    "com.google.android.inputmethod.latin", # Gboard
+    "com.sohu.inputmethod.sogou",      # Chinese keyboards
+    "com.baidu.input",
+    "com.miui.home",                   # MIUI / HyperOS launcher
+    "com.android.launcher",
+    "com.android.launcher3",
+    "com.oppo.launcher",
+    "com.vivo.launcher",
+    "com.huawei.android.launcher"
+}
+
+def is_package_protected(pkg: str) -> bool:
+    """Returns True if the package is a critical system service that must never be restricted."""
+    return pkg in PROTECTED_SYSTEM_PACKAGES
+
 def assert_command_safe(cmd_tokens: List[str]) -> bool:
     """
     Inspects an ADB command before execution to guarantee:

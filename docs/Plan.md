@@ -80,6 +80,9 @@ PROHIBITED_COMMAND_PATTERNS = [
 ]
 ```
 
+### 2.2 Critical Core System Protection Lock
+Critical system packages (`android`, `SystemUI`, `Phone`, `Settings`, `PackageInstaller`, `com.google.android.gms`, `Find My Device`, `Keyboards`, `Launchers`) are protected by `is_package_protected()`. Any action or user attempt to restrict them triggers an immediate safety block.
+
 ---
 
 ## 3. CI/CD & Automated Regression Testing

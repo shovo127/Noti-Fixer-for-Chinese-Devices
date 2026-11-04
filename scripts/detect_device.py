@@ -92,6 +92,7 @@ def detect_device_profile(serial: Optional[str] = None) -> Dict[str, Any]:
     vivo_os = get_prop("ro.vivo.os.build.display.id", serial) or get_prop("ro.vivo.rom.version", serial)
     coloros_ver = get_prop("ro.build.version.oplusrom", serial) or get_prop("ro.build.version.opporom", serial)
     harmony_ver = get_prop("ro.build.version.emui", serial) or get_prop("ro.huawei.build.version.incremental", serial)
+    flyme_ver = get_prop("ro.build.display.id", serial)
     
     rom_family = "AOSP / Stock Android"
     rom_detail = "Standard Android"
@@ -111,6 +112,12 @@ def detect_device_profile(serial: Optional[str] = None) -> Dict[str, Any]:
     elif harmony_ver or brand in ["huawei", "honor"]:
         rom_family = "Huawei HarmonyOS / MagicOS"
         rom_detail = f"HarmonyOS/MagicOS {harmony_ver or build_id}"
+    elif "flyme" in flyme_ver.lower() or brand in ["meizu"]:
+        rom_family = "Meizu Flyme"
+        rom_detail = f"Flyme {flyme_ver}"
+    elif brand in ["infinix", "tecno", "itel"]:
+        rom_family = "Transsion XOS / HiOS"
+        rom_detail = f"Transsion {build_id}"
 
     # Kernel & Subsystem Checks
     freezer_res = run_adb(["shell", "device_config", "get", "activity_manager_native_boot", "use_freezer"], serial)

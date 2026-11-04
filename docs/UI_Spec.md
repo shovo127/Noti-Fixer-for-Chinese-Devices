@@ -48,7 +48,57 @@ Enter choice [1-9]:
 
 ## 3. Step-by-Step CLI Visual Feedback
 
-When Option 1 or 2 is selected, the engine renders a standardized 7-step progress stream:
+### 3.1 Interactive User Consultation Screens
+
+Before applying changes, the engine prompts the user interactively (unless `--auto` flag is passed):
+
+```text
+==============================================================================
+⚡ [USER CONSULTATION] INSTANT NOTIFICATION PRIORITY SUITE
+==============================================================================
+ Detected communication apps on your phone:
+   [ 1] com.google.android.gms
+   [ 2] com.google.android.gm
+   [ 3] com.whatsapp
+   [ 4] com.whatsapp.w4b
+   [ 5] com.imo.android.imoim
+   [ 6] com.facebook.orca
+   [ 7] com.instagram.android
+
+ Options:
+   [Y] Prioritize ALL detected apps (Recommended - Instant notifications)
+   [A] Add custom packages
+
+ Enter choice [Y/a] (Default: Y):
+
+==============================================================================
+🔋 [USER CONSULTATION] CUSTOM BATTERY DRAIN RESTRICTOR
+==============================================================================
+ Noti-Fixer will NEVER restrict apps without your consent.
+ The following background drainers were detected on your phone:
+
+   [ 1] bKash (Fintech / Mobile Wallet)               (com.bKash.customerapp)
+   [ 2] Nagad (Fintech / Mobile Wallet)               (com.konasl.nagad)
+   [ 3] Pathao (Ride-sharing / Food delivery)         (com.pathao.user)
+   [ 4] Foodpanda (Food delivery)                     (com.global.foodpanda.android)
+   [ 5] Uber (Ride-sharing)                           (com.ubercab)
+   [ 6] Daraz (E-commerce / Shopping)                 (com.daraz.android)
+   [ 7] Othoba (E-commerce / Shopping)                (com.othoba.android)
+   [ 8] Zoom (Video Conferencing)                     (us.zoom.videomeetings)
+   [ 9] Google Play Store (Idle self-check throttling)(com.android.vending)
+   [10] Xiaomi Wallpaper Carousel (Glance / Bloat)    (com.mfashiongallery.emag)
+
+ Options:
+   [A] Restrict ALL listed drainers (Recommended - Maximum battery life)
+   [C] Custom select by number (e.g., 1, 2, 5, 8)
+   [S] Skip battery restrictions (Keep phone default)
+
+ Enter choice [A/c/s] (Default: A):
+```
+
+### 3.2 Automated Execution Progress Stream
+
+When confirmed, the engine renders a standardized 7-step progress stream:
 
 ```text
 ========================================================================

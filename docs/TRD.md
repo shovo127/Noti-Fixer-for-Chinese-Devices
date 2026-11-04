@@ -80,6 +80,20 @@ Xiaomi's `com.miui.powerkeeper` reads directly from Android `Settings.System`:
 * **Netpolicy Unrestricted Background Data:** `cmd netpolicy add restrict-background-whitelist <UID>`
 * **Background Data Blacklisting (Drainers):** `cmd netpolicy add restrict-background-blacklist <UID>`
 
+### 2.6 Multi-Brand Chinese Vendor Mechanics
+* **Vivo OriginOS / FuntouchOS:**
+  * Uses proprietary background high-power management.
+  * Whitelists autostart via `cmd appops set <pkg> 10008 allow` and `cmd appops set <pkg> RUN_ANY_IN_BACKGROUND allow`.
+* **Oppo ColorOS / RealmeUI / OxygenOS:**
+  * Uses Athena quick-freeze subsystem.
+  * Overrides automatic permission revocation: `cmd appops set <pkg> AUTO_REVOKE_PERMISSIONS_IF_UNUSED ignore`.
+  * Whitelists autostart: `cmd appops set <pkg> 10008 allow`.
+* **Huawei HarmonyOS / Honor MagicOS:**
+  * Uses EMUI PowerGenie killer subsystem.
+  * Bypasses PowerGenie aggressive throttling by setting normal power mode (`hw_power_mode 0`), granting autostart `10008`, and allowing background execution.
+* **Meizu Flyme:**
+  * Flyme background freeze subsystem bypassed via AppOps 10008 autostart and Standby Bucket 5 exemption.
+
 ---
 
 ## 3. Persistent Watchdog Daemon (`millet_watchdog.sh`)

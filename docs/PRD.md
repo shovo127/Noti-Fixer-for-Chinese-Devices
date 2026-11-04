@@ -60,16 +60,26 @@ These aggressive vendor engines:
 * **FR-3.4:** Inject Xiaomi-specific AppOps: Autostart (`10008`), Secondary Autostart (`10021`), Heads-Up Float (`10017`), Lockscreen (`10020`), and Alert Sound (`10022`).
 * **FR-3.5:** Inject packages into PowerKeeper system tables (`cloud_memory_freeze_whitelist`, `power_pkg_white_list`).
 
-### 3.4 Battery Optimization Engine
-* **FR-4.1:** Restrict heavy background apps (e-commerce, ride-sharing, banking, video conferencing) to Standby Bucket 45 (`RESTRICTED`).
-* **FR-4.2:** Restrict Google Play Store (`com.android.vending`) background auto-checks and cancel queued background jobs while preserving 100% foreground speed.
-* **FR-4.3:** Disable lockscreen Wallpaper Carousel / Glance (`com.mfashiongallery.emag`).
+### 3.4 Battery Optimization Engine & User Consultation Mandate
+* **FR-4.0 (Mandatory User Consultation):** Battery restrictions must never be arbitrarily applied by AI agents or silent automated runs without presenting options to the user. The CLI must interactively present detected background drainers and allow users to approve all, select custom apps, or skip entirely.
+* **FR-4.1:** Restrict user-approved background apps (e-commerce, ride-sharing, fintech/banking, video conferencing) to Standby Bucket 45 (`RESTRICTED`), revoke background wakelocks, and blacklist idle background data.
+* **FR-4.2:** Restrict Google Play Store (`com.android.vending`) background auto-checks and cancel queued background jobs while preserving 100% foreground speed and dependent frameworks (Google Play Services, Find My Device).
+* **FR-4.3:** Disable lockscreen Wallpaper Carousel / Glance bloat (`com.mfashiongallery.emag`).
 * **FR-4.4:** Optimize Google Chrome for deep sleep when screen is off without losing tabs or foreground speed.
 
-### 3.5 Persistence & Self-Healing Watchdog
-* **FR-5.1:** Lightweight, standalone shell daemon (`millet_watchdog.sh`) running under shell UID.
-* **FR-5.2:** Periodically detects PowerKeeper resets and re-injects whitelists.
-* **FR-5.3:** Pulses periodic FCM keepalive heartbeats (`MCS_HEARTBEAT`).
+### 3.5 Multi-Brand Chinese ROM Coverage
+* **FR-5.0:** Support all Chinese ROM ecosystems with tailored vendor hooks:
+  * **Xiaomi / Redmi / POCO:** HyperOS / MIUI (PowerKeeper system tables, MILLET, AppOps 10008/10021/10017/10020/10022).
+  * **Vivo / iQOO:** OriginOS / FuntouchOS (AppOps 10008 autostart, high background power consumption whitelisting).
+  * **Oppo / OnePlus / Realme:** ColorOS / OxygenOS / RealmeUI (Athena quick-freeze bypass, auto-revoke disable, AppOps 10008).
+  * **Huawei / Honor:** HarmonyOS / EMUI / MagicOS (PowerGenie killer bypass, `hw_power_mode` normal performance, AppOps 10008).
+  * **Meizu:** Flyme (Standby freeze bypass, AppOps autostart).
+  * **Generic Android / Transsion:** Standard Android 9–16 Doze Whitelist, Standby Bucket 5 (`EXEMPTED`), Netpolicy.
+
+### 3.6 Persistence & Self-Healing Watchdog
+* **FR-6.1:** Lightweight, standalone shell daemon (`millet_watchdog.sh`) running under shell UID.
+* **FR-6.2:** Periodically detects PowerKeeper resets and re-injects whitelists.
+* **FR-6.3:** Pulses periodic FCM keepalive heartbeats (`MCS_HEARTBEAT`).
 
 ---
 
@@ -77,6 +87,7 @@ These aggressive vendor engines:
 
 * **NFR-1 (Zero Privilege Escalation):** No `su`, Magisk, KernelSU, or root requirements.
 * **NFR-2 (Zero Data Destruction):** No `factory_reset`, `format`, `wipe`, `pm clear`, or uninstalls of system apps.
-* **NFR-3 (Strict Command Interception):** All shell commands must be vetted by `safety_guard.py` before execution.
-* **NFR-4 (Idempotent Execution):** Scripts can be rerun multiple times safely without duplicate entries or state corruption.
+* **NFR-3 (Strict Core System Protection):** Critical core system packages (`android`, `SystemUI`, `com.android.phone`, `Settings`, `com.google.android.gms`, `Find My Device`, `InputMethod/Keyboards`, `Launchers`) are hard-protected and can never be restricted or disabled.
+* **NFR-4 (Strict Command Interception):** All shell commands must be vetted by `safety_guard.py` before execution.
+* **NFR-5 (Idempotent Execution):** Scripts can be rerun multiple times safely without duplicate entries or state corruption.
 

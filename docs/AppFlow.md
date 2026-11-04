@@ -48,17 +48,26 @@ flowchart TD
 
 ### Stage 1: Launcher Menu
 1. The user launches `NotiFixer_OneClick.bat` (Windows) or `NotiFixer_OneClick.sh` (Linux/macOS).
-2. The user selects from 8 standardized options:
+2. The user selects from 9 standardized options:
    * `[1]` Simple Wireless Wi-Fi Connect & Fix (Interactive pairing wizard).
-   * `[2]` USB Cable 1-Click Notification & Battery Fix.
+   * `[2]` USB Cable 1-Click Notification & Battery Fix (with User Consultation).
    * `[3]` Live Diagnostic Audit (FCM Socket, Android Doze, Kernel Freezer).
    * `[4]` Device Fingerprint & Hardware/ROM Profile.
    * `[5]` Battery Drain Analysis & Culprit Inspector.
    * `[6]` Push & Start Persistent Watchdog Daemon.
    * `[7]` Wireless ADB Port Scanner (Post-reboot discovery).
    * `[8]` 100% Reversible Rollback.
+   * `[9]` Exit.
 
-### Stage 2: Automated Execution Flow
+### Stage 2: User Consultation & Safety Gate
+1. **Priority Communication Apps Review:** The CLI displays detected messaging/email apps on device and asks the user to confirm or add packages.
+2. **Battery Optimization Customization:** The CLI displays detected background drainers (fintech, ride-sharing, e-commerce, bloatware) and asks the user:
+   * `[A]` Restrict all detected drainers (Maximum battery savings).
+   * `[C]` Custom select specific apps by number.
+   * `[S]` Skip battery restrictions entirely.
+3. **Core System Safety Lock:** Any attempt by AI or user to restrict critical system frameworks (`SystemUI`, `Phone`, `Settings`, `GMS`, `Find My Device`, `Keyboard`, `Launcher`) is intercepted and rejected.
+
+### Stage 3: Automated Execution Flow
 1. **Safety Interceptor Check:** Every command passes through `safety_guard.py`. Any destructive command triggers immediate abort.
 2. **Pre-flight Snapshot:** Capture current system settings into `backups/backup_<device>_<timestamp>.json`.
 3. **Execution with Visual Progress:** Display clear step counters `[1/7]` through `[7/7]` with colored ANSI feedback.

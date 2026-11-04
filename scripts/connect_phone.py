@@ -8,6 +8,7 @@ License: MIT License (Copyright (c) 2026)
 """
 
 import sys
+import os
 import subprocess
 import time
 import re
@@ -109,9 +110,12 @@ def interactive_wireless_pair():
     c_res = subprocess.run(["adb", "connect", connect_target], capture_output=True, text=True)
     print(c_res.stdout.strip())
 
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
     if "connected" not in c_res.stdout.lower() or "cannot" in c_res.stdout.lower():
         print(f"{Colors.YELLOW}[!] Connect pending. Trying auto-discovery on active ports...{Colors.RESET}")
-        scan_res = subprocess.run([sys.executable, "scripts/scan_ports.py", "-ip", ip], capture_output=True, text=True)
+        scan_py = os.path.join(script_dir, "scan_ports.py")
+        scan_res = subprocess.run([sys.executable, scan_py, "-ip", ip], capture_output=True, text=True)
         print(scan_res.stdout.strip())
 
     # Verify device state
@@ -137,10 +141,12 @@ def interactive_wireless_pair():
     confirm = input(f"{Colors.BOLD}👉 Do you want to apply the Notification Fix now? [Y/n]: {Colors.RESET}").strip().lower()
     if confirm in ["", "y", "yes"]:
         print(f"\n{Colors.CYAN}[*] Launching Automated Notification Fixer...{Colors.RESET}")
-        subprocess.run([sys.executable, "scripts/apply_notification_fix.py", "--dns-adguard"])
+        apply_py = os.path.join(script_dir, "apply_notification_fix.py")
+        subprocess.run([sys.executable, apply_py, "--dns-adguard"])
         
         print(f"\n{Colors.CYAN}[*] Running live verification audit...{Colors.RESET}")
-        subprocess.run([sys.executable, "scripts/audit_fcm_doze.py"])
+        audit_py = os.path.join(script_dir, "audit_fcm_doze.py")
+        subprocess.run([sys.executable, audit_py])
 
         print(f"\n{Colors.GREEN}{Colors.BOLD}🎉 ALL DONE! Your phone is now fully optimized.{Colors.RESET}")
         print("Your notifications and calls will now arrive instantly without delay 24/7.")
