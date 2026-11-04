@@ -59,6 +59,7 @@ TARGET_PACKAGES = [
 ]
 
 RESTRICTED_BACKGROUND_PACKAGES = [
+    "com.android.vending",
     "com.bKash.customerapp",
     "com.konasl.nagad",
     "com.pathao.user",
@@ -247,8 +248,10 @@ def apply_universal_fixes(serial: Optional[str] = None, enable_dns: bool = False
             run_adb(["shell", "am", "set-standby-bucket", pkg, "restricted"], serial)
             run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_IN_BACKGROUND", "ignore"], serial)
             run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_ANY_IN_BACKGROUND", "ignore"], serial)
+            run_adb(["shell", "cmd", "appops", "set", pkg, "WAKE_LOCK", "ignore"], serial)
             run_adb(["shell", "cmd", "appops", "set", pkg, "10008", "ignore"], serial)
             run_adb(["shell", "cmd", "appops", "set", pkg, "10021", "ignore"], serial)
+            run_adb(["shell", "cmd", "jobscheduler", "cancel", "-u", "0", pkg], serial)
             uid = get_package_uid(pkg, serial)
             if uid is not None:
                 run_adb(["shell", "cmd", "netpolicy", "remove", "restrict-background-whitelist", str(uid)], serial)
