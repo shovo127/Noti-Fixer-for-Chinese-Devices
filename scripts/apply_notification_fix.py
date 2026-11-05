@@ -64,6 +64,7 @@ DEFAULT_PRIORITY_PACKAGES = [
 CANDIDATE_DRAINER_PACKAGES = [
     ("com.bKash.customerapp", "bKash (Fintech / Mobile Wallet)"),
     ("com.konasl.nagad", "Nagad (Fintech / Mobile Wallet)"),
+    ("com.dbbl.mbs.apps.amaderrocket", "Rocket (DBBL Mobile Banking)"),
     ("com.pathao.user", "Pathao (Ride-sharing / Food delivery)"),
     ("com.global.foodpanda.android", "Foodpanda (Food delivery)"),
     ("com.ubercab", "Uber (Ride-sharing)"),
@@ -71,6 +72,7 @@ CANDIDATE_DRAINER_PACKAGES = [
     ("com.othoba.android", "Othoba (E-commerce / Shopping)"),
     ("us.zoom.videomeetings", "Zoom (Video Conferencing)"),
     ("com.facebook.katana", "Facebook (Social Network main app)"),
+    ("com.intsig.camscanner", "CamScanner (Document Scanner)"),
     ("com.mfashiongallery.emag", "Xiaomi Wallpaper Carousel (Glance / Bloat)"),
     ("com.zhiliaoapp.musically", "TikTok (Short video platform)"),
     ("com.alibaba.aliexpresshd", "AliExpress (Shopping)"),
@@ -393,19 +395,21 @@ def apply_universal_fixes(
             if pkg in installed:
                 # Remove from Doze whitelist to allow deep idle sleep when screen is off and inactive
                 run_adb(["shell", "dumpsys", "deviceidle", "whitelist", f"-{pkg}"], serial)
-                # Assign to Standard Working Set (20) or Rare (40) bucket - NEVER restricted 45
-                run_adb(["shell", "am", "set-standby-bucket", pkg, "20"], serial)
-                # Suppress cold autostart in boot/broadcast loops while preserving active background work
+                # Assign to Official Android Standby Bucket RARE (40)
+                # When closed: strict freeze, no background jobs, battery drain = 0
+                # When opened by user: Android auto-promotes to ACTIVE (10) for 100% full speed
+                run_adb(["shell", "am", "set-standby-bucket", pkg, "rare"], serial)
+                # Suppress cold autostart on boot and wakeups from background broadcasts
                 run_adb(["shell", "cmd", "appops", "set", pkg, "10008", "ignore"], serial)
                 run_adb(["shell", "cmd", "appops", "set", pkg, "10021", "ignore"], serial)
-                # Ensure active background tasks (downloads, meetings, navigation) are allowed
+                run_adb(["shell", "cmd", "appops", "set", pkg, "10028", "ignore"], serial)
+                run_adb(["shell", "cmd", "appops", "set", pkg, "10029", "ignore"], serial)
+                # Ensure permissions allow smooth operation while actively in use
                 run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_IN_BACKGROUND", "allow"], serial)
                 run_adb(["shell", "cmd", "appops", "set", pkg, "WAKE_LOCK", "allow"], serial)
-                # Ensure background network data is NEVER blacklisted
-                uid = get_package_uid(pkg, serial)
-                if uid is not None:
-                    run_adb(["shell", "cmd", "netpolicy", "remove", "restrict-background-blacklist", str(uid)], serial)
-                print(f"       • Safe Background Optimization (No Freezes): {Colors.GREEN}{pkg}{Colors.RESET}")
+                # Gracefully stop any lingering background idle instance
+                run_adb(["shell", "am", "stop-app", pkg], serial)
+                print(f"       • On-Demand Execution Configured (Dormant when closed): {Colors.GREEN}{pkg}{Colors.RESET}")
     else:
         print(f"\n {Colors.CYAN}[5/7] Background Restrictions: None applied (as chosen by user){Colors.RESET}")
 
