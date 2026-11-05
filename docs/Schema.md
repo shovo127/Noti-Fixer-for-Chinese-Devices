@@ -113,6 +113,8 @@ These packages must NEVER be restricted, blacklisted, or modified:
     "android",
     "com.android.systemui",
     "com.android.vending",
+    "com.android.providers.downloads",
+    "us.zoom.videomeetings",
     "com.miui.home",
     "com.android.settings",
     "com.android.phone",

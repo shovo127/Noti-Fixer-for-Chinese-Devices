@@ -11,7 +11,7 @@ MAX_LOG_LINES=500
 POLL_INTERVAL=15
 
 # Core packages required to never freeze
-CRITICAL_PACKAGES="com.google.android.gms,com.google.android.gsf,com.whatsapp,com.whatsapp.w4b,com.imo.android.imoim,com.facebook.orca,com.google.android.gm,com.instagram.android,org.telegram.messenger,org.telegram.plus,org.thoughtcrime.securesms,com.tencent.mm,com.discord,com.microsoft.office.outlook"
+CRITICAL_PACKAGES="com.google.android.gms,com.google.android.gsf,com.google.android.gm,com.android.vending,com.android.providers.downloads,us.zoom.videomeetings,com.whatsapp,com.whatsapp.w4b,com.imo.android.imoim,com.facebook.orca,com.instagram.android,org.telegram.messenger,org.telegram.plus,org.thoughtcrime.securesms,com.tencent.mm,com.discord,com.microsoft.office.outlook"
 
 log_msg() {
     timestamp=$(date "+%Y-%m-%d %H:%M:%S")
@@ -40,9 +40,9 @@ while true; do
     # 1. Inspect current MILLET whitelist
     current_millet=$(settings get system MILLET_NO_RESTRICT_APP 2>/dev/null)
     
-    # Check if Google Play Services or target apps are missing
+    # Check if Google Play Services, Play Store or target apps are missing
     case "$current_millet" in
-        *"com.google.android.gms"*com.google.android.gm*)
+        *"com.google.android.gms"*com.android.vending*)
             ;;
         *)
             log_msg "[ALERT] MILLET_NO_RESTRICT_APP was wiped or reset by HyperOS PowerKeeper!"

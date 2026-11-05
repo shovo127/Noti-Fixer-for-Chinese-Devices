@@ -67,6 +67,8 @@ PROTECTED_SYSTEM_PACKAGES = {
     "com.google.android.gsf",          # Google Services Framework
     "com.google.android.apps.adm",     # Google Find My Device
     "com.android.vending",             # Google Play Store (App updates & background downloads)
+    "com.android.providers.downloads", # Android Download Manager
+    "us.zoom.videomeetings",           # Zoom Meetings (Video conferencing & background call audio)
     "com.android.emergency",
     "com.android.dialer",
     "com.google.android.dialer",
