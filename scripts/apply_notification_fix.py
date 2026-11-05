@@ -42,6 +42,7 @@ class Colors:
 DEFAULT_PRIORITY_PACKAGES = [
     "com.google.android.gms",
     "com.google.android.gsf",
+    "com.android.vending",
     "com.google.android.gm",
     "com.whatsapp",
     "com.whatsapp.w4b",
@@ -70,7 +71,6 @@ CANDIDATE_DRAINER_PACKAGES = [
     ("com.othoba.android", "Othoba (E-commerce / Shopping)"),
     ("us.zoom.videomeetings", "Zoom (Video Conferencing)"),
     ("com.facebook.katana", "Facebook (Social Network main app)"),
-    ("com.android.vending", "Google Play Store (Background self-check throttling)"),
     ("com.mfashiongallery.emag", "Xiaomi Wallpaper Carousel (Glance / Bloat)"),
     ("com.zhiliaoapp.musically", "TikTok (Short video platform)"),
     ("com.alibaba.aliexpresshd", "AliExpress (Shopping)"),
@@ -382,38 +382,41 @@ def apply_universal_fixes(
     else:
         print(f"       -> Applying Universal Android AOSP Background Whitelists...")
 
-    # 5. Restrict User-Selected Heavy Background Apps (Preserving RAM & Battery)
+    # 5. Non-Destructive Battery Optimization for Background Drainers
+    # Safe Protocol: Suppress cold autostart without breaking active background tasks (downloads, calls, tracking)
     if battery_targets:
-        print(f"\n {Colors.CYAN}[5/7] Restricting User-Approved Heavy Background Apps (Battery Boost)...{Colors.RESET}")
+        print(f"\n {Colors.CYAN}[5/7] Applying Safe Battery Optimization to Background Drainers...{Colors.RESET}")
         for pkg in battery_targets:
             if is_package_protected(pkg):
                 print(f"       • Skipping Protected System Service: {Colors.RED}{pkg}{Colors.RESET}")
                 continue
             if pkg in installed:
+                # Remove from Doze whitelist to allow deep idle sleep when screen is off and inactive
                 run_adb(["shell", "dumpsys", "deviceidle", "whitelist", f"-{pkg}"], serial)
-                run_adb(["shell", "am", "set-standby-bucket", pkg, "restricted"], serial)
-                run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_IN_BACKGROUND", "ignore"], serial)
-                run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_ANY_IN_BACKGROUND", "ignore"], serial)
-                run_adb(["shell", "cmd", "appops", "set", pkg, "WAKE_LOCK", "ignore"], serial)
+                # Assign to Standard Working Set (20) or Rare (40) bucket - NEVER restricted 45
+                run_adb(["shell", "am", "set-standby-bucket", pkg, "20"], serial)
+                # Suppress cold autostart in boot/broadcast loops while preserving active background work
                 run_adb(["shell", "cmd", "appops", "set", pkg, "10008", "ignore"], serial)
                 run_adb(["shell", "cmd", "appops", "set", pkg, "10021", "ignore"], serial)
-                run_adb(["shell", "cmd", "jobscheduler", "cancel", "-u", "0", pkg], serial)
+                # Ensure active background tasks (downloads, meetings, navigation) are allowed
+                run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_IN_BACKGROUND", "allow"], serial)
+                run_adb(["shell", "cmd", "appops", "set", pkg, "WAKE_LOCK", "allow"], serial)
+                # Ensure background network data is NEVER blacklisted
                 uid = get_package_uid(pkg, serial)
                 if uid is not None:
-                    run_adb(["shell", "cmd", "netpolicy", "remove", "restrict-background-whitelist", str(uid)], serial)
-                    run_adb(["shell", "cmd", "netpolicy", "add", "restrict-background-blacklist", str(uid)], serial)
-                print(f"       • Restricted Background Execution: {Colors.YELLOW}{pkg}{Colors.RESET}")
+                    run_adb(["shell", "cmd", "netpolicy", "remove", "restrict-background-blacklist", str(uid)], serial)
+                print(f"       • Safe Background Optimization (No Freezes): {Colors.GREEN}{pkg}{Colors.RESET}")
     else:
         print(f"\n {Colors.CYAN}[5/7] Background Restrictions: None applied (as chosen by user){Colors.RESET}")
 
-    # Optimize Chrome (Safe Background Sleep, 100% Foreground Speed)
+    # Optimize Chrome (Safe Background Sleep, Preserving Active Downloads)
     if "com.android.chrome" in installed:
         run_adb(["shell", "dumpsys", "deviceidle", "whitelist", "-com.android.chrome"], serial)
-        run_adb(["shell", "cmd", "appops", "set", "com.android.chrome", "RUN_IN_BACKGROUND", "ignore"], serial)
-        run_adb(["shell", "cmd", "appops", "set", "com.android.chrome", "RUN_ANY_IN_BACKGROUND", "ignore"], serial)
-        run_adb(["shell", "cmd", "appops", "set", "com.android.chrome", "WAKE_LOCK", "ignore"], serial)
+        run_adb(["shell", "cmd", "appops", "set", "com.android.chrome", "10008", "ignore"], serial)
+        run_adb(["shell", "cmd", "appops", "set", "com.android.chrome", "RUN_IN_BACKGROUND", "allow"], serial)
+        run_adb(["shell", "cmd", "appops", "set", "com.android.chrome", "WAKE_LOCK", "allow"], serial)
         run_adb(["shell", "am", "set-standby-bucket", "com.android.chrome", "20"], serial)
-        print(f"       • Optimized Chrome: {Colors.GREEN}Safe background sleep, 100% foreground speed{Colors.RESET}")
+        print(f"       • Optimized Chrome: {Colors.GREEN}Natural sleep when closed, active downloads preserved{Colors.RESET}")
 
     # 6. AdGuard Private DNS Configuration (Optional / Clean)
     if enable_dns:

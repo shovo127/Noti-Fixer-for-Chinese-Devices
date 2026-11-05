@@ -60,12 +60,12 @@ These aggressive vendor engines:
 * **FR-3.4:** Inject Xiaomi-specific AppOps: Autostart (`10008`), Secondary Autostart (`10021`), Heads-Up Float (`10017`), Lockscreen (`10020`), and Alert Sound (`10022`).
 * **FR-3.5:** Inject packages into PowerKeeper system tables (`cloud_memory_freeze_whitelist`, `power_pkg_white_list`).
 
-### 3.4 Battery Optimization Engine & User Consultation Mandate
-* **FR-4.0 (Mandatory User Consultation):** Battery restrictions must never be arbitrarily applied by AI agents or silent automated runs without presenting options to the user. The CLI must interactively present detected background drainers and allow users to approve all, select custom apps, or skip entirely.
-* **FR-4.1:** Restrict user-approved background apps (e-commerce, ride-sharing, fintech/banking, video conferencing) to Standby Bucket 45 (`RESTRICTED`), revoke background wakelocks, and blacklist idle background data.
-* **FR-4.2:** Restrict Google Play Store (`com.android.vending`) background auto-checks and cancel queued background jobs while preserving 100% foreground speed and dependent frameworks (Google Play Services, Find My Device).
+### 3.4 Non-Destructive Background Optimization Engine & User Consultation Mandate
+* **FR-4.0 (Mandatory User Consultation):** Battery optimizations must never be arbitrarily applied by AI agents without explicit user consent. The CLI interactively presents detected background drainers and allows users to approve all, select custom apps, or skip entirely.
+* **FR-4.1 (Non-Destructive Idle Management):** For user-approved apps, suppress cold background autostarts (`10008 ignore`, `10021 ignore`) while preserving active background execution (`RUN_IN_BACKGROUND allow`, `WAKE_LOCK allow`) and NEVER blacklisting background data (`netpolicy blacklist` strictly prohibited). This ensures active background tasks (downloads, video calls, ride tracking, transactions) never pause or glitch.
+* **FR-4.2 (Google Play Store Framework Protection):** Google Play Store (`com.android.vending`) is recognized as a critical framework service. It is permanently whitelisted with full background download privileges, active standby bucket (`10`), and unthrottled wakelock allowance so app updates finish seamlessly with the screen off.
 * **FR-4.3:** Disable lockscreen Wallpaper Carousel / Glance bloat (`com.mfashiongallery.emag`).
-* **FR-4.4:** Optimize Google Chrome for deep sleep when screen is off without losing tabs or foreground speed.
+* **FR-4.4:** Optimize Google Chrome for deep sleep when idle without losing tabs, active downloads, or foreground responsiveness.
 
 ### 3.5 Multi-Brand Chinese ROM Coverage
 * **FR-5.0:** Support all Chinese ROM ecosystems with tailored vendor hooks:

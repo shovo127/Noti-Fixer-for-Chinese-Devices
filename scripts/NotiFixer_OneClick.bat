@@ -20,11 +20,12 @@ echo   [4] 📱 Device Fingerprint & Hardware/ROM Profile
 echo   [5] 🔋 Battery Drain Analysis & Culprit Inspector
 echo   [6] 🛡️ Push & Start HyperOS MILLET Watchdog Daemon
 echo   [7] 🔄 Wireless ADB Port Scanner (Find new port after reboot)
-echo   [8] ⏪ Revert Changes (Master 100%% Safe Rollback)
-echo   [9] ❌ Exit
+echo   [8] 🛠️ Fix Background App Freezing & Network Stalls (Play Store & Apps)
+echo   [9] ⏪ Revert Changes (Master 100%% Safe Rollback)
+echo   [10] ❌ Exit
 echo.
 ==============================================================================
-set /p choice="Enter choice [1-9]: "
+set /p choice="Enter choice [1-10]: "
 
 if "%choice%"=="1" goto WIRELESS
 if "%choice%"=="2" goto FIX
@@ -33,8 +34,9 @@ if "%choice%"=="4" goto DETECT
 if "%choice%"=="5" goto BATTERY
 if "%choice%"=="6" goto WATCHDOG
 if "%choice%"=="7" goto SCAN
-if "%choice%"=="8" goto ROLLBACK
-if "%choice%"=="9" exit /b 0
+if "%choice%"=="8" goto UNFREEZE
+if "%choice%"=="9" goto ROLLBACK
+if "%choice%"=="10" exit /b 0
 
 echo Invalid choice. Try again.
 pause
@@ -107,6 +109,15 @@ if "%target_ip%"=="" (
 ) else (
     python "%~dp0scan_ports.py" -ip %target_ip%
 )
+echo.
+echo Press any key to return to menu...
+pause >nul
+goto MENU
+
+:UNFREEZE
+cls
+echo [*] Restoring background app health and unblocking network...
+python "%~dp0restore_background_health.py"
 echo.
 echo Press any key to return to menu...
 pause >nul

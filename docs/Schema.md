@@ -60,28 +60,26 @@ These packages receive full Doze exemptions, Bucket 5 elevation, and all heads-u
 
 ---
 
-### Tier 2: Heavy Background Drainers (Battery Restricted)
-These packages are demoted to Bucket 45 (`RESTRICTED`), prohibited from background wakeups, and have their background data blacklisted:
+### Tier 2: Non-Destructive Background Optimization (Idle Suppressed)
+These user-approved packages have cold autostart suppressed (`10008 ignore`, `10021 ignore`), but preserve active background networking, wakelocks, and normal execution so tasks (calls, downloads, tracking) never stall:
 
 ```json
 {
   "tier": 2,
-  "category": "RESTRICTED_BACKGROUND_DRAINERS",
+  "category": "SAFE_BACKGROUND_DRAINERS",
   "policy": {
-    "standby_bucket": 45,
+    "standby_bucket": 20,
     "doze_whitelist": false,
-    "netpolicy_blacklist": true,
-    "cancel_scheduled_jobs": true,
+    "netpolicy_blacklist": false,
     "appops": {
-      "RUN_IN_BACKGROUND": "ignore",
-      "RUN_ANY_IN_BACKGROUND": "ignore",
-      "WAKE_LOCK": "ignore",
+      "RUN_IN_BACKGROUND": "allow",
+      "RUN_ANY_IN_BACKGROUND": "allow",
+      "WAKE_LOCK": "allow",
       "10008": "ignore",
       "10021": "ignore"
     }
   },
   "packages": [
-    "com.android.vending",
     "com.bKash.customerapp",
     "com.konasl.nagad",
     "com.pathao.user",
@@ -99,7 +97,7 @@ These packages are demoted to Bucket 45 (`RESTRICTED`), prohibited from backgrou
 ---
 
 ### Tier 3: Core System Frameworks (Read-Only / Protected)
-These packages must NEVER be uninstalled, frozen, or modified:
+These packages must NEVER be restricted, blacklisted, or modified:
 
 ```json
 {
@@ -108,11 +106,13 @@ These packages must NEVER be uninstalled, frozen, or modified:
   "policy": {
     "immutable": true,
     "never_uninstall": true,
-    "never_force_stop": true
+    "never_force_stop": true,
+    "never_blacklist_network": true
   },
   "packages": [
     "android",
     "com.android.systemui",
+    "com.android.vending",
     "com.miui.home",
     "com.android.settings",
     "com.android.phone",

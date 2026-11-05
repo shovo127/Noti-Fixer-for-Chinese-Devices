@@ -66,6 +66,7 @@ PROTECTED_SYSTEM_PACKAGES = {
     "com.google.android.gms",          # Core Google Play Services framework
     "com.google.android.gsf",          # Google Services Framework
     "com.google.android.apps.adm",     # Google Find My Device
+    "com.android.vending",             # Google Play Store (App updates & background downloads)
     "com.android.emergency",
     "com.android.dialer",
     "com.google.android.dialer",

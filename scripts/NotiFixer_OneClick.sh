@@ -31,11 +31,12 @@ show_menu() {
     echo -e "  [5] 🔋 Battery Drain Analysis & Culprit Inspector"
     echo -e "  [6] 🛡️ Push & Start HyperOS MILLET Watchdog Daemon"
     echo -e "  [7] 🔄 Wireless ADB Port Scanner (Find new port after reboot)"
-    echo -e "  [8] ⏪ Revert Changes (Master 100% Safe Rollback)"
-    echo -e "  [9] ❌ Exit"
+    echo -e "  [8] 🛠️ Fix Background App Freezing & Network Stalls (Play Store & Apps)"
+    echo -e "  [9] ⏪ Revert Changes (Master 100% Safe Rollback)"
+    echo -e "  [10] ❌ Exit"
     echo ""
     echo -e "${CYAN}==============================================================================${NC}"
-    echo -n "Enter choice [1-9]: "
+    echo -n "Enter choice [1-10]: "
 }
 
 while true; do
@@ -111,6 +112,14 @@ while true; do
             ;;
         8)
             clear
+            echo -e "${CYAN}[*] Restoring background app health and unblocking network...${NC}"
+            python3 "$SCRIPT_DIR/restore_background_health.py"
+            echo ""
+            echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
+            read -r
+            ;;
+        9)
+            clear
             echo -e "${YELLOW}Reverting all optimizations back to stock defaults...${NC}"
             adb shell device_config put activity_manager_native_boot use_freezer true
             adb shell setprop persist.sys.freezer true
@@ -122,7 +131,7 @@ while true; do
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
             read -r
             ;;
-        9)
+        10)
             echo "Exiting Noti-Fixer. Have a great day!"
             exit 0
             ;;
