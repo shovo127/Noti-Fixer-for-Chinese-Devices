@@ -15,8 +15,33 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        include:
+          # Ubuntu Runners with Supported Python Binaries
+          - os: ubuntu-22.04
+            python-version: "3.8"
+          - os: ubuntu-22.04
+            python-version: "3.9"
+          - os: ubuntu-latest
+            python-version: "3.10"
+          - os: ubuntu-latest
+            python-version: "3.11"
+          - os: ubuntu-latest
+            python-version: "3.12"
+          - os: ubuntu-latest
+            python-version: "3.13"
+          # Windows Runners
+          - os: windows-latest
+            python-version: "3.8"
+          - os: windows-latest
+            python-version: "3.9"
+          - os: windows-latest
+            python-version: "3.10"
+          - os: windows-latest
+            python-version: "3.11"
+          - os: windows-latest
+            python-version: "3.12"
+          - os: windows-latest
+            python-version: "3.13"
 
     steps:
       - name: Checkout Repository
@@ -34,6 +59,8 @@ jobs:
           python -m py_compile scripts/apply_notification_fix.py
           python -m py_compile scripts/scan_ports.py
           python -m py_compile scripts/connect_phone.py
+          python -m py_compile scripts/inspect_battery.py
+          python -m py_compile scripts/restore_background_health.py
           python -m py_compile scripts/safety_guard.py
 
       - name: Run Non-Destructive Safety Guard Verification Tests
@@ -46,6 +73,8 @@ jobs:
           python scripts/audit_fcm_doze.py --help
           python scripts/apply_notification_fix.py --help
           python scripts/scan_ports.py --help
+          python scripts/inspect_battery.py --help
+          python scripts/restore_background_health.py --help
 
   validate-shell:
     name: Validate Shell & Daemon Scripts
@@ -62,4 +91,3 @@ jobs:
             shellcheck -e SC2086,SC2181,SC2046 scripts/millet_watchdog.sh
             shellcheck -e SC2086,SC2181,SC2046 scripts/NotiFixer_OneClick.sh
           fi
-
