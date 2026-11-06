@@ -52,30 +52,59 @@ Every ADB shell command MUST pass `safety_guard.py` before execution.
 ### 2.1 Hard Prohibited Command Patterns (Immediate Abort)
 ```python
 PROHIBITED_COMMAND_PATTERNS = [
+    # Factory reset / Master clear / Wipe / Format / Erase commands
+    "master_clear",
+    "masterclear",
+    "android.intent.action.master_clear",
+    "factory_reset",
+    "factory-reset",
+    "wipe_data",
+    "--wipe_data",
+    "cmd recovery",
+    "recovery",
+    "wipe",
+    "format",
+    "erase",
+    "locksettings clear",
+    "locksettings set-pin",
+    "locksettings set-password",
+    "reset-screen",
+    "reset_phone",
+    "reset phone",
+
+    # Destructive package commands
     "uninstall",
     "pm clear",
     "disable-user",
     "pm disable",
+
+    # Bootloader / Fastboot / Recovery / Download mode
     "reboot bootloader",
+    "reboot-bootloader",
     "reboot recovery",
     "reboot fastboot",
+    "reboot sideload",
+    "reboot download",
+    "reboot edl",
     "fastboot",
-    "recovery",
-    "factory_reset",
-    "wipe",
-    "format",
-    "erase",
+    "oem unlock",
+    "flashing unlock",
+
+    # Filesystem destruction
     "rm -rf /",
     "rm -rf /data",
     "rm -rf /system",
+    "rm -rf /sdcard",
+    "blockdev",
+    "dd if=",
+    "flash ",
+
+    # Root & privilege escalation
     "su -c",
     "su ",
     "magisk",
     "kernelsu",
     "supersu",
-    "blockdev",
-    "dd if=",
-    "flash ",
     "setenforce 0"
 ]
 ```

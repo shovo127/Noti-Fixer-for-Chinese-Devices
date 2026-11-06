@@ -38,6 +38,10 @@ TARGET PHONE CONNECTION:
 - Pairing Code:    [YOUR_6_DIGIT_PAIRING_CODE] (Example: 849201 - Leave blank if already paired)
 
 INSTRUCTIONS FOR AI AGENT (Strict Non-Destructive Protocol):
+0. CRITICAL SAFETY BOUNDARIES (HARD LOCK - ABSOLUTE PROHIBITION):
+   - NEVER RESET THE PHONE (NO FACTORY RESET, NO DATA WIPE, NO FORMAT, NO LOCKSCREEN RESET, NO RECOVERY/FASTBOOT REBOOT). IT IS TOTALLY PROHIBITED. This is a non-destructive user-space configuration optimization; personal data, photos, chats, banking apps, and OS settings must remain 100% untouched.
+   - ZERO ROOT & ZERO BOOTLOADER UNLOCK: Never run su/Magisk/KernelSU or attempt to unlock bootloader.
+   - ZERO UNINSTALLS: Never run pm uninstall, pm disable, or pm clear. All apps must remain intact.
 1. CONNECT: Connect to my phone using adb pair / adb connect. Remind me to KEEP MY PHONE SCREEN ON and STAY inside the Wireless Debugging popup until connected.
 2. FINGERPRINT & BACKUP: Run scripts/detect_device.py to verify device brand, model, and Android OS. Create a 100% reversible backup in backups/.
 3. USER CONSULTATION (MANDATORY GATE):
@@ -203,9 +207,16 @@ graph TD
 
 Your smartphone contains your bank accounts, personal chats, and photos. Noti-Fixer is engineered with non-destructive, zero-risk safeguards enforced programmatically by `scripts/safety_guard.py`:
 
+> [!CAUTION]
+> ### 🚫 TOTAL PROHIBITION: ZERO PHONE RESET & ZERO DATA LOSS GUARANTEE
+> **Resetting the phone or wiping data is TOTALLY PROHIBITED.**  
+> Fixing notifications and battery drain is a simple non-destructive user-space ADB configuration task (adjusting Android Doze, Standby Buckets, MIUI/HyperOS MILLET tables, and AppOps). Resetting the phone, wiping user data, unlocking bootloader, or rooting is completely unnecessary, unacceptable, and forbidden.  
+> 
+> The integrated safety engine (`scripts/safety_guard.py`) automatically intercepts and blocks any attempt to run destructive commands (`factory_reset`, `master_clear`, `wipe`, `format`, `erase`, `locksettings clear`, `reboot recovery`, `reboot bootloader`, `fastboot`, `oem unlock`, `pm clear`, `pm uninstall`).
+
 - **100% Root-Free:** Does NOT require Magisk, KernelSU, or SuperSU. Never escalates privileges.
 - **Zero Bootloader Unlock Needed:** Keeps Widevine L1 (Netflix HD/4K), Google Wallet, and Banking apps 100% working.
-- **Zero Data Loss or Wipes:** Hard prohibited commands (`wipe`, `format`, `factory_reset`, `erase`) are blocked at the code interceptor level.
+- **Zero Phone Reset / Zero Data Loss:** All personal data, chats, photos, apps, and accounts remain 100% untouched.
 - **Zero Package Deletions:** Never executes `pm uninstall` or `pm disable`. Your apps are never deleted.
 - **Core System Protection:** Critical packages (`com.android.vending`, `com.google.android.gms`, `SystemUI`, `Phone`, `Settings`, `Keyboards`, `Launchers`) are hard-locked and can never be disabled.
 - **100% Reversible:** Every operation creates a timestamped JSON backup in `backups/`. Revert instantly with one click.

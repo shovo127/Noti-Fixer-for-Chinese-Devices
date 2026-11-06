@@ -86,7 +86,7 @@ These aggressive vendor engines:
 ## 4. Non-Functional Requirements & Safety Boundaries
 
 * **NFR-1 (Zero Privilege Escalation):** No `su`, Magisk, KernelSU, or root requirements.
-* **NFR-2 (Zero Data Destruction):** No `factory_reset`, `format`, `wipe`, `pm clear`, or uninstalls of system apps.
+* **NFR-2 (Zero Reset & Zero Data Destruction):** Resetting the phone or wiping user data is strictly prohibited. No `factory_reset`, `master_clear`, `format`, `wipe`, `locksettings clear`, `pm clear`, or uninstalls of system apps. This is a non-destructive user-space configuration optimization; personal data, photos, chats, banking apps, and OS settings remain 100% untouched.
 * **NFR-3 (Strict Core System Protection):** Critical core system packages (`android`, `SystemUI`, `com.android.phone`, `Settings`, `com.google.android.gms`, `Find My Device`, `InputMethod/Keyboards`, `Launchers`) are hard-protected and can never be restricted or disabled.
 * **NFR-4 (Strict Command Interception):** All shell commands must be vetted by `safety_guard.py` before execution.
 * **NFR-5 (Idempotent Execution):** Scripts can be rerun multiple times safely without duplicate entries or state corruption.

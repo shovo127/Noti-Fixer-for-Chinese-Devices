@@ -23,31 +23,61 @@ class SecurityViolationError(Exception):
     pass
 
 # Hard prohibited tokens and commands that NO script or AI agent is ever allowed to execute
+# Strict Zero-Reset, Zero-Wipe, Zero-Root, and Zero-Destruction Policy
 PROHIBITED_COMMAND_PATTERNS = [
+    # Factory reset / Master clear / Wipe / Format / Erase commands
+    "master_clear",
+    "masterclear",
+    "android.intent.action.master_clear",
+    "factory_reset",
+    "factory-reset",
+    "wipe_data",
+    "--wipe_data",
+    "cmd recovery",
+    "recovery",
+    "wipe",
+    "format",
+    "erase",
+    "locksettings clear",
+    "locksettings set-pin",
+    "locksettings set-password",
+    "reset-screen",
+    "reset_phone",
+    "reset phone",
+
+    # Destructive package commands
     "uninstall",
     "pm clear",
     "disable-user",
     "pm disable",
+
+    # Bootloader / Fastboot / Recovery / Download mode
     "reboot bootloader",
+    "reboot-bootloader",
     "reboot recovery",
     "reboot fastboot",
+    "reboot sideload",
+    "reboot download",
+    "reboot edl",
     "fastboot",
-    "recovery",
-    "factory_reset",
-    "wipe",
-    "format",
-    "erase",
+    "oem unlock",
+    "flashing unlock",
+
+    # Filesystem destruction
     "rm -rf /",
     "rm -rf /data",
     "rm -rf /system",
+    "rm -rf /sdcard",
+    "blockdev",
+    "dd if=",
+    "flash ",
+
+    # Root & privilege escalation
     "su -c",
     "su ",
     "magisk",
     "kernelsu",
     "supersu",
-    "blockdev",
-    "dd if=",
-    "flash ",
     "setenforce 0"
 ]
 
@@ -116,6 +146,8 @@ if __name__ == "__main__":
     test_safe = ["shell", "dumpsys", "deviceidle", "whitelist", "+com.whatsapp"]
     test_unsafe_uninstall = ["shell", "pm", "uninstall", "-k", "--user", "0", "com.google.android.gms"]
     test_unsafe_root = ["shell", "su", "-c", "id"]
+    test_unsafe_reset = ["shell", "am", "broadcast", "-a", "android.intent.action.MASTER_CLEAR"]
+    test_unsafe_recovery = ["reboot", "recovery"]
 
     assert assert_command_safe(test_safe) is True
 
@@ -129,6 +161,20 @@ if __name__ == "__main__":
     try:
         assert_command_safe(test_unsafe_root)
         print("FAIL: Should have blocked root attempt")
+        sys.exit(1)
+    except SecurityViolationError:
+        pass
+
+    try:
+        assert_command_safe(test_unsafe_reset)
+        print("FAIL: Should have blocked factory reset")
+        sys.exit(1)
+    except SecurityViolationError:
+        pass
+
+    try:
+        assert_command_safe(test_unsafe_recovery)
+        print("FAIL: Should have blocked reboot recovery")
         sys.exit(1)
     except SecurityViolationError:
         pass
