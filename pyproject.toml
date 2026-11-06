@@ -8,7 +8,7 @@ version = "1.0.0"
 description = "Autonomous push notification, FCM socket & process keeper suite for Chinese Android ROMs by Shovo"
 readme = "README.md"
 requires-python = ">=3.8"
-license = { text = "MIT" }
+license = { text = "Personal Non-Commercial License" }
 authors = [
   { name = "Mohammed Thuhidul Islam Shovo", email = "shovo127@users.noreply.github.com" }
 ]
@@ -31,7 +31,7 @@ classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
   "Intended Audience :: End Users/Desktop",
-  "License :: OSI Approved :: MIT License",
+  "License :: Other/Proprietary License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.8",

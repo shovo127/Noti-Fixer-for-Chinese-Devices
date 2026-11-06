@@ -6,7 +6,7 @@
 *Engineered for Xiaomi HyperOS / MIUI • Vivo OriginOS • Oppo ColorOS • Huawei HarmonyOS • Meizu Flyme*
 
 [![CI Validation](https://github.com/shovo127/Noti-Fixer-for-Chinese-Devices/actions/workflows/ci.yml/badge.svg)](https://github.com/shovo127/Noti-Fixer-for-Chinese-Devices/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: Personal Non-Commercial](https://img.shields.io/badge/License-Personal%20Non--Commercial-blue.svg)](LICENSE)
 [![Python 3.8+](https://img.shields.io/badge/Python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-3776AB.svg?logo=python&logoColor=white)](https://python.org)
 [![Android Compatibility](https://img.shields.io/badge/Android-12%20%7C%2013%20%7C%2014%20%7C%2015%20%7C%2016-green.svg?logo=android&logoColor=white)](https://developer.android.com)
 [![Zero Root Required](https://img.shields.io/badge/Root-NOT%20Required%20(Safe)-brightgreen.svg)](#-truthful-safety-guarantees)
@@ -237,8 +237,10 @@ Contributions from Android developers, ROM testers, and reverse-engineers are wa
 
 ---
 
-## 📜 Credit & Attribution
+## 📜 Credit, License & Legal Terms
 
 - **Architect & Maintainer:** **[Mohammed Thuhidul Islam Shovo (shovo127)](https://github.com/shovo127)**
-- **Notice:** See [`NOTICE`](NOTICE) for mandatory attribution and copyright requirements.
-- **License:** Open-source under the **[MIT License](LICENSE)**. Copyright (c) 2026 Mohammed Thuhidul Islam Shovo.
+- **Notice & Attribution:** See [`NOTICE`](NOTICE) for mandatory attribution requirements.
+- **License:** Licensed under the **[Noti-Fixer Personal Non-Commercial License](LICENSE)** (Copyright (c) 2026 Mohammed Thuhidul Islam Shovo).
+  - **Allowed:** 100% free for individual users to download, inspect, and use on devices they own.
+  - **Prohibited:** Commercial exploitation, paid repair shop usage, rebranding, unauthorized distribution, and closed-source monetization are strictly forbidden without prior written authorization.

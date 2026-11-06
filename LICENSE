@@ -1,21 +1,31 @@
-MIT License
+NOTI-FIXER PERSONAL NON-COMMERCIAL LICENSE
 
-Copyright (c) 2026 Mohammed Thuhidul Islam Shovo (shovo127)
+Copyright (c) 2026 Mohammed Thuhidul Islam Shovo (shovo127). All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is granted, free of charge, to any individual to download and use
+this software for PERSONAL, NON-COMMERCIAL purposes on devices they own.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+You MAY:
+- Download, inspect, and execute the source code on personal devices.
+- Report issues, suggest improvements, and submit pull requests (all contributions
+  submitted become licensed to the author for inclusion and maintenance).
 
+You MAY NOT, without prior written permission from the author:
+1. Copy, republish, fork-and-redistribute outside GitHub, mirror, or host this
+   software or substantial parts of it, whether modified or unmodified.
+2. Sell, sublicense, monetize, bundle, or use this software in any commercial
+   product, toolkit, or service (including paid mobile repair or servicing shops).
+3. Remove, obscure, or alter this notice, the author's name, or original attribution.
+4. Claim, present, or distribute this work or any derivatives thereof as your own.
+
+GitHub's Terms of Service allow viewing and personal forking of public repositories
+within GitHub; this license does not widen those rights or permit external distribution.
+
+DISCLAIMER OF WARRANTY AND LIMITATION OF LIABILITY:
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHOR OR COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES, DATA LOSS, OR
+DEVICE ISSUES ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR
+THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+USE AT YOUR OWN RISK; ALWAYS MAINTAIN A BACKUP OF YOUR DATA.
