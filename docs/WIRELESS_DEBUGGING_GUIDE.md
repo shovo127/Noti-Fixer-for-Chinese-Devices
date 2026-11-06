@@ -61,7 +61,7 @@ python scripts/connect_phone.py
 
 The script will ask you for 3 simple things:
 1. **IP & Pairing Port:** Enter `192.168.1.50:39481` (from your phone popup).
-2. **6-Digit Pairing Code:** Enter `849201` (from your phone popup).
+2. **6-Digit Pairing Code:** Enter `123456` (from your phone popup).
 3. **Connect Port:** Close the popup on your phone, glance at the main Wireless Debugging screen, and press **Enter**!
 
 ---

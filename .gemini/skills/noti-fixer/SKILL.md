@@ -40,10 +40,10 @@ This skill equips Antigravity, Cursor, Claude Code, GitHub Copilot, and LLM pair
 
 ### Phase 0: Collect
 Prompt the user for connection parameters if not already provided:
-- `PHONE_IP`: Device Wi-Fi IP address (e.g., `192.168.1.160`)
-- `PAIRING_PORT`: Port shown on the "Pair device with pairing code" popup (e.g., `40261`)
-- `PAIRING_CODE`: 6-digit Wi-Fi pairing code (e.g., `849201`)
-- `CONNECT_PORT`: Port shown on the main Wireless Debugging screen (e.g., `39845`)
+- `PHONE_IP`: Device Wi-Fi IP address (e.g., `192.168.0.105`)
+- `PAIRING_PORT`: Port shown on the "Pair device with pairing code" popup (e.g., `41259`)
+- `PAIRING_CODE`: 6-digit Wi-Fi pairing code (e.g., `123456`)
+- `CONNECT_PORT`: Port shown on the main Wireless Debugging screen (e.g., `38473`)
 *If any value is missing, ask once in a single concise message.*
 
 ### Phase 1: Connect

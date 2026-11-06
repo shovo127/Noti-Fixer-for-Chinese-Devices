@@ -134,7 +134,7 @@ def restore_backup(backup_dir: Optional[str] = None, serial: Optional[str] = Non
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Noti-Fixer Master Rollback & Reinstaller")
-    parser.add_argument("-s", "--serial", help="ADB device serial (e.g. 192.168.1.160:39845)")
+    parser.add_argument("-s", "--serial", help="ADB device serial (e.g. 192.168.0.105:38473)")
     parser.add_argument("-b", "--backup-dir", help="Path to specific backup directory")
     args = parser.parse_args()
 

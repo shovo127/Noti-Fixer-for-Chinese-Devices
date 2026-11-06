@@ -11,7 +11,7 @@
 
 ```
 [Phase 1: Environment & Port Discovery]
-   ├── Check existing wireless ADB connection (e.g. 192.168.1.160:PORT)
+   ├── Check existing wireless ADB connection (e.g. 192.168.0.105:PORT)
    └── If offline, run scan_ports.py across local IP to acquire active port
              │
 [Phase 2: Pre-Flight Audit & Snapshot]

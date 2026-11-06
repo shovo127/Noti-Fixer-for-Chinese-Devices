@@ -27,10 +27,10 @@ Follow these phases sequentially:
 
 ### Phase 0: Collect
 Request or parse the target device parameters from the user:
-- `PHONE_IP` (e.g. `192.168.1.160`)
-- `PAIRING_PORT` (e.g. `40261` from the "Pair device with pairing code" popup)
-- `PAIRING_CODE` (e.g. `849201`)
-- `CONNECT_PORT` (e.g. `39845` from the main Wireless Debugging screen)
+- `PHONE_IP` (e.g. `192.168.0.105`)
+- `PAIRING_PORT` (e.g. `41259` from the "Pair device with pairing code" popup)
+- `PAIRING_CODE` (e.g. `123456`)
+- `CONNECT_PORT` (e.g. `38473` from the main Wireless Debugging screen)
 *If any are missing, ask once in a single concise message.*
 
 ### Phase 1: Connect

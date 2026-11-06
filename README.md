@@ -51,10 +51,10 @@ Copy the block below, replace `[PHONE_IP]`, `[PAIRING_PORT]`, `[PAIRING_CODE]`, 
 Hey AI Agent! Please optimize my phone using the Noti-Fixer repository:
 
 TARGET PHONE CONNECTION:
-- Phone IP:       [PHONE_IP]       (Example: 192.168.1.160)
-- Pairing Port:   [PAIRING_PORT]   (Example: 40261 - from the "Pair with code" popup)
-- Pairing Code:   [PAIRING_CODE]   (Example: 849201 - 6-digit code on the popup)
-- Connect Port:   [CONNECT_PORT]   (Example: 39845 - from the main Wireless Debugging page)
+- Phone IP:       [PHONE_IP]       (Example: 192.168.0.105)
+- Pairing Port:   [PAIRING_PORT]   (Example: 41259 - from the "Pair with code" popup)
+- Pairing Code:   [PAIRING_CODE]   (Example: 123456 - 6-digit code on the popup)
+- Connect Port:   [CONNECT_PORT]   (Example: 38473 - from the main Wireless Debugging page)
 
 AI AGENT DIRECTIVES (Read AGENTS.md and .gemini/skills/noti-fixer/SKILL.md first):
 1. SAFETY FIRST: Never reset the phone (zero factory reset, zero wipe, zero recovery reboot). Zero root, zero bootloader unlock. All commands must pass scripts/safety_guard.py.
