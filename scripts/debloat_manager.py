@@ -330,3 +330,4 @@ if __name__ == "__main__":
         print(json.dumps(found, indent=2))
     else:
         manage_debloat(serial=args.serial, auto=args.auto, specific_apps=args.apps)
+
