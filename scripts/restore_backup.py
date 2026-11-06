@@ -139,3 +139,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     restore_backup(backup_dir=args.backup_dir, serial=args.serial)
+

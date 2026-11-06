@@ -6,3 +6,4 @@ Please refer to the master agent instructions in [AGENTS.md](AGENTS.md), as well
 - Debloat Integration: [docs/DEBLOAT_INTEGRATION.md](docs/DEBLOAT_INTEGRATION.md)
 
 Follow the 8-phase deterministic workflow (Phase 0 through Phase 7) and obey all safety constraints without exception.
+
