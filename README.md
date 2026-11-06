@@ -145,8 +145,9 @@ chmod +x scripts/NotiFixer_OneClick.sh
 | `[6]` | 🛡️ **Start MILLET Watchdog** | Background daemon that prevents HyperOS from resetting whitelists. |
 | `[7]` | 🔄 **Wireless Port Scanner** | Auto-discovers new dynamic ports across `30000–49999` after reboot. |
 | `[8]` | 🛠️ **Unfreeze Background Apps** | Restores background network and execution for Play Store & apps. |
-| `[9]` | ⏪ **Master 100% Safe Rollback** | Reinstalls debloated packages and reverts all settings to stock. |
-| `[10]`| ❌ **Exit** | Closes the repair suite. |
+| `[9]` | 🧹 **Safe Bloatware & Ad Debloater** | Removes recommended vendor ads & bloat for User 0 (100% reversible). |
+| `[10]`| ⏪ **Master 100% Safe Rollback** | Reinstalls debloated packages and reverts all settings to stock. |
+| `[11]`| ❌ **Exit** | Closes the repair suite. |
 
 ---
 

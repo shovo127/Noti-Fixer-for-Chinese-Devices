@@ -21,11 +21,12 @@ echo   [5] 🔋 Battery Drain Analysis & Culprit Inspector
 echo   [6] 🛡️ Push & Start HyperOS MILLET Watchdog Daemon
 echo   [7] 🔄 Wireless ADB Port Scanner (Find new port after reboot)
 echo   [8] 🛠️ Fix Background App Freezing & Network Stalls (Play Store & Apps)
-echo   [9] ⏪ Revert Changes (Master 100%% Safe Rollback)
-echo   [10] ❌ Exit
+echo   [9] 🧹 Safe Bloatware & Ad Debloater (User-Profile Only - 100%% Reversible)
+echo   [10] ⏪ Revert Changes (Master 100%% Safe Rollback & Reinstaller)
+echo   [11] ❌ Exit
 echo.
 ==============================================================================
-set /p choice="Enter choice [1-10]: "
+set /p choice="Enter choice [1-11]: "
 
 if "%choice%"=="1" goto WIRELESS
 if "%choice%"=="2" goto FIX
@@ -35,8 +36,9 @@ if "%choice%"=="5" goto BATTERY
 if "%choice%"=="6" goto WATCHDOG
 if "%choice%"=="7" goto SCAN
 if "%choice%"=="8" goto UNFREEZE
-if "%choice%"=="9" goto ROLLBACK
-if "%choice%"=="10" exit /b 0
+if "%choice%"=="9" goto DEBLOAT
+if "%choice%"=="10" goto ROLLBACK
+if "%choice%"=="11" exit /b 0
 
 echo Invalid choice. Try again.
 pause
@@ -118,6 +120,15 @@ goto MENU
 cls
 echo [*] Restoring background app health and unblocking network...
 python "%~dp0restore_background_health.py"
+echo.
+echo Press any key to return to menu...
+pause >nul
+goto MENU
+
+:DEBLOAT
+cls
+echo [*] Launching Safe User-Profile Bloatware & Ad Debloater...
+python "%~dp0debloat_manager.py"
 echo.
 echo Press any key to return to menu...
 pause >nul

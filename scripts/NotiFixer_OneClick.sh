@@ -32,11 +32,12 @@ show_menu() {
     echo -e "  [6] 🛡️ Push & Start HyperOS MILLET Watchdog Daemon"
     echo -e "  [7] 🔄 Wireless ADB Port Scanner (Find new port after reboot)"
     echo -e "  [8] 🛠️ Fix Background App Freezing & Network Stalls (Play Store & Apps)"
-    echo -e "  [9] ⏪ Revert Changes (Master 100% Safe Rollback)"
-    echo -e "  [10] ❌ Exit"
+    echo -e "  [9] 🧹 Safe Bloatware & Ad Debloater (User-Profile Only - 100% Reversible)"
+    echo -e "  [10] ⏪ Revert Changes (Master 100% Safe Rollback & Reinstaller)"
+    echo -e "  [11] ❌ Exit"
     echo ""
     echo -e "${CYAN}==============================================================================${NC}"
-    echo -n "Enter choice [1-10]: "
+    echo -n "Enter choice [1-11]: "
 }
 
 while true; do
@@ -120,13 +121,21 @@ while true; do
             ;;
         9)
             clear
+            echo -e "${CYAN}[*] Launching Safe User-Profile Bloatware & Ad Debloater...${NC}"
+            python3 "$SCRIPT_DIR/debloat_manager.py"
+            echo ""
+            echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
+            read -r
+            ;;
+        10)
+            clear
             echo -e "${YELLOW}Executing Master 100% Safe System Rollback & Package Restoration...${NC}"
             python3 "$SCRIPT_DIR/restore_backup.py"
             echo ""
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
             read -r
             ;;
-        10)
+        11)
             echo "Exiting Noti-Fixer. Have a great day!"
             exit 0
             ;;

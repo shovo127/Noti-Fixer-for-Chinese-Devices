@@ -131,6 +131,42 @@ These packages must NEVER be restricted, blacklisted, or modified:
 
 ---
 
+### Tier 4: Vendor Bloatware & Ad Services (Safe User-Profile Debloat)
+These packages are non-critical vendor bloatware, push ad delivery services, or redundant stores that can be safely uninstalled for the active user profile (`pm uninstall -k --user 0`). They never touch the `/system` partition and can be reinstalled anytime (`cmd package install-existing --user 0`):
+
+```json
+{
+  "tier": 4,
+  "category": "SAFE_DEBLOAT_CANDIDATES",
+  "policy": {
+    "removal_command": "pm uninstall -k --user 0",
+    "restore_command": "cmd package install-existing --user 0",
+    "system_partition_safe": true,
+    "user_profile_only": true
+  },
+  "packages": [
+    "com.miui.analytics",
+    "com.miui.systemAdSolution",
+    "com.mfashiongallery.emag",
+    "com.xiaomi.mipicks",
+    "com.miui.hybrid",
+    "com.miui.bugreport",
+    "com.miui.yellowpage",
+    "com.mi.globalbrowser",
+    "com.miui.videoplayer",
+    "com.miui.player",
+    "com.vivo.appstore",
+    "com.vivo.magazine",
+    "com.heytap.market",
+    "com.heytap.pictorial",
+    "com.huawei.appmarket",
+    "com.huawei.magazine"
+  ]
+}
+```
+
+---
+
 ## 2. Reversible Backup Schema (`backups/backup_*.json`)
 
 Every execution of `apply_notification_fix.py` produces a standard JSON backup schema:

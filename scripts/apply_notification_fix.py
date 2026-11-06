@@ -254,6 +254,7 @@ def apply_universal_fixes(
     custom_apps: Optional[List[str]] = None,
     restrict_apps: Optional[List[str]] = None,
     skip_battery: bool = False,
+    enable_debloat: bool = False,
     auto: bool = False
 ):
     print(f"\n{Colors.CYAN}{'='*72}{Colors.RESET}")
@@ -423,28 +424,43 @@ def apply_universal_fixes(
         run_adb(["shell", "am", "set-standby-bucket", "com.android.chrome", "20"], serial)
         print(f"       • Optimized Chrome: {Colors.GREEN}Natural sleep when closed, active downloads preserved{Colors.RESET}")
 
-    # 6. AdGuard Private DNS Configuration (Optional / Clean)
+    # 6. Safe User-Profile Bloatware & Ad Debloater (Optional)
+    if enable_debloat:
+        try:
+            from debloat_manager import scan_bloatware, execute_debloat
+        except ImportError:
+            from scripts.debloat_manager import scan_bloatware, execute_debloat
+        print(f"\n {Colors.CYAN}[6/8] Scanning and Debloating Recommended Vendor Bloatware...{Colors.RESET}")
+        cands = scan_bloatware(serial)
+        rec_pkgs = [c["package"] for c in cands if c["tier"] == "RECOMMENDED"]
+        if rec_pkgs:
+            execute_debloat(rec_pkgs, serial)
+        else:
+            print(f"       -> {Colors.GREEN}No recommended vendor bloatware packages detected on User 0.{Colors.RESET}")
+
+    # 7. AdGuard Private DNS Configuration (Optional / Clean)
     if enable_dns:
-        print(f"\n {Colors.CYAN}[6/7] Activating Safe AdGuard Private DNS (Sinkhole Bloat Analytics)...{Colors.RESET}")
+        print(f"\n {Colors.CYAN}[7/8] Activating Safe AdGuard Private DNS (Sinkhole Bloat Analytics)...{Colors.RESET}")
         run_adb(["shell", "settings", "put", "global", "private_dns_mode", "hostname"], serial)
         run_adb(["shell", "settings", "put", "global", "private_dns_specifier", "dns.adguard.com"], serial)
         print(f"       -> Private DNS set to: {Colors.GREEN}dns.adguard.com{Colors.RESET} (FCM sockets 100% preserved)")
     else:
-        print(f"\n {Colors.CYAN}[6/7] Private DNS: Preserving user default (Use --dns-adguard to enable AdGuard){Colors.RESET}")
+        print(f"\n {Colors.CYAN}[7/8] Private DNS: Preserving user default (Use --dns-adguard to enable AdGuard){Colors.RESET}")
 
-    # 7. FCM Pulse & Verification
-    print(f"\n {Colors.CYAN}[7/7] Pulsing Google FCM Connection Heartbeat...{Colors.RESET}")
+    # 8. FCM Pulse & Verification
+    print(f"\n {Colors.CYAN}[8/8] Pulsing Google FCM Connection Heartbeat...{Colors.RESET}")
     run_adb(["shell", "am", "broadcast", "-a", "com.google.android.intent.action.MCS_HEARTBEAT", "-p", "com.google.android.gms"], serial)
     run_adb(["shell", "am", "broadcast", "-a", "com.google.android.c2dm.intent.RECEIVE", "-p", "com.google.android.gms"], serial)
     print(f"       -> FCM Wakeup Heartbeat Broadcast delivered to GMS.")
 
-    print(f"\n{Colors.GREEN}{Colors.BOLD}✔ All highest-level notification & battery fixes applied successfully!{Colors.RESET}")
+    print(f"\n{Colors.GREEN}{Colors.BOLD}✔ All highest-level notification, battery & bloatware fixes applied successfully!{Colors.RESET}")
     print(f"{Colors.CYAN}{'='*72}{Colors.RESET}\n")
 
 def main():
     parser = argparse.ArgumentParser(description="Noti-Fixer Multi-Brand Notification & Battery Suite by Shovo")
     parser.add_argument("-s", "--serial", help="ADB serial of target device", default=None)
     parser.add_argument("--dns-adguard", action="store_true", help="Configure AdGuard Private DNS to block vendor analytics")
+    parser.add_argument("--debloat", action="store_true", help="Scan and remove recommended vendor bloatware & ad services for user profile")
     parser.add_argument("--apps", nargs="+", help="Additional priority package names to whitelist", default=None)
     parser.add_argument("--restrict-apps", nargs="+", help="Explicit package names to restrict in background", default=None)
     parser.add_argument("--skip-battery", action="store_true", help="Skip restricting any apps for battery savings")
@@ -457,6 +473,7 @@ def main():
         custom_apps=args.apps,
         restrict_apps=args.restrict_apps,
         skip_battery=args.skip_battery,
+        enable_debloat=args.debloat,
         auto=args.auto
     )
 

@@ -62,6 +62,7 @@ jobs:
           python -m py_compile scripts/inspect_battery.py
           python -m py_compile scripts/restore_background_health.py
           python -m py_compile scripts/restore_backup.py
+          python -m py_compile scripts/debloat_manager.py
           python -m py_compile scripts/safety_guard.py
 
       - name: Run Non-Destructive Safety Guard Verification Tests
@@ -75,6 +76,7 @@ jobs:
           python scripts/apply_notification_fix.py --help
           python scripts/scan_ports.py --help
           python scripts/restore_backup.py --help
+          python scripts/debloat_manager.py --help
           python scripts/inspect_battery.py --help
           python scripts/restore_background_health.py --help
 
