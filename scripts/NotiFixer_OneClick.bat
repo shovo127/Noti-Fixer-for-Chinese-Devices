@@ -125,5 +125,9 @@ goto MENU
 
 :ROLLBACK
 cls
-call "%~dp0..\templates\master_restore_template.bat"
+echo [*] Executing Master 100% Safe System Rollback & Package Restoration...
+python "%~dp0restore_backup.py"
+echo.
+echo Press any key to return to menu...
+pause >nul
 goto MENU

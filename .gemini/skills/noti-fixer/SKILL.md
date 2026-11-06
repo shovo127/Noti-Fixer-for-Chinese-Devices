@@ -1,6 +1,6 @@
 ---
 name: noti-fixer
-description: Autonomous notification fixer and process optimization specialist for Chinese ROM devices (Xiaomi HyperOS, Vivo OriginOS, Oppo ColorOS, Huawei HarmonyOS). Resolves delayed notifications, aggressive background kills, and FCM socket freezes via ADB pairing.
+description: Autonomous push notification healer, background battery optimizer, and safe user-profile debloater for Chinese Android ROMs (Xiaomi HyperOS, Vivo OriginOS, Oppo ColorOS, Huawei HarmonyOS, Meizu Flyme).
 ---
 
 # Noti-Fixer: Master AI Agent Skill for Chinese Android Devices
@@ -8,7 +8,7 @@ description: Autonomous notification fixer and process optimization specialist f
 **Architect:** Mohammed Thuhidul Islam Shovo (shovo127)  
 **License:** MIT License (Copyright (c) 2026)
 
-This skill equips Antigravity, Cursor, Claude, and AI pairing agents with full autonomous intelligence to diagnose, repair, and permanently maintain push notifications on any Chinese ROM device without root, without unlocking the bootloader, and with 100% reversibility.
+This skill equips Antigravity, Cursor, Claude Code, GitHub Copilot, and LLM pairing agents with deterministic intelligence to diagnose, repair, and maintain push notifications and battery life across Chinese ROMs without root, without bootloader unlocking, and with 100% reversibility.
 
 ---
 
@@ -16,134 +16,91 @@ This skill equips Antigravity, Cursor, Claude, and AI pairing agents with full a
 
 > **CRITICAL AI SAFETY DIRECTIVE:** AI pairing agents MUST NEVER execute or recommend destructive commands. The programmatic security interceptor (`scripts/safety_guard.py`) will automatically terminate any prohibited operations.
 
-1. **Zero Root / Zero Bootloader Unlock:** Never suggest or execute `su`, `magisk`, `kernelsu`, bootloader unlocking, or custom ROM flashing. All optimizations operate strictly through Android's sanctioned ADB AppOps/Doze whitelist APIs.
-2. **Zero Factory Reset or Data Wiping:** Never suggest or run `factory_reset`, `format`, `wipe`, `erase`, or `reboot recovery`. User data must remain 100% untouched.
-3. **Zero Package Deletions or Disablings:** Never execute `pm uninstall`, `pm clear`, or `pm disable-user`. Noti-Fixer only adds whitelists; it NEVER deletes user or system apps.
+1. **Zero Factory Reset or Data Wiping:** Never suggest or run `factory_reset`, `master_clear`, `wipe`, `format`, `erase`, `locksettings clear`, or `reboot recovery`. User data, accounts, photos, and chats must remain 100% untouched.
+2. **Zero Root / Zero Bootloader Unlock:** Never suggest or execute `su`, `magisk`, `kernelsu`, bootloader unlocking, or custom ROM flashing. All optimizations operate strictly through Android's sanctioned ADB AppOps/Doze whitelist APIs.
+3. **Reversible User-Profile Debloat Only:** Never run `pm disable`, `disable-user`, `pm clear`, or unvetted uninstalls. The only permitted removal command is `pm uninstall -k --user 0 <pkg>` applied strictly to packages explicitly confirmed in **List A**, and NEVER to packages in **List C** (Protected Frameworks).
 4. **Always Route ADB Through Safety Guard:** All operations run through `scripts/safety_guard.py` which intercepts dangerous tokens before they can be sent to the device.
-5. **Always Backup First:** Every execution of `scripts/apply_notification_fix.py` automatically generates a timestamped recovery snapshot in `backups/`.
-6. **Mandatory Post-Verification:** Never declare success until `scripts/audit_fcm_doze.py` confirms that the FCM socket (`mtalk.google.com:5228`) is connected and healthy.
-7. *(Full security reference: [docs/SAFETY_AND_AI_BOUNDARIES.md](docs/SAFETY_AND_AI_BOUNDARIES.md))*
+5. **Always Backup First:** Every execution automatically generates a timestamped recovery snapshot and rollback script in `backups/<timestamp>/`.
+6. **Mandatory User Confirmation Gates:** Never apply changes or debloat apps without explicitly presenting the diagnosis and the 3 editable lists (A, B, C) and waiting for user confirmation.
+7. **Mandatory Post-Verification:** Never declare success until `scripts/audit_fcm_doze.py` confirms that the FCM socket (`mtalk.google.com:5228`) is connected and healthy.
+*(Full security reference: [docs/SAFETY_AND_AI_BOUNDARIES.md](docs/SAFETY_AND_AI_BOUNDARIES.md))*
 
 ---
 
-## 2. Interaction Protocol & Step-by-Step Workflow
+## 2. Deterministic 8-Phase AI Workflow
 
-```
-[Phase 1: Pairing & Connection]
-         │ ── USB Cable OR Wireless Debugging
-         ▼
-[Phase 2: Fingerprinting & Detection]
-         │ ── Run detect_device.py
-         ▼
-[Phase 3: Live FCM & Doze Audit]
-         │ ── Run audit_fcm_doze.py
-         ▼
-[Phase 4: Brand-Specific Remediation]
-         │ ── Run apply_notification_fix.py
-         ▼
-[Phase 5: Verification & Watchdog Activation]
-         │ ── Verify mtalk.google.com:5228 & deploy millet_watchdog.sh
+```text
+[Phase 0: Collect] ──────► [Phase 1: Connect] ──────► [Phase 2: Safe Scan]
+                                                             │
+[Phase 5: Backup]  ◄───── [Phase 4: Propose Lists] ◄── [Phase 3: Diagnose + Confirm]
+       │
+       ▼
+[Phase 6: Apply]   ──────► [Phase 7: Verify]
 ```
 
----
+### Phase 0: Collect
+Prompt the user for connection parameters if not already provided:
+- `PHONE_IP`: Device Wi-Fi IP address (e.g., `192.168.1.160`)
+- `PAIRING_PORT`: Port shown on the "Pair device with pairing code" popup (e.g., `40261`)
+- `PAIRING_CODE`: 6-digit Wi-Fi pairing code (e.g., `849201`)
+- `CONNECT_PORT`: Port shown on the main Wireless Debugging screen (e.g., `39845`)
+*If any value is missing, ask once in a single concise message.*
 
-### Step 1: Device Pairing & Setup Guidance
-
-When a user mentions delayed notifications, missed WhatsApp/Telegram calls, or background app closures on a Chinese device, guide them:
-
-#### A. Enable Developer Options & Debugging
-1. Open phone **Settings** -> **About Phone**.
-2. Tap **Build Number** (or **OS Version**) 7 times until you see *"You are now a developer!"*.
-3. Go to **Settings** -> **System / Additional Settings** -> **Developer Options**.
-4. Enable **USB Debugging** (and on Xiaomi devices, also enable **USB Debugging (Security settings)**).
-
-#### B. Connection Mode (USB or Wireless ADB)
-- **Super Simple Wireless Pairing Wizard (Recommended):**
-  Ask the user for their IP, pairing port, and 6-digit code from the "Pair device with pairing code" popup, then execute:
-  ```bash
-  python scripts/connect_phone.py
-  ```
-  Or directly:
-  `adb pair <IP>:<Pairing_Port> <Code>` followed by `adb connect <IP>:<Connect_Port>`
-- **USB Cable:** Plug in cable, select *File Transfer*, and tap **Allow Always** on the USB debugging authorization popup.
-
-#### C. Post-Reboot Wireless Port Discovery
-If the phone reboots and the Wireless Debugging port changes dynamically:
+### Phase 1: Connect
+Connect to the phone using the collected parameters:
 ```bash
-python scripts/scan_ports.py -ip <Device_IP>
+adb pair <PHONE_IP>:<PAIRING_PORT> <PAIRING_CODE>
+adb connect <PHONE_IP>:<CONNECT_PORT>
 ```
-The script will multi-thread scan ports `30000-49999` and automatically reconnect.
+*Instruct the user in plain language:*
+- Keep phone screen ON and stay on the "Pair device with pairing code" popup until pairing succeeds.
+- Once paired, approve any "Always allow from this computer" prompt.
 
----
-
-### Step 2: Device Fingerprinting
-
-Identify the brand, Android OS version, and kernel freezer status:
+### Phase 2: Safe Scan (READ-ONLY)
+Audit the device state without executing any modifications:
 ```bash
 python scripts/detect_device.py
-```
-Check:
-- `rom_family`: Identifies if target is HyperOS, OriginOS, ColorOS, or HarmonyOS.
-- `cached_apps_freezer`: Identifies if Android 14/15/16 kernel socket freezing is active.
-
----
-
-### Step 3: Live FCM & Process Audit
-
-Execute a non-invasive live audit:
-```bash
 python scripts/audit_fcm_doze.py
+python scripts/inspect_battery.py
 ```
-Evaluate:
-- **FCM Socket Connection:** Must show `CONNECTED` to Google port `5228`.
-- **Doze Whitelist:** Ensures WhatsApp, Telegram, Messenger, and GMS are exempted.
-- **Vendor AppOps:** Checks if autostart (`10008`) is granted.
+Gather: Brand, Model, Android OS / API, ROM family, Kernel cgroup freezer status, Google FCM socket status (`mtalk.google.com:5228`), and top battery drainers.
 
----
+### Phase 3: Diagnose & Ask for Confirmation
+Present the findings clearly in a short table.
+**Ask the user:**
+> *"Do you confirm this diagnosis and wish to proceed with the remediation plan? (yes/edit)"*
+*Wait for user confirmation before proceeding to Phase 4.*
 
-### Step 4: Automated Scientific Remediation
+### Phase 4: Propose 3 Editable Lists
+Present three structured lists to the user:
+- **List A (Debloat Candidates):** Pre-installed vendor bloatware/analytics safe to uninstall for user profile (`pm uninstall -k --user 0`). Include package name, app label, and safety tier.
+- **List B (Background-Restrict Candidates):** High-drain user apps (ride-sharing, food delivery, shopping, secondary social media) to put in On-Demand Standby (Bucket `40 / RARE` with autostart `10008` & `10021` set to `ignore`). When opened by the user, they run at 100% full speed.
+- **List C (Protected / Never Touched):** Core system frameworks, Google Play Services, Google Play Store (`com.android.vending`), Download Manager (`com.android.providers.downloads`), Zoom (`us.zoom.videomeetings`), SystemUI, Phone, Dialer, SMS, Keyboards, Launchers, and user-marked critical banking/messaging apps.
+Save the plan to `backups/<timestamp>/plan.json`.
+**Ask the user:**
+> *"Would you like to add or remove any apps from List A or List B? Reply 'proceed' when ready."*
+*Iterate until the user approves.*
 
-Run the universal fixer:
-```bash
-python scripts/apply_notification_fix.py --dns-adguard
-```
+### Phase 5: Backup
+Snapshot current system settings, AppOps states, Standby Buckets, and uninstalled packages into `backups/<timestamp>/` and generate a single-click `restore.bat` / `restore.sh`.
 
-#### What this accomplishes across brands:
-1. **Universal Android Core:**
-   - Disables kernel Cgroup `cached_apps_freezer` (`use_freezer false`).
-   - Adds GMS and messaging apps to Android Doze whitelist (`dumpsys deviceidle whitelist +<pkg>`).
-   - Exempts apps from metered background netpolicy (`cmd netpolicy add restrict-background-whitelist <UID>`).
-2. **Xiaomi HyperOS / MIUI:**
-   - Grants AppOp `10008` (`OP_AUTO_START`).
-   - Grants AppOp `10021` (`OP_SHOW_WHEN_LOCKED` / secondary launch).
-   - Injects apps into `Settings.System.MILLET_NO_RESTRICT_APP`.
-   - Deploys `scripts/millet_watchdog.sh` into `/data/local/tmp` to prevent PowerKeeper from wiping the whitelist on app updates.
-3. **Vivo OriginOS / FuntouchOS:**
-   - Whitelists high background battery consumption.
-   - Sets AppOp `10008` (Autostart).
-   - Grants `RUN_ANY_IN_BACKGROUND`.
-4. **Oppo ColorOS / Realme UI:**
-   - Bypasses Athena Quick Freeze.
-   - Sets `AUTO_REVOKE_PERMISSIONS_IF_UNUSED` to `ignore`.
-5. **Safe AdGuard Private DNS:**
-   - Configures `dns.adguard.com` to sinkhole vendor telemetry while preserving Google push sockets.
+### Phase 6: Apply
+1. Debloat approved List A packages via:
+   `adb shell pm uninstall -k --user 0 <package>`
+2. Configure approved List B packages into On-Demand Standby:
+   `adb shell cmd appops set <package> 10008 ignore`
+   `adb shell cmd appops set <package> 10021 ignore`
+   `adb shell am set-standby-bucket <package> rare`
+3. Execute notification remediation:
+   `python scripts/apply_notification_fix.py`
+4. Deploy the watchdog daemon on HyperOS devices:
+   `adb push scripts/millet_watchdog.sh /data/local/tmp/millet_watchdog.sh`
+   `adb shell chmod +x /data/local/tmp/millet_watchdog.sh`
+   `adb shell "nohup /data/local/tmp/millet_watchdog.sh >/dev/null 2>&1 &"`
 
----
-
-### Step 5: Verification & Testing
-
-Verify that the socket is open and live:
-```bash
-python scripts/audit_fcm_doze.py
-```
-Ask the user to turn off the screen, wait 2 minutes, and send a message or test call to verify instantaneous delivery.
-
----
-
-### Step 6: 100% Reversible Rollback
-
-If the user ever sells the phone or wants to revert:
-```bash
-call templates/master_restore_template.bat
-```
-This safely restores default factory settings without modifying user data.
+### Phase 7: Verify & Report
+1. Re-run live FCM socket audit:
+   `python scripts/audit_fcm_doze.py`
+2. Deliver a clean before-and-after verification table.
+3. Show the user the exact 1-click rollback command:
+   `python scripts/restore_backup.py` (or Option `[9]` in `scripts/NotiFixer_OneClick.bat`).

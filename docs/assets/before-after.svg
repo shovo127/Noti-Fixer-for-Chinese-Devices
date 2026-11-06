@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 280" width="100%" height="auto" style="background:#0d1117;border-radius:12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+  <defs>
+    <linearGradient id="badGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#f87171" />
+    </linearGradient>
+    <linearGradient id="goodGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#34d399" />
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="35" y="32" fill="#f8fafc" font-size="18" font-weight="700">Push Delivery &amp; Background Stability Comparison</text>
+  <text x="35" y="52" fill="#94a3b8" font-size="12">Measured behavior under vendor background process freezing vs. Noti-Fixer remediation (results vary by ROM)</text>
+
+  <!-- Column Headers -->
+  <text x="210" y="78" fill="#ef4444" font-size="13" font-weight="700">❌ Stock Chinese ROM (Unpatched)</text>
+  <text x="560" y="78" fill="#10b981" font-size="13" font-weight="700">✅ With Noti-Fixer Remediation</text>
+
+  <!-- Row 1: WhatsApp / Telegram Calls -->
+  <g transform="translate(35, 92)">
+    <text x="0" y="20" fill="#cbd5e1" font-size="12" font-weight="600">WhatsApp / Telegram Calls</text>
+    <!-- Before Bar -->
+    <rect x="175" y="6" width="300" height="22" rx="4" fill="#1e293b" />
+    <rect x="175" y="6" width="280" height="22" rx="4" fill="url(#badGrad)">
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite" />
+    </rect>
+    <text x="185" y="21" fill="#fff" font-size="10.5" font-weight="600">Delayed / Fails to ring when screen is locked</text>
+    <!-- After Bar -->
+    <rect x="525" y="6" width="300" height="22" rx="4" fill="#1e293b" />
+    <rect x="525" y="6" width="130" height="22" rx="4" fill="url(#goodGrad)" />
+    <text x="535" y="21" fill="#fff" font-size="10.5" font-weight="700">Rings instantly on lockscreen</text>
+  </g>
+
+  <!-- Row 2: Gmail / Outlook Sync -->
+  <g transform="translate(35, 134)">
+    <text x="0" y="20" fill="#cbd5e1" font-size="12" font-weight="600">Gmail / Outlook Sync</text>
+    <!-- Before Bar -->
+    <rect x="175" y="6" width="300" height="22" rx="4" fill="#1e293b" />
+    <rect x="175" y="6" width="260" height="22" rx="4" fill="url(#badGrad)" />
+    <text x="185" y="21" fill="#fff" font-size="10.5" font-weight="600">30–60 min delay (socket sleeping)</text>
+    <!-- After Bar -->
+    <rect x="525" y="6" width="300" height="22" rx="4" fill="#1e293b" />
+    <rect x="525" y="6" width="130" height="22" rx="4" fill="url(#goodGrad)" />
+    <text x="535" y="21" fill="#fff" font-size="10.5" font-weight="700">Real-time push notifications</text>
+  </g>
+
+  <!-- Row 3: Play Store Downloads -->
+  <g transform="translate(35, 176)">
+    <text x="0" y="20" fill="#cbd5e1" font-size="12" font-weight="600">Google Play Store Updates</text>
+    <!-- Before Bar -->
+    <rect x="175" y="6" width="300" height="22" rx="4" fill="#1e293b" />
+    <rect x="175" y="6" width="240" height="22" rx="4" fill="url(#badGrad)" />
+    <text x="185" y="21" fill="#fff" font-size="10.5" font-weight="600">Pauses/glitches when screen turns off</text>
+    <!-- After Bar -->
+    <rect x="525" y="6" width="300" height="22" rx="4" fill="#1e293b" />
+    <rect x="525" y="6" width="130" height="22" rx="4" fill="url(#goodGrad)" />
+    <text x="535" y="21" fill="#fff" font-size="10.5" font-weight="700">Uninterrupted screen-off updates</text>
+  </g>
+
+  <!-- Row 4: Background Drainers -->
+  <g transform="translate(35, 218)">
+    <text x="0" y="20" fill="#cbd5e1" font-size="12" font-weight="600">Heavy Apps (bKash/Uber)</text>
+    <!-- Before Bar -->
+    <rect x="175" y="6" width="300" height="22" rx="4" fill="#1e293b" />
+    <rect x="175" y="6" width="270" height="22" rx="4" fill="url(#badGrad)" />
+    <text x="185" y="21" fill="#fff" font-size="10.5" font-weight="600">Silent background wakes &amp; battery drain</text>
+    <!-- After Bar -->
+    <rect x="525" y="6" width="300" height="22" rx="4" fill="#1e293b" />
+    <rect x="525" y="6" width="130" height="22" rx="4" fill="url(#goodGrad)" />
+    <text x="535" y="21" fill="#fff" font-size="10.5" font-weight="700">Dormant when closed (Standby 40)</text>
+  </g>
+</svg>

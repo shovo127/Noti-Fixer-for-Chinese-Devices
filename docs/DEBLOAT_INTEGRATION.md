@@ -40,4 +40,14 @@ Many naive debloat lists remove packages that appear to be bloatware but actuall
      python scripts/audit_fcm_doze.py
      ```
      Noti-Fixer will immediately diagnose whether `com.google.android.gms` or your messaging app's push socket was severed.
+4. **The 3-List Architecture (Mandatory AI Consultation Gate):**
+   Before removing or restricting any application, AI pairing agents must present three editable lists:
+   - **List A (Debloat Candidates):** Explicit non-critical vendor bloatware (e.g. `com.miui.analytics`, `com.mfashiongallery.emag`, `com.xiaomi.mipicks`).
+     - Executed safely via: `adb shell pm uninstall -k --user 0 <package>`
+     - Reversible via: `adb shell cmd package install-existing --user 0 <package>`
+   - **List B (Background-Restrict Candidates):** Applications the user uses occasionally (e.g. food delivery, ride-sharing, e-commerce, secondary social media).
+     - Applied via: `cmd appops set <pkg> 10008 ignore`, `cmd appops set <pkg> 10021 ignore`, and Standby Bucket `40 (RARE)`.
+     - When opened by the user, the app runs at 100% full speed with active foreground permissions.
+   - **List C (Protected System Frameworks):** Critical packages that must NEVER be touched (SystemUI, Telephony, Settings, Keyboards, Google Play Services, Google Play Store, Download Manager, Zoom, and user banking/messaging applications). Any attempt to uninstall or restrict List C triggers an automatic abort via `safety_guard.py`.
+
 

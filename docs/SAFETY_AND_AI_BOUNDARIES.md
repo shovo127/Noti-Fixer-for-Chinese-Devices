@@ -18,13 +18,16 @@ Noti-Fixer is engineered for everyday users, enterprises, and mission-critical d
 - **No data loss risk:** The commands `factory_reset`, `wipe`, `format`, `erase`, and `reboot recovery` are blocked by `scripts/safety_guard.py`.
 - Your photos, chats, settings, contacts, and personal files are **never touched**.
 
-### 3. 🚫 Zero Package Deletion or Blind Uninstalls
-- Unlike reckless "debloat scripts", Noti-Fixer **never** runs `pm uninstall` or `pm clear`.
-- It does not remove system apps or user apps.
-- It purely manages permission whitelists (`deviceidle whitelist`, `appops set`, `netpolicy add`).
+### 3. 🛡️ User-Profile Debloat Only (Never System Deletion)
+- Noti-Fixer **never** deletes apps from the read-only `/system` partition.
+- When the user explicitly requests debloating of vendor ads or analytics bloatware from List A, removal is executed strictly via `pm uninstall -k --user 0 <pkg>`. This removes the package **only for the current user profile (User 0)** while keeping system binaries intact.
+- Critical system services, communication apps, and banking packages (List C) are permanently protected and denied.
+- Every uninstalled package is logged in `backups/<timestamp>/plan.json` and can be restored at any time via `cmd package install-existing --user 0 <pkg>`.
+- Destructive commands like `pm clear`, `pm disable`, `disable-user`, or blanket uninstalls without user consent remain strictly blocked.
 
 ### 4. 🔄 100% Reversible with One Click
-- Every single property adjusted has a matching factory default restore in `templates/master_restore_template.bat`.
+- Every single setting, AppOps rule, and debloated package has a matching recovery script in `backups/<timestamp>/restore.bat` (and `restore.sh`).
+- Restoring packages restores user-profile installations via `cmd package install-existing --user 0 <pkg>`.
 - Before applying any change, `apply_notification_fix.py` saves a timestamped JSON snapshot to `backups/`.
 
 ---
@@ -37,12 +40,14 @@ When this project is used in AI-paired environments, AI agents MUST obey these h
 ┌────────────────────────────────────────────────────────────────────────┐
 │                   AI AGENT SECURITY DIRECTIVES                         │
 ├────────────────────────────────────────────────────────────────────────┤
-│ 1. NEVER suggest or run `adb shell pm uninstall`                       │
+│ 1. NEVER suggest or run factory reset, wipe, format, or recovery       │
 │ 2. NEVER suggest or run `adb shell pm disable` or `disable-user`       │
 │ 3. NEVER suggest or run `adb reboot bootloader` or `fastboot`          │
-│ 4. NEVER ask the user to unlock their bootloader or install Magisk     │
-│ 5. ALWAYS route all ADB commands through scripts/safety_guard.py       │
-│ 6. ALWAYS verify FCM socket alive before completing any task           │
+│ 4. NEVER ask the user to unlock their bootloader or install root       │
+│ 5. ONLY allow `pm uninstall -k --user 0 <pkg>` for user-approved List A│
+│ 6. NEVER touch or uninstall critical system packages (List C)          │
+│ 7. ALWAYS route all ADB commands through scripts/safety_guard.py       │
+│ 8. ALWAYS verify FCM socket alive before completing any task           │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 

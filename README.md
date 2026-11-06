@@ -1,279 +1,243 @@
 <div align="center">
 
-# ⚡ Noti-Fixer for Chinese Devices
-### The World's First Autonomous AI-Powered Push Notification & Battery Optimizer for Chinese Android ROMs
+<img src="docs/assets/banner.svg" alt="Noti-Fixer Banner" width="100%" style="max-width:900px;" />
+
+### Autonomous Push Notification Healer & Reversible Battery Optimizer for Chinese Android ROMs
 *Engineered for Xiaomi HyperOS / MIUI • Vivo OriginOS • Oppo ColorOS • Huawei HarmonyOS • Meizu Flyme*
 
 [![CI Validation](https://github.com/shovo127/Noti-Fixer-for-Chinese-Devices/actions/workflows/ci.yml/badge.svg)](https://github.com/shovo127/Noti-Fixer-for-Chinese-Devices/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Python 3.8+](https://img.shields.io/badge/Python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-3776AB.svg?logo=python&logoColor=white)](https://python.org)
+[![Python 3.8+](https://img.shields.io/badge/Python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-3776AB.svg?logo=python&logoColor=white)](https://python.org)
 [![Android Compatibility](https://img.shields.io/badge/Android-12%20%7C%2013%20%7C%2014%20%7C%2015%20%7C%2016-green.svg?logo=android&logoColor=white)](https://developer.android.com)
-[![Zero Root Required](https://img.shields.io/badge/Root-NOT%20Required%20(100%25%20Safe)-brightgreen.svg)](#-enterprise-safety-guarantees)
-[![Passes Play Integrity](https://img.shields.io/badge/Play%20Integrity-Passes%20100%25-success.svg)](#-enterprise-safety-guarantees)
+[![Zero Root Required](https://img.shields.io/badge/Root-NOT%20Required%20(Safe)-brightgreen.svg)](#-truthful-safety-guarantees)
 [![Architect](https://img.shields.io/badge/Architect-Mohammed%20Thuhidul%20Islam%20Shovo-blueviolet.svg)](https://github.com/shovo127)
 
 <p align="center">
   <b>Tired of missed WhatsApp/Telegram calls, delayed Gmail notifications, and frozen background apps on Chinese ROMs?</b><br>
-  Noti-Fixer scientifically eliminates background kills, heals Google FCM push sockets, and unlocks massive battery life without root, without bootloader unlocking, and with 100% reversibility.
+  Noti-Fixer scientifically prevents background socket freezes, heals Google FCM push sockets, and curtails idle drain without root, without bootloader unlocking, and with 100% reversibility.
 </p>
 
-[⚡ 1-Click AI Prompt](#-the-1-click-ai-copilot-prompt-instant-setup) • [🎮 Human 1-Click Launcher](#-for-human-users-1-click-interactive-launcher) • [📱 30-Second Setup Guide](#-30-second-noob-proof-connection-guide) • [🔬 The Science](#-the-science-why-chinese-roms-kill-notifications) • [🏛️ 6-Blueprint Architecture](#-6-markdown-blueprint-lock-architecture-docs-root) • [FAQ](#-frequently-asked-questions-faq)
+[🚀 Start Here in 3 Steps](#-start-here-in-3-steps) • [⚡ 1-Click AI Prompt](#-the-copy-paste-ai-copilot-command) • [📱 Phone Pairing Anatomy](#-phone-pairing-anatomy-pairing-port-vs-connect-port) • [🎮 Human Launcher](#-for-human-users-1-click-interactive-launcher) • [🛡️ Safety Guarantees](#-truthful-safety-guarantees) • [🔧 Troubleshooting](#-troubleshooting-guide) • [FAQ](#-frequently-asked-questions-faq)
 
 </div>
 
 ---
 
-## ⚡ The 1-Click AI Copilot Prompt (Instant Setup)
+## 🚀 Start Here in 3 Steps
 
-> [!TIP]
-> **Use this if you are using Antigravity IDE, Cursor, VS Code (with Claude/ChatGPT/Copilot), or Claude Code!**  
-> Simply copy the template below, replace the bracketed values with the details shown on your phone screen, and paste it into your AI chat. Your AI will autonomously handle everything from connection to verification!
+Follow these three zero-jargon steps to optimize your phone in under 2 minutes:
+
+### Step 1: Prepare Your Phone
+1. Connect your phone and computer to the **same Wi-Fi network** (keep battery >30%).
+2. Open **Settings** ➔ **About Phone** ➔ Tap **Build Number** (or OS Version) 7 times until you see *"You are now a developer!"*.
+3. Go to **Settings** ➔ **Additional Settings / System** ➔ **Developer Options**:
+   - Turn **ON** **Wireless Debugging**.
+   - *(Xiaomi / Redmi / POCO users: also turn ON "USB debugging (Security settings)")*.
+4. Tap the words **"Wireless Debugging"** ➔ tap **"Pair device with pairing code"**.
+
+### Step 2: Open Workspace with an AI Agent
+Open this cloned repository folder as your workspace in **Google Antigravity IDE**, **Cursor**, **Claude Code**, or **VS Code** (with GitHub Copilot, Cline, or Roo Code). Ensure your AI assistant has a valid API key or subscription (standard free tiers or paid models both work smoothly; free tiers may encounter typical hourly query rate limits during extensive package scans).
+
+### Step 3: Copy and Paste the Command
+Copy the ready-made prompt below, fill in the 4 bracketed placeholders from your phone screen, and paste it into your AI chat!
+
+---
+
+## ⚡ The Copy-Paste AI Copilot Command
+
+Copy the block below, replace `[PHONE_IP]`, `[PAIRING_PORT]`, `[PAIRING_CODE]`, and `[CONNECT_PORT]` with the numbers shown on your phone, and paste it into your AI assistant:
 
 ```markdown
 Hey AI Agent! Please optimize my phone using the Noti-Fixer repository:
 
 TARGET PHONE CONNECTION:
-- Mode: Wireless Debugging (ADB)
-- Phone IP & Port: [YOUR_PHONE_IP:PORT]       (Example: 192.168.1.160:40261)
-- Pairing Code:    [YOUR_6_DIGIT_PAIRING_CODE] (Example: 849201 - Leave blank if already paired)
+- Phone IP:       [PHONE_IP]       (Example: 192.168.1.160)
+- Pairing Port:   [PAIRING_PORT]   (Example: 40261 - from the "Pair with code" popup)
+- Pairing Code:   [PAIRING_CODE]   (Example: 849201 - 6-digit code on the popup)
+- Connect Port:   [CONNECT_PORT]   (Example: 39845 - from the main Wireless Debugging page)
 
-INSTRUCTIONS FOR AI AGENT (Strict Non-Destructive Protocol):
-0. CRITICAL SAFETY BOUNDARIES (HARD LOCK - ABSOLUTE PROHIBITION):
-   - NEVER RESET THE PHONE (NO FACTORY RESET, NO DATA WIPE, NO FORMAT, NO LOCKSCREEN RESET, NO RECOVERY/FASTBOOT REBOOT). IT IS TOTALLY PROHIBITED. This is a non-destructive user-space configuration optimization; personal data, photos, chats, banking apps, and OS settings must remain 100% untouched.
-   - ZERO ROOT & ZERO BOOTLOADER UNLOCK: Never run su/Magisk/KernelSU or attempt to unlock bootloader.
-   - ZERO UNINSTALLS: Never run pm uninstall, pm disable, or pm clear. All apps must remain intact.
-1. CONNECT: Connect to my phone using adb pair / adb connect. Remind me to KEEP MY PHONE SCREEN ON and STAY inside the Wireless Debugging popup until connected.
-2. FINGERPRINT & BACKUP: Run scripts/detect_device.py to verify device brand, model, and Android OS. Create a 100% reversible backup in backups/.
-3. USER CONSULTATION (MANDATORY GATE):
-   - Scan communication apps (WhatsApp, Gmail, IMO, Messenger, Instagram, Telegram) -> Ask me to confirm instant push priority (Standby Bucket 5).
-   - Scan background drainers (bKash, Nagad, Rocket, Pathao, Uber, Daraz, Othoba, Foodpanda, Zoom, Facebook, Wallpaper Carousel) -> Ask me which apps to place into "On-Demand Standby (Bucket 40 / RARE)" so they never run unprompted in the background, but run at 100% full speed when I open them!
-   - STRICT SAFETY LOCK: Never throttle Google Play Store, Play Services, Phone, SMS, or SystemUI.
-4. REMEDIATE: Apply fixes via scripts/apply_notification_fix.py, deploy scripts/millet_watchdog.sh, and pulse FCM keepalive.
-5. AUDIT: Run scripts/audit_fcm_doze.py and display a clean Markdown verification report proving FCM socket connection and app health.
+AI AGENT DIRECTIVES (Read AGENTS.md and .gemini/skills/noti-fixer/SKILL.md first):
+1. SAFETY FIRST: Never reset the phone (zero factory reset, zero wipe, zero recovery reboot). Zero root, zero bootloader unlock. All commands must pass scripts/safety_guard.py.
+2. CONNECT: Run adb pair <PHONE_IP>:<PAIRING_PORT> <PAIRING_CODE>, then adb connect <PHONE_IP>:<CONNECT_PORT>. Remind me to keep my screen ON and stay on the pairing popup until paired.
+3. SAFE SCAN (READ-ONLY): Run scripts/detect_device.py and scripts/audit_fcm_doze.py. Show me the findings and ASK ME TO CONFIRM before changing anything.
+4. PROPOSE 3 EDITABLE LISTS:
+   - List A (Debloat Candidates): Non-critical vendor bloat to remove via safe user-profile uninstalls (pm uninstall -k --user 0).
+   - List B (Background Restrict Candidates): High-drain apps to put into On-Demand Standby (Bucket 40 / RARE). They run at 100% full speed when I open them.
+   - List C (Protected Frameworks): Google Play Store, Play Services, Download Manager, Zoom, Phone, SMS, Keyboards, and Banking apps. NEVER touched.
+   Ask me to add/remove apps from A or B. Apply nothing until I confirm.
+5. BACKUP & APPLY: Create a backup snapshot in backups/<timestamp>/, apply the approved list, deploy scripts/millet_watchdog.sh, and pulse FCM keepalive.
+6. VERIFY: Re-audit the FCM socket (mtalk.google.com:5228), show a before/after summary, and provide the exact 1-click rollback command.
 ```
+
+---
+
+## 📱 Phone Pairing Anatomy (Pairing Port vs. Connect Port)
+
+> [!IMPORTANT]
+> **Android assigns TWO DIFFERENT PORTS for security.**  
+> - **Pairing Port:** Appears *inside* the 6-digit code popup dialog. Used only once to establish trust (`adb pair`).
+> - **Connect Port:** Appears on the *main* Wireless Debugging screen under your IP. Used for ongoing communication (`adb connect`).
+
+<div align="center">
+<img src="docs/assets/phone-pairing.svg" alt="Phone Pairing Screen Anatomy" width="100%" style="max-width:900px;" />
+</div>
+
+### ⚠️ While the AI Connects: DO and DON'T
+
+| ✅ DO | ❌ DON'T |
+| :--- | :--- |
+| **DO** keep the pairing code popup dialog open on your screen until the AI confirms pairing. | **DO NOT** leave, back out of, or minimize the Wireless Debugging popup while pairing. |
+| **DO** keep your phone screen awake and unlocked. | **DO NOT** toggle Wireless Debugging OFF and ON while the AI is connecting. |
+| **DO** ensure phone and PC remain connected to the exact same Wi-Fi network. | **DO NOT** switch Wi-Fi networks or activate VPNs on your phone during connection. |
+| **DO** tap "Always allow from this computer" if an authorization prompt appears. | **DO NOT** panic if ports change after reboot — use `scripts/scan_ports.py` to auto-reconnect. |
+
+---
+
+## 🤖 What the AI Will Do (Autonomous 5-Step Pipeline)
+
+When you send the command, your AI executes the deterministic 5-step safety workflow:
+
+<div align="center">
+<img src="docs/assets/flow.svg" alt="Autonomous 5-Step Flow" width="100%" style="max-width:900px;" />
+</div>
+
+1. **Safe Read-Only Scan:** Audits brand, ROM, Android version, kernel freezer state, and live FCM push socket (`mtalk.google.com:5228`).
+2. **Diagnostic Summary:** Presents a clear summary of vendor bottlenecks and asks: *"Do you confirm this diagnosis? (yes/edit)"*.
+3. **Presents 3 Editable Lists:**
+   - **List A (Debloat):** Vendor analytics and ads safe to remove for user profile only (`pm uninstall -k --user 0`).
+   - **List B (Background-Sleep):** Secondary apps (e.g., e-commerce, ride-sharing) put into On-Demand Standby (Bucket 40). They work normally when opened.
+   - **List C (Protected Frameworks):** Critical system services, Play Store, Zoom, and banking apps that are hard-locked and never modified.
+4. **Automated Backup Snapshot:** Saves existing states to `backups/<timestamp>/` and generates a 1-click `restore.bat` / `restore.sh`.
+5. **Precision Remediation & Verification:** Applies approved configurations, deploys watchdog persistence, verifies the Google FCM socket, and outputs verification logs.
+
+---
+
+## 📊 Before & After Empirical Comparison
+
+Results vary across individual devices, ROM updates, and carrier builds:
+
+<div align="center">
+<img src="docs/assets/before-after.svg" alt="Before and After Performance Comparison" width="100%" style="max-width:900px;" />
+</div>
 
 ---
 
 ## 🎮 For Human Users: 1-Click Interactive Launcher
 
-Prefer doing it yourself without an AI? We built a visual, zero-dependency interactive terminal suite:
+Prefer running without an AI? Launch the interactive terminal suite:
 
-### 🪟 Windows Users:
+### 🪟 Windows:
 Double-click `scripts/NotiFixer_OneClick.bat` in File Explorer.
 
-### 🐧 macOS / Linux Users:
-Open your terminal in the repo folder and run:
+### 🐧 macOS / Linux:
 ```bash
 chmod +x scripts/NotiFixer_OneClick.sh
 ./scripts/NotiFixer_OneClick.sh
 ```
 
-### 🖥️ Interactive 10-Option Terminal Suite:
-```text
-==============================================================================
-        NOTI-FIXER FOR CHINESE DEVICES - PRODUCTION REPAIR SUITE
-             Architect: Mohammed Thuhidul Islam Shovo (shovo127)
-                         Open-Source MIT License
-==============================================================================
-
-  Targeting: Xiaomi HyperOS / MIUI | Vivo OriginOS | Oppo ColorOS | HarmonyOS
-
-  [1]  ⚡ Simple Wireless Wi-Fi Connect & Fix (No Cable Needed - Recommended)
-  [2]  🔌 USB Cable 1-Click Notification & Battery Fix
-  [3]  🔍 Live Diagnostic Audit (FCM Socket, Android Doze, Kernel Freezer)
-  [4]  📱 Device Fingerprint & Hardware/ROM Profile
-  [5]  🔋 Battery Drain Analysis & Culprit Inspector
-  [6]  🛡️ Push & Start HyperOS MILLET Watchdog Daemon
-  [7]  🔄 Wireless ADB Port Scanner (Find new port after reboot)
-  [8]  🛠️ Fix Background App Freezing & Network Stalls (Play Store & Apps)
-  [9]  ⏪ Revert Changes (Master 100% Safe Rollback)
-  [10] ❌ Exit
-
-==============================================================================
-Enter choice [1-10]: 
-```
-
----
-
-## 📱 30-Second Noob-Proof Connection Guide
-
-Connect your phone and computer to the **same Wi-Fi network**, then follow these 3 visual steps:
-
-```text
-  ┌──────────────────────────────┐     ┌──────────────────────────────┐     ┌──────────────────────────────┐
-  │ 1. Developer Options         │     │ 2. Wireless Debugging        │     │ 3. Run Connect or Paste AI   │
-  │    Settings ➔ About Phone   │ ──► │    Tap "Pair with code"      │ ──► │    Paste IP, Port & PIN      │
-  │    Tap Build Number 7 times  │     │ ⚠️ STAY ON THIS SCREEN!       │     │    Auto-fixes in 10 seconds! │
-  └──────────────────────────────┘     └──────────────────────────────┘     └──────────────────────────────┘
-```
-
-### 🟢 Step 1: Turn on Wireless Debugging on Phone
-1. Open phone **Settings** ➔ **About Phone** ➔ Tap **Build Number** (or OS Version) 7 times until you see *"You are now a developer!"*.
-2. Go to **Settings** ➔ **Additional Settings / System** ➔ **Developer Options**.
-3. Turn **ON** **Wireless Debugging**:
-   - *(Xiaomi / Redmi / POCO users: also turn ON "USB Debugging (Security settings)")*.
-
-### 🟡 Step 2: Open Pairing Dialog
-1. In Developer Options, tap the words **"Wireless Debugging"** to open its settings page.
-2. Tap **"Pair device with pairing code"**.
-3. A popup will appear on your screen showing:
-   - **Wi-Fi Pairing Code** (e.g., `849201`)
-   - **IP address & Port** (e.g., `192.168.1.160:40261`)
-
-> [!CAUTION]
-> **CRITICAL GOLDEN RULE:**  
-> **DO NOT LEAVE OR MINIMIZE THIS POPUP SCREEN ON YOUR PHONE!**  
-> If you leave this screen or switch to another app before your PC connects, Android will invalidate the pairing code and change the port for security reasons. Keep your phone screen on while connecting!
-
-### 🔵 Step 3: Run the Wizard
-Run `python scripts/connect_phone.py` (or Option `[1]` in the OneClick menu) and type the IP, Port, and PIN shown on your screen.  
-**That's it!** The engine pairs, snapshots your system, prioritizes notifications, and optimizes battery automatically!
-
----
-
-## 🔬 The Science: Why Chinese ROMs Kill Notifications
-
-Vendors like Xiaomi, Vivo, Oppo, and Huawei deploy aggressive proprietary power managers to maximize battery benchmarks. This creates three fatal bottlenecks for push notifications:
-
-```mermaid
-flowchart TD
-    A["Phone Screen Turns Off"] --> B["Vendor Daemon Wakes Up<br>(PowerKeeper / Athena / Jovi / PowerGenie)"]
-    B --> C["1. Drops Google FCM TCP Socket<br>(mtalk.google.com:5228 killed)"]
-    B --> D["2. Triggers Kernel Cgroup Freezer<br>(cached_apps_freezer / MILLET freezes processes)"]
-    B --> E["3. Demotes Standby Buckets & Netpolicy<br>(Blocks background data packets)"]
-    C & D & E --> F["❌ RESULT:<br>WhatsApp / Telegram calls never ring!<br>Gmail delayed 30-60 minutes!<br>Play Store downloads pause when screen locks!"]
-```
-
-### 🛠️ How Noti-Fixer Solves It Scientifically:
-
-1. **Kernel Cgroup Unfreezing:** Disables Linux `cached_apps_freezer` so background sockets don't get frozen by SIGSTOP.
-2. **Google FCM Push Preservation:** Whitelists `com.google.android.gms` and messaging apps in Android Doze and injects Google FCM Keepalive pulses (`MCS_HEARTBEAT`).
-3. **Proprietary Vendor Injections:**
-   - **Xiaomi HyperOS:** Injects priority apps into `MILLET_NO_RESTRICT_APP`, `cloud_memory_freeze_whitelist`, and grants MIUI AppOps `10008` (Autostart), `10021` (Secondary Autostart), `10017` (Float Banner), and `10020` (Lockscreen).
-   - **Vivo OriginOS:** Bypasses Jovi Engine background power restrictions.
-   - **Oppo ColorOS:** Overrides Athena Quick Freeze and disables auto-revocation.
-   - **Huawei HarmonyOS:** Bypasses PowerGenie aggressive task killer.
-4. **The "On-Demand" Battery Engine:**
-   - Heavy secondary apps (bKash, Nagad, Rocket, Pathao, Uber, Zoom, Foodpanda, Facebook) are assigned to Android Standby Bucket `RARE (40)`:
-     - **When closed / not in use:** Background autostarts (`10008`) and broadcast wakeups (`10021`) are blocked. Battery drain is **0%**!
-     - **When opened by user:** Android instantly elevates the app to `ACTIVE (10)`. Full GPS, video calls, payments, and 100% full speed!
-5. **Google Play Store & Download Protection:**
-   - `com.android.vending` and `com.android.providers.downloads` are permanently protected in `MILLET_NO_RESTRICT_APP` with unthrottled wakelocks so **app updates finish at full speed even with the screen turned off**!
-
----
-
-## 📊 Before & After Benchmark
-
-| Metric | Stock Chinese ROM | After Noti-Fixer |
-| :--- | :--- | :--- |
-| **WhatsApp / Telegram Calls** | Silent / Never rings until unlocked | **Rings instantly on lockscreen (<100ms)** |
-| **FCM Socket (`mtalk.google.com:5228`)** | Drops after 3–5 minutes | **100% Persistent TCP Keepalive** |
-| **Gmail / Outlook Sync** | 30 to 60 minute delay | **Real-time instant push notification** |
-| **Google Play Store Updates** | Pauses/glitches when screen locks | **Continues updating at 100% full speed** |
-| **Zoom Background Meetings** | Audio cuts / PiP blocked | **Seamless floating window & background audio** |
-| **Idle Battery Drainers (bKash/Uber)** | Wake up silently in background | **Dormant when closed (0% idle drain)** |
-| **Reboot Persistence** | Wiped by vendor system updates | **Protected 24/7 by `millet_watchdog.sh`** |
-| **Banking / DRM Security** | Intact | **100% Intact (Passes Play Integrity & Widevine L1)** |
-
----
-
-## 🏛️ 6-Markdown Blueprint Lock Architecture (`/docs` ROOT)
-
-Noti-Fixer is strictly governed by the **৬টি মার্কডাউন ব্লুপ্রিন্ট লক** architecture. All AI agents and developers working on this project are bound to these 6 immutable blueprints:
-
-```mermaid
-graph TD
-    Root["/docs ROOT ARCHITECTURE"]
-    Root --> PRD["#01 PRD.md<br>Product Requirements & User Consultation"]
-    Root --> AppFlow["#02 AppFlow.md<br>Deterministic Interaction & AI Protocol"]
-    Root --> UISpec["#03 UI_Spec.md<br>Terminal UI & Visual Progress Spec"]
-    Root --> TRD["#04 TRD.md<br>Technical Deep-Dive & Vendor Mechanics"]
-    Root --> Schema["#05 Schema.md<br>App Dictionary & JSON Backup Schema"]
-    Root --> Plan["#06 Plan.md<br>Safety Gates & Automated CI Matrix"]
-```
-
-| # | Blueprint Document | Focus Area |
+| Option | Feature | Purpose |
 | :---: | :--- | :--- |
-| **#01** | [`docs/PRD.md`](docs/PRD.md) | Problem statement, target OEMs, non-destructive safety boundaries, mandatory user consultation. |
-| **#02** | [`docs/AppFlow.md`](docs/AppFlow.md) | End-to-end flowchart: Wi-Fi pairing, fingerprinting, diagnostic audit, remediation, watchdog. |
-| **#03** | [`docs/UI_Spec.md`](docs/UI_Spec.md) | 10-option interactive menu, ANSI color formatting, progress streams `[1/7]`–`[7/7]`. |
-| **#04** | [`docs/TRD.md`](docs/TRD.md) | Linux cgroup v2, Standby Buckets, MIUI custom AppOps (`10008`–`10029`), MILLET kernel engine. |
-| **#05** | [`docs/Schema.md`](docs/Schema.md) | Tier 1 (Priority), Tier 2 (On-Demand), Tier 3 (Protected Frameworks), JSON backup schema. |
-| **#06** | [`docs/Plan.md`](docs/Plan.md) | Phased roadmap, safety guard interceptor token list, automated GitHub Actions CI suite. |
+| `[1]` | ⚡ **Simple Wireless Connect & Fix** | Pairs via Wi-Fi and applies brand-specific push fixes. |
+| `[2]` | 🔌 **USB Cable 1-Click Fix** | Plug in USB cable with USB debugging enabled to fix instantly. |
+| `[3]` | 🔍 **Live Diagnostic Audit** | Tests Google FCM socket (`5228`), Android Doze, and freezer. |
+| `[4]` | 📱 **Device Profile Fingerprint** | Identifies hardware, ROM generation, and kernel parameters. |
+| `[5]` | 🔋 **Battery Drain Inspector** | Inspects background drainers and active CPU wakelocks. |
+| `[6]` | 🛡️ **Start MILLET Watchdog** | Background daemon that prevents HyperOS from resetting whitelists. |
+| `[7]` | 🔄 **Wireless Port Scanner** | Auto-discovers new dynamic ports across `30000–49999` after reboot. |
+| `[8]` | 🛠️ **Unfreeze Background Apps** | Restores background network and execution for Play Store & apps. |
+| `[9]` | ⏪ **Master 100% Safe Rollback** | Reinstalls debloated packages and reverts all settings to stock. |
+| `[10]`| ❌ **Exit** | Closes the repair suite. |
 
 ---
 
-## 🛡️ Enterprise Safety Guarantees
+## 🛡️ Truthful Safety Guarantees
 
-Your smartphone contains your bank accounts, personal chats, and photos. Noti-Fixer is engineered with non-destructive, zero-risk safeguards enforced programmatically by `scripts/safety_guard.py`:
+Your smartphone contains your personal life, banking credentials, and private conversations. Noti-Fixer operates strictly within sanctioned user-space Android boundaries:
 
 > [!CAUTION]
 > ### 🚫 TOTAL PROHIBITION: ZERO PHONE RESET & ZERO DATA LOSS GUARANTEE
-> **Resetting the phone or wiping data is TOTALLY PROHIBITED.**  
-> Fixing notifications and battery drain is a simple non-destructive user-space ADB configuration task (adjusting Android Doze, Standby Buckets, MIUI/HyperOS MILLET tables, and AppOps). Resetting the phone, wiping user data, unlocking bootloader, or rooting is completely unnecessary, unacceptable, and forbidden.  
+> **Resetting the phone or wiping data is TOTALLY PROHIBITED across the entire repository.**  
+> Fixing notifications and battery drain is a simple user-space ADB configuration task. Resetting the phone, wiping user data, unlocking bootloader, or rooting is completely unnecessary, unacceptable, and forbidden.  
 > 
-> The integrated safety engine (`scripts/safety_guard.py`) automatically intercepts and blocks any attempt to run destructive commands (`factory_reset`, `master_clear`, `wipe`, `format`, `erase`, `locksettings clear`, `reboot recovery`, `reboot bootloader`, `fastboot`, `oem unlock`, `pm clear`, `pm uninstall`).
+> The integrated safety interceptor ([`scripts/safety_guard.py`](scripts/safety_guard.py)) programmatically halts and aborts any command containing: `factory_reset`, `master_clear`, `wipe`, `format`, `erase`, `locksettings clear`, `reboot recovery`, `reboot bootloader`, `fastboot`, `oem unlock`, `pm clear`, or `pm disable`.
 
 - **100% Root-Free:** Does NOT require Magisk, KernelSU, or SuperSU. Never escalates privileges.
-- **Zero Bootloader Unlock Needed:** Keeps Widevine L1 (Netflix HD/4K), Google Wallet, and Banking apps 100% working.
-- **Zero Phone Reset / Zero Data Loss:** All personal data, chats, photos, apps, and accounts remain 100% untouched.
-- **Zero Package Deletions:** Never executes `pm uninstall` or `pm disable`. Your apps are never deleted.
-- **Core System Protection:** Critical packages (`com.android.vending`, `com.google.android.gms`, `SystemUI`, `Phone`, `Settings`, `Keyboards`, `Launchers`) are hard-locked and can never be disabled.
-- **100% Reversible:** Every operation creates a timestamped JSON backup in `backups/`. Revert instantly with one click.
-- **Zero External Dependencies:** Built with pure Python standard library. No pip packages, no external bloat.
-- **100% Offline & Private:** All scripts run entirely on your local computer and phone over ADB. Zero data is transmitted to external servers.
+- **Zero Bootloader Unlock Needed:** Bootloader remains locked. DRM Widevine L1 (Netflix HD/4K) and device security remain untampered.
+- **Reversible User-Profile Debloat Only:** When debloating vendor apps from List A, commands execute strictly via `pm uninstall -k --user 0 <pkg>`. This removes the app **only for your user profile** while leaving the `/system` partition untouched.
+- **100% Reversible Package Reinstallation:** Any uninstalled package can be restored instantly via `cmd package install-existing --user 0 <pkg>` (or via `python scripts/restore_backup.py`).
+- **Core System Protection Lock:** Google Play Store (`com.android.vending`), Play Services (`com.google.android.gms`), Download Manager (`com.android.providers.downloads`), Zoom (`us.zoom.videomeetings`), SystemUI, Phone, Settings, Keyboards, and Launchers are permanently locked and cannot be disabled.
+- **100% Offline & Private:** Operates entirely over local ADB. Zero telemetry, zero analytics, zero external network requests.
 
 ---
 
-## 🚀 Multi-Brand Compatibility Matrix
+## 🚀 Supported Device Ecosystems
 
-| Brand | System Versions | Vendor Engines Handled |
+| Brand | System Versions | Proprietary Vendor Mechanics Handled |
 | :--- | :--- | :--- |
-| **Xiaomi / POCO / Redmi** | HyperOS 1.0, 2.0, 3.0 • MIUI 12, 13, 14 | MILLET framework, PowerKeeper, AppOps 10008/10021/10017/10020/10022 |
-| **Vivo / iQOO** | OriginOS 3, 4, 5 • FuntouchOS 13, 14, 15 | PEM, Jovi Engine, High Background Power Consumption whitelisting |
-| **Oppo / OnePlus / Realme** | ColorOS 12–15 • OxygenOS 12–15 • RealmeUI | Athena daemon, GuardElf, Quick Freeze bypass, Auto-revoke disable |
-| **Huawei / Honor** | HarmonyOS 2, 3, 4, NEXT • MagicOS 7, 8 | PowerGenie background killer, Deep Sleep Whitelist, hw_power_mode |
+| **Xiaomi / POCO / Redmi** | HyperOS 1.0, 2.0, 3.0 • MIUI 12–14 | MILLET framework, PowerKeeper tables, MIUI AppOps `10008` & `10021` |
+| **Vivo / iQOO** | OriginOS 3, 4, 5 • FuntouchOS 13–15 | PEM, Jovi Engine, High Background Power Consumption whitelists |
+| **Oppo / OnePlus / Realme** | ColorOS 12–15 • OxygenOS • RealmeUI | Athena daemon, GuardElf, Quick Freeze bypass, Auto-revoke disable |
+| **Huawei / Honor** | HarmonyOS 2–4, NEXT • MagicOS 7–8 | PowerGenie background killer bypass, `hw_power_mode` normal |
 | **Meizu** | Flyme 9, 10, Auto | Standby freeze bypass, AppOps autostart |
-| **Transsion / Generic** | XOS • HiOS • Stock Android 12–16 | Standby Bucket 5 (`EXEMPTED`), Doze whitelist, Netpolicy |
+| **Generic Android** | Stock Android 12–16 / Transsion | Standard Android Doze Whitelist, Standby Buckets, Netpolicy |
 
 ---
 
-## 🔄 Emergency Rollback (100% Reversible)
+## 🔄 Emergency Rollback (1-Click Revert)
 
-Want to return your phone to 100% factory OEM state before selling it or claiming warranty?  
-Simply select **Option `[9]`** in `NotiFixer_OneClick.bat` / `.sh`, or run:
+To return your phone to 100% factory default configuration or reinstall debloated apps:
 ```bash
 python scripts/restore_backup.py
 ```
-All system properties, Standby Buckets, DNS, and AppOps settings will immediately revert to your exact pre-fix factory state!
+*(Or select **Option `[9]`** in `NotiFixer_OneClick.bat` / `.sh`)*.  
+The restorer reinstalls debloated packages for User 0, restores kernel freezer settings, and resets AppOps to system defaults.
+
+---
+
+## 🔧 Troubleshooting Guide
+
+| Issue | Root Cause | Solution |
+| :--- | :--- | :--- |
+| **Port changed after phone reboot** | Android assigns random ports to Wireless Debugging on reboot. | Run `python scripts/scan_ports.py -ip <PHONE_IP>` (Option `[7]`) to auto-discover the new port in seconds. |
+| **`device unauthorized` error** | Phone has not approved your PC's ADB cryptographic key. | In Developer Options, tap **"Revoke USB debugging authorizations"**, toggle Wireless Debugging OFF and ON, and approve the popup. |
+| **Xiaomi toggle missing / grayed out** | HyperOS requires a SIM card to enable *"USB debugging (Security settings)"*. | Insert any active SIM card once, toggle the switch ON, and complete Xiaomi's 3-step prompt. SIM can then be removed. |
+| **Cannot connect over Wi-Fi** | Router has **AP / Client Isolation** enabled. | Disable Client Isolation in router settings, connect both to a phone hotspot, or simply use a standard USB cable (Option `[2]`). |
+| **Play Store updates pause on lock** | Kernel freezer freezes download manager on screen-off. | Run `python scripts/restore_background_health.py` (Option `[8]`) to restore unthrottled download engine permissions. |
 
 ---
 
 ## ❓ Frequently Asked Questions (FAQ)
 
 <details>
-<summary><b>Does this drain more battery?</b></summary>
-<b>No!</b> In fact, battery life typically <i>increases</i>. Noti-Fixer prevents the Google FCM socket from sleeping (which consumes micro-amperes of current) while putting heavy background apps (bKash, Nagad, Uber, Pathao, Facebook) into On-Demand Standby (Bucket 40) where they consume 0% power when closed.
+<summary><b>Can this harm my phone or delete my photos?</b></summary>
+<b>No.</b> Noti-Fixer operates exclusively in user-space settings via standard Android ADB APIs. It contains programmatic interceptors that block any factory reset, wipe, format, or system partition modification.
 </details>
 
 <details>
-<summary><b>Will this void my warranty or trip Knox / SafetyNet / Play Integrity?</b></summary>
-<b>No!</b> Because Noti-Fixer operates strictly through standard, sanctioned Android ADB APIs and requires zero root or bootloader unlocking, your phone's Knox/SafetyNet/Play Integrity status remains 100% certified and untouched.
+<summary><b>Does debloating remove apps permanently?</b></summary>
+<b>No.</b> Debloating uses Android's safe user-profile uninstallation (<code>pm uninstall -k --user 0</code>). The system APK remains safe in the factory read-only partition and can be reinstalled in 1 second using <code>python scripts/restore_backup.py</code>.
+</details>
+
+<details>
+<summary><b>Does this drain more battery?</b></summary>
+<b>No.</b> While messaging apps are kept alive to receive push notifications, secondary battery drainers (e-commerce, ride-sharing, food delivery) are placed in On-Demand Standby (Bucket 40) where they consume 0% power when closed.
 </details>
 
 <details>
 <summary><b>What happens when my phone restarts?</b></summary>
-Core system configs persist across reboots. On HyperOS devices, the included <code>millet_watchdog.sh</code> runs lightweight in the background to automatically protect whitelists against vendor resets.
-</details>
-
-<details>
-<summary><b>Can I choose which apps to optimize?</b></summary>
-<b>Yes!</b> The User Consultation Gate always asks you before modifying apps. You can prioritize communication apps, customize which background drainers to throttle, or skip battery restrictions entirely.
+Core system configurations persist across reboots. On Xiaomi HyperOS devices, the lightweight <code>millet_watchdog.sh</code> script monitors and prevents vendor daemons from wiping whitelists.
 </details>
 
 ---
 
-## 📜 License & Copyright
+## 🤝 Contributing
 
-Architected and developed with pride by **[Mohammed Thuhidul Islam Shovo (shovo127)](https://github.com/shovo127)**.  
-Licensed under the open-source **[MIT License](LICENSE)**. Copyright (c) 2026.
+Contributions from Android developers, ROM testers, and reverse-engineers are warmly welcomed! Please read [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`docs/PRD.md`](docs/PRD.md) before submitting pull requests.
+
+---
+
+## 📜 Credit & Attribution
+
+- **Architect & Maintainer:** **[Mohammed Thuhidul Islam Shovo (shovo127)](https://github.com/shovo127)**
+- **Notice:** See [`NOTICE`](NOTICE) for mandatory attribution and copyright requirements.
+- **License:** Open-source under the **[MIT License](LICENSE)**. Copyright (c) 2026 Mohammed Thuhidul Islam Shovo.

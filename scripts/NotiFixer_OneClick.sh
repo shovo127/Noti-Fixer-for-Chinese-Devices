@@ -120,13 +120,8 @@ while true; do
             ;;
         9)
             clear
-            echo -e "${YELLOW}Reverting all optimizations back to stock defaults...${NC}"
-            adb shell device_config put activity_manager_native_boot use_freezer true
-            adb shell setprop persist.sys.freezer true
-            adb shell settings put global private_dns_mode opportunistic
-            adb shell settings delete global private_dns_specifier
-            adb shell settings put system MILLET_NO_RESTRICT_APP '""'
-            echo -e "${GREEN}[✔] System settings restored to stock defaults!${NC}"
+            echo -e "${YELLOW}Executing Master 100% Safe System Rollback & Package Restoration...${NC}"
+            python3 "$SCRIPT_DIR/restore_backup.py"
             echo ""
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
             read -r

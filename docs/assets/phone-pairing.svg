@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="100%" height="auto" style="background:#0d1117;border-radius:12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+  <defs>
+    <filter id="phoneShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000" flood-opacity="0.4" />
+    </filter>
+    <linearGradient id="screenGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+  </defs>
+
+  <!-- Title & Banner -->
+  <text x="35" y="32" fill="#f8fafc" font-size="18" font-weight="700">Wireless Debugging Screen &amp; Port Anatomy</text>
+  <text x="35" y="52" fill="#94a3b8" font-size="12">Schematic Illustration • Pairing Port and Connect Port are DIFFERENT numbers</text>
+  <rect x="740" y="20" width="125" height="24" rx="12" fill="#334155" />
+  <text x="752" y="36" fill="#cbd5e1" font-size="11" font-weight="600">ILLUSTRATION</text>
+
+  <!-- Left: Main Wireless Debugging Screen (Device Background) -->
+  <g transform="translate(35, 75)" filter="url(#phoneShadow)">
+    <!-- Phone Outline -->
+    <rect width="360" height="255" rx="16" fill="url(#screenGrad)" stroke="#475569" stroke-width="2" />
+    
+    <!-- Header -->
+    <rect x="0" y="0" width="360" height="42" rx="16" fill="#334155" />
+    <rect x="0" y="26" width="360" height="16" fill="#334155" />
+    <text x="20" y="26" fill="#f8fafc" font-size="13" font-weight="700">Wireless Debugging</text>
+    <rect x="300" y="14" width="40" height="18" rx="9" fill="#22c55e" />
+    <circle cx="330" cy="23" r="7" fill="#fff" />
+
+    <!-- IP & Connect Port Card -->
+    <g transform="translate(18, 55)">
+      <rect width="324" height="65" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
+      <text x="14" y="22" fill="#94a3b8" font-size="11" font-weight="600">IP address &amp; Connect Port</text>
+      <text x="14" y="44" fill="#38bdf8" font-size="16" font-family="monospace" font-weight="700">192.168.1.160:<tspan fill="#38bdf8" text-decoration="underline">39845</tspan></text>
+      <rect x="235" y="14" width="75" height="20" rx="4" fill="#0369a1" />
+      <text x="242" y="28" fill="#e0f2fe" font-size="10" font-weight="700">CONNECT</text>
+    </g>
+
+    <!-- Tap Button: Pair with code -->
+    <g transform="translate(18, 130)">
+      <rect width="324" height="48" rx="8" fill="#1e293b" stroke="#64748b" stroke-width="1" />
+      <text x="14" y="24" fill="#f8fafc" font-size="12" font-weight="600">Pair device with pairing code</text>
+      <text x="14" y="38" fill="#94a3b8" font-size="10">Pair using 6-digit Wi-Fi code</text>
+      <text x="300" y="30" fill="#94a3b8" font-size="14">›</text>
+    </g>
+
+    <!-- Paired Devices List -->
+    <g transform="translate(18, 190)">
+      <text x="4" y="16" fill="#64748b" font-size="11" font-weight="600">PAIRED DEVICES</text>
+      <rect y="24" width="324" height="30" rx="6" fill="#1e293b" opacity="0.6" />
+      <text x="12" y="44" fill="#94a3b8" font-size="11">Your PC / Antigravity Agent</text>
+    </g>
+  </g>
+
+  <!-- Right: Pairing Code Dialog Popup -->
+  <g transform="translate(440, 75)" filter="url(#phoneShadow)">
+    <!-- Popup Card -->
+    <rect width="425" height="255" rx="16" fill="#1e293b" stroke="#f59e0b" stroke-width="2">
+      <animate attributeName="stroke" values="#f59e0b;#fbbf24;#f59e0b" dur="3s" repeatCount="indefinite" />
+    </rect>
+
+    <!-- Dialog Header -->
+    <text x="24" y="36" fill="#f8fafc" font-size="15" font-weight="700">Pair with device</text>
+    <text x="24" y="56" fill="#94a3b8" font-size="11">Enter this 6-digit code and pairing address on PC:</text>
+
+    <!-- 6-Digit Pairing Code Display -->
+    <g transform="translate(24, 72)">
+      <rect width="377" height="60" rx="8" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5" />
+      <text x="14" y="22" fill="#fbbf24" font-size="11" font-weight="600">Wi-Fi pairing code [PAIRING_CODE]</text>
+      <text x="14" y="48" fill="#fbbf24" font-size="24" font-family="monospace" font-weight="800" letter-spacing="4">8 4 9 2 0 1</text>
+    </g>
+
+    <!-- IP & Pairing Port Display -->
+    <g transform="translate(24, 142)">
+      <rect width="377" height="55" rx="8" fill="#0f172a" stroke="#f43f5e" stroke-width="1.5" />
+      <text x="14" y="20" fill="#fda4af" font-size="11" font-weight="600">IP address &amp; Pairing Port [PAIRING_PORT]</text>
+      <text x="14" y="42" fill="#fda4af" font-size="16" font-family="monospace" font-weight="700">192.168.1.160:<tspan fill="#f43f5e" text-decoration="underline" font-weight="900">40261</tspan></text>
+      <rect x="285" y="12" width="75" height="20" rx="4" fill="#be123c" />
+      <text x="294" y="26" fill="#fff" font-size="10" font-weight="700">PAIRING</text>
+    </g>
+
+    <!-- Golden Rule Warning Callout -->
+    <g transform="translate(24, 207)">
+      <rect width="377" height="36" rx="6" fill="#450a0a" stroke="#ef4444" stroke-width="1" />
+      <text x="12" y="16" fill="#fecaca" font-size="10" font-weight="700">⚠️ CRITICAL GOLDEN RULE:</text>
+      <text x="12" y="28" fill="#fca5a5" font-size="9.5">DO NOT EXIT THIS POPUP until AI finishes pairing! Port changes if dismissed.</text>
+    </g>
+  </g>
+</svg>
