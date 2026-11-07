@@ -68,6 +68,48 @@ DEBLOAT_CATALOG: Dict[str, Dict[str, Any]] = {
         "tier": "RECOMMENDED",
         "reason": "Redundant third-party app store with aggressive push notifications"
     },
+    "com.xiaomi.market": {
+        "brand": "Xiaomi",
+        "name": "Xiaomi App Store (GetApps China)",
+        "tier": "RECOMMENDED",
+        "reason": "Proprietary app store with aggressive promotional push and background services"
+    },
+    "com.miui.cleanmaster": {
+        "brand": "Xiaomi",
+        "name": "Cleaner Engine (Clean Master)",
+        "tier": "RECOMMENDED",
+        "reason": "Cheetah Mobile third-party advertising and cleaning definition engine"
+    },
+    "com.xiaomi.ab": {
+        "brand": "Xiaomi",
+        "name": "MAB (Xiaomi Store & Push Telemetry)",
+        "tier": "RECOMMENDED",
+        "reason": "Xiaomi marketing, A/B push and ad campaign subsystem"
+    },
+    "com.android.htmlviewer": {
+        "brand": "Xiaomi",
+        "name": "HTMLViewer (China Daemon)",
+        "tier": "RECOMMENDED",
+        "reason": "Legacy China ROM background HTML viewer daemon"
+    },
+    "com.mobiletools.systemhelper": {
+        "brand": "Xiaomi",
+        "name": "SystemHelper (Carrier Telemetry)",
+        "tier": "RECOMMENDED",
+        "reason": "China ROM carrier telemetry and diagnostic helper"
+    },
+    "com.bsp.catchlog": {
+        "brand": "Xiaomi",
+        "name": "CatchLog Telemetry",
+        "tier": "RECOMMENDED",
+        "reason": "Xiaomi background log catcher and telemetry daemon"
+    },
+    "com.miui.miservice": {
+        "brand": "Xiaomi",
+        "name": "Services & Feedback",
+        "tier": "RECOMMENDED",
+        "reason": "Diagnostic and feedback reporting background telemetry"
+    },
     "com.miui.hybrid": {
         "brand": "Xiaomi",
         "name": "Quick Apps Framework",
