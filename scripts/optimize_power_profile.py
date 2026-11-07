@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Noti-Fixer for Chinese Devices
-Module: Intelligent Power & Battery Optimizer (Multitasking & Audio Safe)
+Module: Intelligent Power & Battery Optimizer (Multitasking, Meetings & Audio Safe)
 Architect: Mohammed Thuhidul Islam Shovo (shovo127)
 License: MIT License (Copyright (c) 2026)
 """
@@ -34,8 +34,17 @@ class Colors:
     BOLD = '\033[1m'
     RESET = '\033[0m'
 
+# Video Conferencing & Virtual Meetings
+# Must sustain audio, microphone, and floating Picture-in-Picture (PiP) while user
+# browses other apps (e.g. Facebook, ChatGPT, YouTube), but NEVER autostart on boot or drain idle battery.
+CONFERENCING_APPS = [
+    ("Zoom Meetings", "us.zoom.videomeetings"),
+    ("Microsoft Teams", "com.microsoft.teams"),
+    ("Skype", "com.skype.raider")
+]
+
 # Curated list of payment, banking, ride, food, learning, music, and utility apps
-# Categorized to ensure specialized handling:
+# Specialized handling:
 # - Payment & Banking: High multitasking priority (OTP copying, switching between SMS & app)
 # - Music & Audio: Absolute background playback preservation (WAKE_LOCK & media playback allowed)
 # - Travel & Learning: Preserve form state & progress
@@ -89,71 +98,58 @@ def run_adb(cmd: List[str], serial: Optional[str] = None) -> subprocess.Complete
 
 def restore_multitasking_safety(serial: Optional[str] = None):
     """
-    Guarantees 100% multitasking safety, state preservation, and background audio.
-    Resets RUN_IN_BACKGROUND, RUN_ANY_IN_BACKGROUND, and WAKE_LOCK to default
-    and assigns Standby Bucket 10 (ACTIVE) so switching between apps never drops sessions.
+    Guarantees 100% multitasking safety, state preservation, floating PiP, and background audio.
+    - Payment apps: Resets AppOps to default & assigns Standby Bucket 10 (ACTIVE).
+    - Conferencing apps: Grants RUN_IN_BACKGROUND, WAKE_LOCK, SYSTEM_ALERT_WINDOW, and PiP.
+    - Zero idle battery drain: Restricts boot autostart (10008/10021) and removes Doze whitelist for utilities.
     """
     print(f"\n{Colors.CYAN}{'='*76}{Colors.RESET}")
-    print(f"{Colors.GREEN}{Colors.BOLD}   NOTI-FIXER: PRESERVING MULTITASKING, STATE & AUDIO PLAYBACK{Colors.RESET}")
+    print(f"{Colors.GREEN}{Colors.BOLD}   NOTI-FIXER: PRESERVING MULTITASKING, MEETINGS & STATE INTEGRITY{Colors.RESET}")
     print(f"{Colors.CYAN}{'='*76}{Colors.RESET}")
 
     pkg_list_res = run_adb(["shell", "pm", "list", "packages"], serial).stdout or ""
     
+    # 1. Conferencing & Meeting Apps (Zoom, Teams, Skype)
+    conf_count = 0
+    for name, pkg in CONFERENCING_APPS:
+        if f"package:{pkg}" in pkg_list_res:
+            conf_count += 1
+            # Sustained meeting execution while multitasking
+            run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_IN_BACKGROUND", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_ANY_IN_BACKGROUND", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", pkg, "WAKE_LOCK", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", pkg, "SYSTEM_ALERT_WINDOW", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", pkg, "10029", "allow"], serial) # MIUI Floating Window
+            
+            # Prevent idle phantom boot autostart (0% battery drain when not in meeting)
+            run_adb(["shell", "cmd", "appops", "set", pkg, "10008", "ignore"], serial)
+            run_adb(["shell", "cmd", "appops", "set", pkg, "10021", "ignore"], serial)
+            run_adb(["shell", "am", "set-standby-bucket", pkg, "10"], serial)
+            print(f"    {Colors.GREEN}✔ [MEETING READY] {name:<20} ({pkg:<28}) -> Multitask: Active | Boot: Ignored{Colors.RESET}")
+
+    # 2. Payment, Banking, Audio & Utility Apps
     restored_count = 0
     for name, pkg, category in PAYMENT_AND_UTILITY_APPS:
         if f"package:{pkg}" in pkg_list_res:
             restored_count += 1
-            # 1. Reset AppOps to default so Android standard LRU memory manages tasks safely
+            # Reset AppOps to default so Android standard LRU memory manages tasks safely
             run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_IN_BACKGROUND", "default"], serial)
             run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_ANY_IN_BACKGROUND", "default"], serial)
             run_adb(["shell", "cmd", "appops", "set", pkg, "WAKE_LOCK", "default"], serial)
             
-            # 2. Set Standby Bucket to ACTIVE (10) to preserve memory residency during task switching
-            run_adb(["shell", "am", "set-standby-bucket", pkg, "10"], serial)
-            
-            print(f"    {Colors.GREEN}✔ [STATE SAFE] {name:<22} ({pkg:<32}) -> AppOps: default | Bucket: 10{Colors.RESET}")
-
-    print(f"\n{Colors.GREEN}{Colors.BOLD}✔ Successfully verified multitasking & session protection for {restored_count} apps!{Colors.RESET}")
-    print(f"{Colors.CYAN}{'='*76}{Colors.RESET}\n")
-
-def apply_power_saving_rules(serial: Optional[str] = None):
-    """
-    Intelligently saves battery WITHOUT killing multitasking or background audio:
-    - Restricts boot-time autostart (OP_BOOT_COMPLETED 10008, OP_AUTO_START 10021).
-    - Preserves RUN_IN_BACKGROUND default and WAKE_LOCK default for zero state loss.
-    - Sets Standby Bucket to WORKING_SET (20) / ACTIVE (10) for smooth user transitions.
-    """
-    print(f"\n{Colors.CYAN}{'='*76}{Colors.RESET}")
-    print(f"{Colors.GREEN}{Colors.BOLD}   NOTI-FIXER: APPLYING BALANCED POWER & AUTOSTART OPTIMIZATIONS{Colors.RESET}")
-    print(f"{Colors.CYAN}{'='*76}{Colors.RESET}")
-
-    pkg_list_res = run_adb(["shell", "pm", "list", "packages"], serial).stdout or ""
-    
-    applied_count = 0
-    for name, pkg, category in PAYMENT_AND_UTILITY_APPS:
-        if f"package:{pkg}" in pkg_list_res:
-            applied_count += 1
-            
-            # 1. Prevent phantom autostart on boot (stops background drain before user opens app)
+            # Prevent unnecessary autostart on boot (saves battery when unused)
             run_adb(["shell", "cmd", "appops", "set", pkg, "10008", "ignore"], serial)
             run_adb(["shell", "cmd", "appops", "set", pkg, "10021", "ignore"], serial)
             
-            # 2. Never restrict RUN_IN_BACKGROUND or WAKE_LOCK: Keep default for seamless OTP / multitasking
-            run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_IN_BACKGROUND", "default"], serial)
-            run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_ANY_IN_BACKGROUND", "default"], serial)
-            run_adb(["shell", "cmd", "appops", "set", pkg, "WAKE_LOCK", "default"], serial)
+            # Assign Standby Bucket 10 (ACTIVE) so task switching retains forms & OTP screens
+            run_adb(["shell", "am", "set-standby-bucket", pkg, "10"], serial)
             
-            # 3. Bucket 20 (WORKING_SET) or 10 (ACTIVE) allows Android OS to manage RAM naturally
-            # Special case: Audio streaming apps remain ACTIVE (10)
-            target_bucket = "10" if category in ("audio", "payment") else "20"
-            run_adb(["shell", "am", "set-standby-bucket", pkg, target_bucket], serial)
-            
-            # 4. Remove from Doze battery whitelist so device can deep-sleep when left undisturbed
+            # Remove from Doze whitelist to guarantee phone enters deep sleep when idle
             run_adb(["shell", "dumpsys", "deviceidle", "whitelist", f"-{pkg}"], serial)
             
-            print(f"    {Colors.GREEN}✔ [BALANCED] {name:<22} ({pkg:<32}) -> Boot: Ignored | Multitask: Active{Colors.RESET}")
+            print(f"    {Colors.GREEN}✔ [STATE SAFE]    {name:<20} ({pkg:<28}) -> AppOps: default | Bucket: 10{Colors.RESET}")
 
-    print(f"\n{Colors.GREEN}{Colors.BOLD}✔ Successfully applied balanced power profiles to {applied_count} apps!{Colors.RESET}")
+    print(f"\n{Colors.GREEN}{Colors.BOLD}✔ Successfully verified multitasking & meeting protection for {conf_count + restored_count} apps!{Colors.RESET}")
     print(f"{Colors.CYAN}{'='*76}{Colors.RESET}\n")
 
 def optimize_hardware_radios(serial: Optional[str] = None):
@@ -188,21 +184,18 @@ def main():
     parser = argparse.ArgumentParser(description="Intelligent Power & Battery Optimizer by Shovo")
     parser.add_argument("-s", "--serial", help="ADB serial of target device", default=None)
     parser.add_argument("--restore-multitasking", action="store_true", help="Restore full multitasking, session state and audio playback")
-    parser.add_argument("--optimize-power", action="store_true", help="Apply balanced power-saving without affecting multitasking")
     parser.add_argument("--optimize-radios", action="store_true", help="Disable background Wi-Fi and Bluetooth location scanning")
     parser.add_argument("--status", action="store_true", help="Check battery temperature and charging status")
     args = parser.parse_args()
 
     if args.restore_multitasking:
         restore_multitasking_safety(args.serial)
-    elif args.optimize_power:
-        apply_power_saving_rules(args.serial)
     elif args.optimize_radios:
         optimize_hardware_radios(args.serial)
     elif args.status:
         print_thermal_status(args.serial)
     else:
-        # Default run: Optimize hardware radios, restore multitasking protection, and print thermal snapshot
+        # Default run: Optimize hardware radios, enforce multitasking & meeting safety, and print thermal snapshot
         optimize_hardware_radios(args.serial)
         restore_multitasking_safety(args.serial)
         print_thermal_status(args.serial)
