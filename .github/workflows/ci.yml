@@ -65,6 +65,7 @@ jobs:
           python -m py_compile scripts/debloat_manager.py
           python -m py_compile scripts/adblock_manager.py
           python -m py_compile scripts/safety_guard.py
+          python -m py_compile scripts/optimize_power_profile.py
 
       - name: Run Non-Destructive Safety Guard Verification Tests
         run: |
@@ -81,6 +82,7 @@ jobs:
           python scripts/adblock_manager.py --help
           python scripts/inspect_battery.py --help
           python scripts/restore_background_health.py --help
+          python scripts/optimize_power_profile.py --help
 
   validate-shell:
     name: Validate Shell & Daemon Scripts
