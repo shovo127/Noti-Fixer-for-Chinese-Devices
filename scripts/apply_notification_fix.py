@@ -57,6 +57,7 @@ DEFAULT_PRIORITY_PACKAGES = [
     "com.tencent.mm",
     "com.discord",
     "com.microsoft.office.outlook",
+    "com.microsoft.teams",
     "com.Slack",
     "com.viber.voip",
     "com.skype.raider"

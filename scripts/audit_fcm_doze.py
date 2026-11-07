@@ -42,6 +42,9 @@ KEY_PACKAGES = [
     {"name": "Instagram", "pkg": "com.instagram.android", "critical": False},
     {"name": "Discord", "pkg": "com.discord", "critical": False},
     {"name": "Microsoft Outlook", "pkg": "com.microsoft.office.outlook", "critical": False},
+    {"name": "Microsoft Teams", "pkg": "com.microsoft.teams", "critical": False},
+    {"name": "Viber", "pkg": "com.viber.voip", "critical": False},
+    {"name": "Zoom", "pkg": "us.zoom.videomeetings", "critical": False},
 ]
 
 def run_adb(cmd: List[str], serial: Optional[str] = None) -> subprocess.CompletedProcess:
