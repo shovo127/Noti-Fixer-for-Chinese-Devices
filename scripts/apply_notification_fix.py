@@ -266,13 +266,24 @@ def apply_universal_fixes(
     backup_path = create_system_backup(serial)
     print(f"       -> Backup successfully saved to: {Colors.YELLOW}{backup_path}{Colors.RESET}")
 
-    # 2. Kernel Socket Freezer Remediations (Android 14/15/16)
-    print(f"\n {Colors.CYAN}[2/7] Disabling Kernel Cgroup Socket Freezer & Cached Freezer...{Colors.RESET}")
+    # 2. Kernel Socket Freezer Remediations & FCM NAT Heartbeat Interval
+    print(f"\n {Colors.CYAN}[2/7] Disabling Kernel Cgroup Socket Freezer & Enforcing FCM Heartbeat...{Colors.RESET}")
     run_adb(["shell", "settings", "put", "global", "cached_apps_freezer", "disabled"], serial)
     run_adb(["shell", "device_config", "put", "activity_manager_native_boot", "use_freezer", "false"], serial)
     run_adb(["shell", "setprop", "persist.sys.freezer", "false"], serial)
     run_adb(["shell", "setprop", "sys.use_freezer", "false"], serial)
+
+    # Enforce 2-minute FCM Heartbeat (120000ms) to prevent Wi-Fi router & carrier NAT socket drops
+    run_adb(["shell", "settings", "put", "global", "fcm_heartbeat_interval_wifi_ms", "120000"], serial)
+    run_adb(["shell", "settings", "put", "global", "fcm_heartbeat_interval_mobile_ms", "120000"], serial)
+    run_adb(["shell", "settings", "put", "secure", "fcm_heartbeat_interval_wifi_ms", "120000"], serial)
+    run_adb(["shell", "settings", "put", "secure", "fcm_heartbeat_interval_mobile_ms", "120000"], serial)
+    run_adb(["shell", "settings", "put", "global", "gservices:fcm_heartbeat_interval_wifi_ms", "120000"], serial)
+    run_adb(["shell", "settings", "put", "global", "gservices:fcm_heartbeat_interval_mobile_ms", "120000"], serial)
+    run_adb(["shell", "settings", "put", "global", "wifi_suspend_optimizations_enabled", "0"], serial)
     print(f"       -> Cached apps & ActivityManager socket freezer: {Colors.GREEN}DISABLED{Colors.RESET}")
+    print(f"       -> FCM Heartbeat Interval: {Colors.GREEN}120s (2 minutes persistent keepalive){Colors.RESET}")
+    print(f"       -> Wi-Fi Suspend Power Saving: {Colors.GREEN}DISABLED (0 packet latency when locked){Colors.RESET}")
 
     # Scan installed packages
     installed = get_installed_packages(serial)
@@ -349,6 +360,18 @@ def apply_universal_fixes(
         millet_val = ",".join(sorted(list(millet_set)))
         run_adb(["shell", "settings", "put", "system", "MILLET_NO_RESTRICT_APP", millet_val], serial)
         print(f"       -> Injected {len(active_targets)} priority apps into PowerKeeper & MILLET whitelists")
+
+        # Deploy and launch background persistent MILLET watchdog daemon
+        watchdog_path = os.path.join(os.path.dirname(__file__), "millet_watchdog.sh")
+        if os.path.exists(watchdog_path):
+            run_adb(["push", watchdog_path, "/data/local/tmp/millet_watchdog.sh"], serial)
+            run_adb(["shell", "chmod", "755", "/data/local/tmp/millet_watchdog.sh"], serial)
+            ps_res = run_adb(["shell", "ps", "-ef"], serial)
+            if "millet_watchdog.sh" not in (ps_res.stdout or ""):
+                run_adb(["shell", "setsid", "nohup", "/data/local/tmp/millet_watchdog.sh", "</dev/null", ">/dev/null", "2>&1", "&"], serial)
+                print(f"       -> MILLET & FCM Persistent Watchdog Daemon: {Colors.GREEN}DEPLOYED & RUNNING{Colors.RESET}")
+            else:
+                print(f"       -> MILLET & FCM Persistent Watchdog Daemon: {Colors.GREEN}ALREADY ACTIVE{Colors.RESET}")
 
     elif is_vivo:
         print(f"       -> Detected: {Colors.YELLOW}Vivo OriginOS / FuntouchOS Platform{Colors.RESET}")
