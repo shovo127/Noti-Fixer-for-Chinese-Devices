@@ -45,6 +45,7 @@ settings put secure fcm_heartbeat_interval_mobile_ms 120000 2>/dev/null
 settings put global gservices:fcm_heartbeat_interval_wifi_ms 120000 2>/dev/null
 settings put global gservices:fcm_heartbeat_interval_mobile_ms 120000 2>/dev/null
 settings put global wifi_suspend_optimizations_enabled 0 2>/dev/null
+device_config put activity_manager max_phantom_processes 2147483647 2>/dev/null
 
 counter=0
 
@@ -85,6 +86,7 @@ while true; do
         settings put global gservices:fcm_heartbeat_interval_wifi_ms 120000 2>/dev/null
         settings put global gservices:fcm_heartbeat_interval_mobile_ms 120000 2>/dev/null
         settings put global wifi_suspend_optimizations_enabled 0 2>/dev/null
+device_config put activity_manager max_phantom_processes 2147483647 2>/dev/null
 
         # Send FCM keepalive heartbeat broadcasts
         am broadcast -a com.google.android.intent.action.MCS_HEARTBEAT -p com.google.android.gms >/dev/null 2>&1

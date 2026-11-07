@@ -281,7 +281,9 @@ def apply_universal_fixes(
     run_adb(["shell", "settings", "put", "global", "gservices:fcm_heartbeat_interval_wifi_ms", "120000"], serial)
     run_adb(["shell", "settings", "put", "global", "gservices:fcm_heartbeat_interval_mobile_ms", "120000"], serial)
     run_adb(["shell", "settings", "put", "global", "wifi_suspend_optimizations_enabled", "0"], serial)
+    run_adb(["shell", "device_config", "put", "activity_manager", "max_phantom_processes", "2147483647"], serial)
     print(f"       -> Cached apps & ActivityManager socket freezer: {Colors.GREEN}DISABLED{Colors.RESET}")
+    print(f"       -> Max Phantom Processes: {Colors.GREEN}2147483647 (Unlimited child daemons & sync){Colors.RESET}")
     print(f"       -> FCM Heartbeat Interval: {Colors.GREEN}120s (2 minutes persistent keepalive){Colors.RESET}")
     print(f"       -> Wi-Fi Suspend Power Saving: {Colors.GREEN}DISABLED (0 packet latency when locked){Colors.RESET}")
 
@@ -361,6 +363,18 @@ def apply_universal_fixes(
         run_adb(["shell", "settings", "put", "system", "MILLET_NO_RESTRICT_APP", millet_val], serial)
         print(f"       -> Injected {len(active_targets)} priority apps into PowerKeeper & MILLET whitelists")
 
+        # HyperOS Immobulus Mode & Wakeup List Injection
+        try:
+            cur_imm = run_adb(["shell", "settings", "get", "secure", "immobulus_mode_switch_restrict"], serial).stdout.strip()
+            if cur_imm and cur_imm != "null" and "_wakeuplist" in cur_imm and "com.whatsapp" not in cur_imm:
+                extra_imm = "_" + "_".join(active_targets)
+                parts = cur_imm.split("_wakeuplist")
+                new_imm = parts[0] + extra_imm + "_wakeuplist" + parts[1] + extra_imm
+                run_adb(["shell", "settings", "put", "secure", "immobulus_mode_switch_restrict", new_imm], serial)
+                print(f"       -> Injected priority apps into HyperOS Immobulus Allowlist & Wakeuplist")
+        except Exception:
+            pass
+
         # Deploy and launch background persistent MILLET watchdog daemon
         watchdog_path = os.path.join(os.path.dirname(__file__), "millet_watchdog.sh")
         if os.path.exists(watchdog_path):
@@ -429,6 +443,10 @@ def apply_universal_fixes(
                 run_adb(["shell", "cmd", "appops", "set", pkg, "10021", "ignore"], serial)
                 run_adb(["shell", "cmd", "appops", "set", pkg, "10028", "ignore"], serial)
                 run_adb(["shell", "cmd", "appops", "set", pkg, "10029", "ignore"], serial)
+                # Keep user-facing alert delivery active (sound, vibration, lockscreen alert)
+                run_adb(["shell", "cmd", "appops", "set", pkg, "10017", "allow"], serial)
+                run_adb(["shell", "cmd", "appops", "set", pkg, "10020", "allow"], serial)
+                run_adb(["shell", "cmd", "appops", "set", pkg, "10022", "allow"], serial)
                 # Ensure permissions allow smooth operation while actively in use
                 run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_IN_BACKGROUND", "allow"], serial)
                 run_adb(["shell", "cmd", "appops", "set", pkg, "WAKE_LOCK", "allow"], serial)
