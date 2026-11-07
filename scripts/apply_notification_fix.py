@@ -44,7 +44,6 @@ DEFAULT_PRIORITY_PACKAGES = [
     "com.google.android.gsf",
     "com.android.vending",
     "com.android.providers.downloads",
-    "us.zoom.videomeetings",
     "com.google.android.gm",
     "com.whatsapp",
     "com.whatsapp.w4b",
@@ -57,7 +56,6 @@ DEFAULT_PRIORITY_PACKAGES = [
     "com.tencent.mm",
     "com.discord",
     "com.microsoft.office.outlook",
-    "com.microsoft.teams",
     "com.Slack",
     "com.viber.voip",
     "com.skype.raider"
