@@ -38,6 +38,18 @@ DEBLOAT_CATALOG: Dict[str, Dict[str, Any]] = {
         "tier": "RECOMMENDED",
         "reason": "Background telemetry and behavioral ad tracking"
     },
+    "com.miui.personalassistant": {
+        "brand": "Xiaomi",
+        "name": "MIUI App Vault",
+        "tier": "RECOMMENDED",
+        "reason": "Redundant minus-one screen feed and widget consumer"
+    },
+    "com.android.quicksearchbox": {
+        "brand": "Xiaomi",
+        "name": "MIUI Quick Search Box",
+        "tier": "RECOMMENDED",
+        "reason": "Redundant search widget and background memory consumer"
+    },
     "com.miui.systemAdSolution": {
         "brand": "Xiaomi",
         "name": "MSA (MIUI System Ads)",
