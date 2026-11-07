@@ -33,11 +33,12 @@ show_menu() {
     echo -e "  [7] 🔄 Wireless ADB Port Scanner (Find new port after reboot)"
     echo -e "  [8] 🛠️ Fix Background App Freezing & Network Stalls (Play Store & Apps)"
     echo -e "  [9] 🧹 Safe Bloatware & Ad Debloater (User-Profile Only - 100% Reversible)"
-    echo -e "  [10] ⏪ Revert Changes (Master 100% Safe Rollback & Reinstaller)"
-    echo -e "  [11] ❌ Exit"
+    echo -e "  [10] 🛡️ Zero-Latency Ad-Blocker Manager (Local Loopback & DNS Optimizer)"
+    echo -e "  [11] ⏪ Revert Changes (Master 100% Safe Rollback & Reinstaller)"
+    echo -e "  [12] ❌ Exit"
     echo ""
     echo -e "${CYAN}==============================================================================${NC}"
-    echo -n "Enter choice [1-11]: "
+    echo -n "Enter choice [1-12]: "
 }
 
 while true; do
@@ -57,7 +58,7 @@ while true; do
             adb devices
             echo ""
             echo -e "${CYAN}[*] Applying Comprehensive Notification Fix...${NC}"
-            python3 "$SCRIPT_DIR/apply_notification_fix.py" --dns-adguard
+            python3 "$SCRIPT_DIR/apply_notification_fix.py"
             echo ""
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
             read -r
@@ -129,13 +130,35 @@ while true; do
             ;;
         10)
             clear
+            echo -e "${CYAN}[*] Launching Zero-Latency Ad-Blocker & DNS Manager...${NC}"
+            python3 "$SCRIPT_DIR/adblock_manager.py" --status
+            echo ""
+            echo "Options:"
+            echo "  [1] Open Google Play Store to install RethinkDNS (0ms Local Loopback)"
+            echo "  [2] Optimize RethinkDNS Daemon (Grant Bucket 5 & Autostart)"
+            echo "  [3] Disable Slow Remote Private DNS (Restore 3-8ms ISP speed)"
+            echo "  [4] Return to Main Menu"
+            echo ""
+            echo -n "Enter choice [1-4]: "
+            read -r ad_choice
+            case "$ad_choice" in
+                1) python3 "$SCRIPT_DIR/adblock_manager.py" --install-rethink ;;
+                2) python3 "$SCRIPT_DIR/adblock_manager.py" --optimize-rethink ;;
+                3) python3 "$SCRIPT_DIR/adblock_manager.py" --disable-slow-dns ;;
+            esac
+            echo ""
+            echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
+            read -r
+            ;;
+        11)
+            clear
             echo -e "${YELLOW}Executing Master 100% Safe System Rollback & Package Restoration...${NC}"
             python3 "$SCRIPT_DIR/restore_backup.py"
             echo ""
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"
             read -r
             ;;
-        11)
+        12)
             echo "Exiting Noti-Fixer. Have a great day!"
             exit 0
             ;;

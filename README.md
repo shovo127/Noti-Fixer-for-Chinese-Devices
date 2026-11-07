@@ -146,8 +146,9 @@ chmod +x scripts/NotiFixer_OneClick.sh
 | `[7]` | 🔄 **Wireless Port Scanner** | Auto-discovers new dynamic ports across `30000–49999` after reboot. |
 | `[8]` | 🛠️ **Unfreeze Background Apps** | Restores background network and execution for Play Store & apps. |
 | `[9]` | 🧹 **Safe Bloatware & Ad Debloater** | Removes recommended vendor ads & bloat for User 0 (100% reversible). |
-| `[10]`| ⏪ **Master 100% Safe Rollback** | Reinstalls debloated packages and reverts all settings to stock. |
-| `[11]`| ❌ **Exit** | Closes the repair suite. |
+| `[10]`| 🛡️ **Zero-Latency Ad-Blocker Manager** | Local on-device 0ms loopback & low-latency DNS optimizer. |
+| `[11]`| ⏪ **Master 100% Safe Rollback** | Reinstalls debloated packages and reverts all settings to stock. |
+| `[12]`| ❌ **Exit** | Closes the repair suite. |
 
 ---
 

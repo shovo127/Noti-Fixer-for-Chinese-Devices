@@ -75,7 +75,12 @@ python scripts/apply_notification_fix.py
 ```bash
 adb push scripts/millet_watchdog.sh /data/local/tmp/millet_watchdog.sh
 adb shell chmod +x /data/local/tmp/millet_watchdog.sh
-adb shell "nohup /data/local/tmp/millet_watchdog.sh >/dev/null 2>&1 &"
+adb shell "setsid nohup /data/local/tmp/millet_watchdog.sh </dev/null >/dev/null 2>&1 &"
+```
+5. Manage zero-latency ad blocking & DNS:
+```bash
+python scripts/adblock_manager.py --disable-slow-dns
+python scripts/adblock_manager.py --optimize-rethink
 ```
 
 ### Phase 7: Verify & Document

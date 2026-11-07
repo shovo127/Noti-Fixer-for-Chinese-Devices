@@ -22,11 +22,12 @@ echo   [6] 🛡️ Push & Start HyperOS MILLET Watchdog Daemon
 echo   [7] 🔄 Wireless ADB Port Scanner (Find new port after reboot)
 echo   [8] 🛠️ Fix Background App Freezing & Network Stalls (Play Store & Apps)
 echo   [9] 🧹 Safe Bloatware & Ad Debloater (User-Profile Only - 100%% Reversible)
-echo   [10] ⏪ Revert Changes (Master 100%% Safe Rollback & Reinstaller)
-echo   [11] ❌ Exit
+echo   [10] 🛡️ Zero-Latency Ad-Blocker Manager (Local Loopback & DNS Optimizer)
+echo   [11] ⏪ Revert Changes (Master 100%% Safe Rollback & Reinstaller)
+echo   [12] ❌ Exit
 echo.
 ==============================================================================
-set /p choice="Enter choice [1-11]: "
+set /p choice="Enter choice [1-12]: "
 
 if "%choice%"=="1" goto WIRELESS
 if "%choice%"=="2" goto FIX
@@ -37,8 +38,9 @@ if "%choice%"=="6" goto WATCHDOG
 if "%choice%"=="7" goto SCAN
 if "%choice%"=="8" goto UNFREEZE
 if "%choice%"=="9" goto DEBLOAT
-if "%choice%"=="10" goto ROLLBACK
-if "%choice%"=="11" exit /b 0
+if "%choice%"=="10" goto ADBLOCK
+if "%choice%"=="11" goto ROLLBACK
+if "%choice%"=="12" exit /b 0
 
 echo Invalid choice. Try again.
 pause
@@ -58,7 +60,7 @@ echo [*] Checking ADB connection...
 adb devices
 echo.
 echo [*] Applying Comprehensive Notification Fix...
-python "%~dp0apply_notification_fix.py" --dns-adguard
+python "%~dp0apply_notification_fix.py"
 echo.
 echo Press any key to return to menu...
 pause >nul
@@ -129,6 +131,26 @@ goto MENU
 cls
 echo [*] Launching Safe User-Profile Bloatware & Ad Debloater...
 python "%~dp0debloat_manager.py"
+echo.
+echo Press any key to return to menu...
+pause >nul
+goto MENU
+
+:ADBLOCK
+cls
+echo [*] Launching Zero-Latency Ad-Blocker & DNS Manager...
+python "%~dp0adblock_manager.py" --status
+echo.
+echo Options:
+echo   [1] Open Google Play Store to install RethinkDNS (0ms Local Loopback)
+echo   [2] Optimize RethinkDNS Daemon (Grant Bucket 5 & Autostart)
+echo   [3] Disable Slow Remote Private DNS (Restore 3-8ms ISP speed)
+echo   [4] Return to Main Menu
+echo.
+set /p ad_choice="Enter choice [1-4]: "
+if "%ad_choice%"=="1" python "%~dp0adblock_manager.py" --install-rethink
+if "%ad_choice%"=="2" python "%~dp0adblock_manager.py" --optimize-rethink
+if "%ad_choice%"=="3" python "%~dp0adblock_manager.py" --disable-slow-dns
 echo.
 echo Press any key to return to menu...
 pause >nul
