@@ -98,6 +98,9 @@ PROTECTED_SYSTEM_PACKAGES = {
     "com.google.android.apps.adm",     # Google Find My Device
     "com.android.vending",             # Google Play Store (App updates & background downloads)
     "com.android.providers.downloads", # Android Download Manager
+    "com.android.updater",             # HyperOS / MIUI System Updater
+    "com.xiaomi.market",               # Xiaomi App Store (System App updates & Widgets)
+    "com.miui.personalassistant",      # Xiaomi App Vault & System Widgets
     "us.zoom.videomeetings",           # Zoom Meetings (Video conferencing & background call audio)
     "com.google.android.webview",      # Android System WebView
     "com.android.webview",

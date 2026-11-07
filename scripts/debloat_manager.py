@@ -68,12 +68,6 @@ DEBLOAT_CATALOG: Dict[str, Dict[str, Any]] = {
         "tier": "RECOMMENDED",
         "reason": "Redundant third-party app store with aggressive push notifications"
     },
-    "com.xiaomi.market": {
-        "brand": "Xiaomi",
-        "name": "Xiaomi App Store (GetApps China)",
-        "tier": "RECOMMENDED",
-        "reason": "Proprietary app store with aggressive promotional push and background services"
-    },
     "com.miui.cleanmaster": {
         "brand": "Xiaomi",
         "name": "Cleaner Engine (Clean Master)",

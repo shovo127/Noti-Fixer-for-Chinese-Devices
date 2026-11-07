@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Noti-Fixer for Chinese Devices
-Module: Zero-Latency Safe Ad-Blocker & Local Loopback Optimizer
+Module: Zero-Latency Safe Ad-Blocker & Global Network Sinkhole Optimizer
 Architect: Mohammed Thuhidul Islam Shovo (shovo127)
 License: MIT License (Copyright (c) 2026)
 """
@@ -74,26 +74,24 @@ def set_edge_dns(specifier: str, serial: Optional[str] = None):
 
 def apply_native_no_app_adblock(serial: Optional[str] = None):
     """
-    Applies 100% app-free, root-free ad neutralization:
+    Applies 100% app-free, root-free ad neutralization across all global vendors:
     1. Sets low-latency edge ad-blocking DNS (Control D - p2.freedns.controld.com) sinking ads to 127.0.0.1
-    2. Activates Android 16 AdServices global kill switches
+    2. Activates Android 16 AdServices global kill switches (AdMob, Topics, SDK Sandbox, Ad ID)
     3. Disables all native Xiaomi HyperOS / MIUI ad, recommendation, and telemetry toggles
-    4. Restricts secondary ad-injecting security components via Standby Bucket & AppOps
-    5. Mitigates Google Chrome internal DoH bypass
-    6. Safely uninstalls user-profile background ad/telemetry daemons
+    4. Mitigates Google Chrome internal DoH bypass
     """
     print(f"\n{Colors.CYAN}{'='*74}{Colors.RESET}")
-    print(f"{Colors.GREEN}{Colors.BOLD}   NOTI-FIXER: APPLYING 100% NATIVE NO-APP AD NEUTRALIZATION{Colors.RESET}")
+    print(f"{Colors.GREEN}{Colors.BOLD}   NOTI-FIXER: APPLYING GLOBAL 100% NATIVE NO-APP AD NEUTRALIZATION{Colors.RESET}")
     print(f"{Colors.CYAN}{'='*74}{Colors.RESET}")
 
-    # 1. Edge DNS (0.2ms sinkhole to 127.0.0.1 for ad domains)
-    print(f" {Colors.CYAN}[1/6] Activating Ultra-Fast Edge DNS (0.2ms Ad Sinkhole)...{Colors.RESET}")
+    # 1. Edge DNS (0.2ms sinkhole to 127.0.0.1 for all global ad domains)
+    print(f" {Colors.CYAN}[1/4] Activating Ultra-Fast Edge DNS (0.2ms Global Ad Sinkhole)...{Colors.RESET}")
     run_adb(["shell", "settings", "put", "global", "private_dns_mode", "hostname"], serial)
     run_adb(["shell", "settings", "put", "global", "private_dns_specifier", "p2.freedns.controld.com"], serial)
     print(f"       -> Private DNS set to: {Colors.GREEN}p2.freedns.controld.com{Colors.RESET}")
 
     # 2. Android 16 AdServices Global Kill Switch
-    print(f"\n {Colors.CYAN}[2/6] Neutralizing Android 16 AdServices Subsystem...{Colors.RESET}")
+    print(f"\n {Colors.CYAN}[2/4] Neutralizing Android 16 AdServices & Cross-App Ad ID...{Colors.RESET}")
     run_adb(["shell", "device_config", "put", "adservices", "global_kill_switch", "true"], serial)
     run_adb(["shell", "device_config", "put", "adservices", "adservice_enabled", "false"], serial)
     run_adb(["shell", "device_config", "put", "adservices", "adservice_system_service_enabled", "false"], serial)
@@ -106,7 +104,7 @@ def apply_native_no_app_adblock(serial: Optional[str] = None):
     print(f"       -> AdServices & Advertising ID: {Colors.GREEN}DISABLED (Global Kill Switch Active){Colors.RESET}")
 
     # 3. Native Xiaomi HyperOS / MIUI Recommendation Neutralization
-    print(f"\n {Colors.CYAN}[3/6] Disabling Native HyperOS / MIUI App Ad & Telemetry Recommendations...{Colors.RESET}")
+    print(f"\n {Colors.CYAN}[3/4] Disabling Native HyperOS / MIUI App Ad & Telemetry Recommendations...{Colors.RESET}")
     xiaomi_toggles = [
         ("secure", "miui_ad_enable", "0"),
         ("system", "miui_ad_enable", "0"),
@@ -146,84 +144,68 @@ def apply_native_no_app_adblock(serial: Optional[str] = None):
         run_adb(["shell", "settings", "put", table, key, val], serial)
     print(f"       -> System File Manager, Downloads, Themes, Security, MSA & Telemetry: {Colors.GREEN}OFF{Colors.RESET}")
 
-    # 4. Restrict Secondary Security Ad Injectors
-    print(f"\n {Colors.CYAN}[4/6] Restricting Ancillary Security Components (AppOps & Standby Bucket 45)...{Colors.RESET}")
-    sec_pkgs = ["com.miui.securityadd", "com.miui.guardprovider"]
-    for pkg in sec_pkgs:
-        run_adb(["shell", "am", "set-standby-bucket", pkg, "45"], serial)
-        run_adb(["shell", "cmd", "appops", "set", pkg, "10008", "ignore"], serial)
-        run_adb(["shell", "cmd", "appops", "set", pkg, "10021", "ignore"], serial)
-        run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_IN_BACKGROUND", "ignore"], serial)
-        run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_ANY_IN_BACKGROUND", "ignore"], serial)
-        run_adb(["shell", "cmd", "appops", "set", pkg, "POST_NOTIFICATION", "ignore"], serial)
-    print(f"       -> {', '.join(sec_pkgs)}: {Colors.GREEN}Restricted to Bucket 45 (No Background / No Notifications){Colors.RESET}")
-
-    # 5. Chrome DoH Bypass Prevention
-    print(f"\n {Colors.CYAN}[5/6] Mitigating Chrome Mobile DoH Bypass...{Colors.RESET}")
+    # 4. Chrome DoH Bypass Prevention
+    print(f"\n {Colors.CYAN}[4/4] Mitigating Chrome Mobile DoH Bypass...{Colors.RESET}")
     run_adb(["shell", "echo 'chrome --disable-features=DnsOverHttps,AsyncDns' > /data/local/tmp/chrome-command-line"], serial)
     print(f"       -> /data/local/tmp/chrome-command-line configured: {Colors.GREEN}--disable-features=DnsOverHttps,AsyncDns{Colors.RESET}")
-
-    # 6. Safe Debloat of Vetted Ad/Telemetry Daemons
-    print(f"\n {Colors.CYAN}[6/6] Neutralizing Background Ad & Telemetry Daemons...{Colors.RESET}")
-    debloat_candidates = [
-        "com.xiaomi.market",
-        "com.xiaomi.ab",
-        "com.android.htmlviewer",
-        "com.mobiletools.systemhelper",
-        "com.bsp.catchlog",
-        "com.miui.miservice"
-    ]
-    for pkg in debloat_candidates:
-        res = run_adb(["shell", "pm", "uninstall", "-k", "--user", "0", pkg], serial)
-        if "success" in (res.stdout or "").lower():
-            print(f"       -> {pkg}: {Colors.GREEN}Debloated for User 0{Colors.RESET}")
-        else:
-            print(f"       -> {pkg}: {Colors.YELLOW}Already Uninstalled / Protected{Colors.RESET}")
-        run_adb(["shell", "am", "force-stop", pkg], serial)
 
     print(f"\n{Colors.GREEN}{Colors.BOLD}✔ 100% Native Ad Neutralization Complete! Zero apps installed, 0 MB RAM, 0% CPU overhead.{Colors.RESET}")
     print(f"{Colors.CYAN}{'='*74}{Colors.RESET}\n")
 
 def verify_adblock(serial: Optional[str] = None):
     """
-    Verifies ad domain sinkholing and legitimate network latency.
+    Verifies ad domain sinkholing across global advertising networks and verifies legitimate network latency.
     """
     print(f"\n{Colors.CYAN}{'='*74}{Colors.RESET}")
-    print(f"{Colors.GREEN}{Colors.BOLD}   NOTI-FIXER: LIVE AD-BLOCKING & DNS SPEED VERIFICATION{Colors.RESET}")
+    print(f"{Colors.GREEN}{Colors.BOLD}   NOTI-FIXER: GLOBAL AD-BLOCKING & DNS SPEED VERIFICATION{Colors.RESET}")
     print(f"{Colors.CYAN}{'='*74}{Colors.RESET}")
 
     ad_domains = [
-        "googleads.g.doubleclick.net",
-        "pagead2.googlesyndication.com",
-        "unityads.unity3d.com",
-        "applovin.com",
-        "adservice.google.com"
+        # Google AdMob & DoubleClick
+        ("Google AdMob Network", "googleads.g.doubleclick.net"),
+        ("Google Syndication", "pagead2.googlesyndication.com"),
+        ("Google Ad Service", "adservice.google.com"),
+        # Meta (Facebook / Instagram Ads)
+        ("Meta Audience Network", "an.facebook.com"),
+        ("Meta Tracking Pixel", "pixel.facebook.com"),
+        # Unity Ads (Mobile Games)
+        ("Unity Ads Network", "unityads.unity3d.com"),
+        # AppLovin
+        ("AppLovin Network", "applovin.com"),
+        # InMobi
+        ("InMobi Global Ads", "inmobi.com"),
+        # IronSource
+        ("IronSource Ads", "supersonicads.com"),
+        # Taboola & Outbrain
+        ("Taboola Content Ads", "taboola.com"),
+        ("Outbrain Content Ads", "outbrain.com"),
+        # Criteo
+        ("Criteo Retargeting", "criteo.com")
     ]
     legit_domains = [
-        "google.com",
-        "cloudflare.com",
-        "mtalk.google.com"
+        ("Google Search & Services", "google.com"),
+        ("Cloudflare CDN & Edge", "cloudflare.com"),
+        ("Google FCM Push Server", "mtalk.google.com")
     ]
 
-    print(f"\n {Colors.CYAN}[*] Testing Ad Network Domain Sinkhole (Must resolve to 127.0.0.1 / localhost):{Colors.RESET}")
-    for dom in ad_domains:
+    print(f"\n {Colors.CYAN}[*] Testing Global Ad Network Sinkhole (Resolves to 127.0.0.1 / localhost):{Colors.RESET}")
+    for company, dom in ad_domains:
         res = run_adb(["shell", f"ping -c 1 {dom}"], serial)
         out = (res.stdout or "") + (res.stderr or "")
         if "127.0.0.1" in out or "0.0.0.0" in out:
-            # Extract latency
             time_part = "0.1 ms"
             for token in out.split():
                 if "time=" in token:
                     time_part = token.replace("time=", "") + " ms"
                     break
-            print(f"    {Colors.GREEN}✔ [BLOCKED] {dom:<32} -> 127.0.0.1 (Sinkholed in {time_part}){Colors.RESET}")
+            print(f"    {Colors.GREEN}✔ [BLOCKED] {company:<24} ({dom:<30}) -> 127.0.0.1 ({time_part}){Colors.RESET}")
         elif "100% packet loss" in out or "unknown host" in out:
-            print(f"    {Colors.GREEN}✔ [BLOCKED] {dom:<32} -> Dropped by Edge DNS{Colors.RESET}")
+            print(f"    {Colors.GREEN}✔ [BLOCKED] {company:<24} ({dom:<30}) -> Dropped at Edge{Colors.RESET}")
         else:
-            print(f"    {Colors.YELLOW}⚠ [LEAK?]  {dom:<32} -> {out.splitlines()[0] if out.splitlines() else 'Unknown'}{Colors.RESET}")
+            print(f"    {Colors.YELLOW}⚠ [LEAK?]  {company:<24} ({dom:<30}) -> {out.splitlines()[0] if out.splitlines() else 'Unknown'}{Colors.RESET}")
 
-    print(f"\n {Colors.CYAN}[*] Testing Legitimate Network Connectivity & Speed:{Colors.RESET}")
-    for dom in legit_domains:
+    print(f"\n {Colors.CYAN}[*] Testing Legitimate Network Connectivity & Notification Latency:{Colors.RESET}")
+    for label, dom in legit_domains:
         res = run_adb(["shell", f"ping -c 1 {dom}"], serial)
         out = (res.stdout or "") + (res.stderr or "")
         if "0% packet loss" in out:
@@ -232,9 +214,9 @@ def verify_adblock(serial: Optional[str] = None):
                 if "rtt" in line or "time=" in line:
                     time_part = line.strip()
                     break
-            print(f"    {Colors.GREEN}✔ [ONLINE]  {dom:<32} -> 0% Loss ({time_part}){Colors.RESET}")
+            print(f"    {Colors.GREEN}✔ [ONLINE]  {label:<24} ({dom:<24}) -> 0% Loss ({time_part}){Colors.RESET}")
         else:
-            print(f"    {Colors.RED}✘ [OFFLINE] {dom:<32} -> Network unreachable{Colors.RESET}")
+            print(f"    {Colors.RED}✘ [OFFLINE] {label:<24} ({dom:<24}) -> Network unreachable{Colors.RESET}")
 
     print(f"\n{Colors.CYAN}{'='*74}{Colors.RESET}\n")
 
