@@ -101,6 +101,7 @@ PROTECTED_SYSTEM_PACKAGES = {
     "com.android.updater",             # HyperOS / MIUI System Updater
     "com.xiaomi.market",               # Xiaomi App Store (System App updates & Widgets)
     "com.miui.personalassistant",      # Xiaomi App Vault & System Widgets
+    "com.android.htmlviewer",          # Essential: Contains CloudSettingsProvider required by SecurityCenter
     "us.zoom.videomeetings",           # Zoom Meetings (Video conferencing & background call audio)
     "com.google.android.webview",      # Android System WebView
     "com.android.webview",

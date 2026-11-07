@@ -80,12 +80,6 @@ DEBLOAT_CATALOG: Dict[str, Dict[str, Any]] = {
         "tier": "RECOMMENDED",
         "reason": "Xiaomi marketing, A/B push and ad campaign subsystem"
     },
-    "com.android.htmlviewer": {
-        "brand": "Xiaomi",
-        "name": "HTMLViewer (China Daemon)",
-        "tier": "RECOMMENDED",
-        "reason": "Legacy China ROM background HTML viewer daemon"
-    },
     "com.mobiletools.systemhelper": {
         "brand": "Xiaomi",
         "name": "SystemHelper (Carrier Telemetry)",
