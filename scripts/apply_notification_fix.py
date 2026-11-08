@@ -47,6 +47,7 @@ DEFAULT_PRIORITY_PACKAGES = [
     "com.whatsapp.w4b",
     "com.imo.android.imoim",
     "com.facebook.orca",
+    "com.instagram.android",
     "org.telegram.messenger",
     "org.telegram.plus",
 ]
@@ -344,7 +345,7 @@ def apply_universal_fixes(
         run_adb(["shell", "cmd", "appops", "set", pkg, "TURN_SCREEN_ON", "allow"], serial)
         # Unstop package if device recently rebooted to ensure GMS delivers pending broadcasts
         run_adb(["shell", "am", "broadcast", "-a", "android.intent.action.PACKAGE_UNSTOPPED", "-d", f"package:{pkg}", "--include-stopped-packages"], serial)
-        print(f"       • Whitelisted (Bucket 5 / Doze / Netpolicy): {Colors.BOLD}{pkg}{Colors.RESET}")
+        print(f"       • Whitelisted (Bucket {bucket} / Doze / Netpolicy): {Colors.BOLD}{pkg}{Colors.RESET}")
 
     # Explicitly protect system alarm clock (guarantees alarms always fire in deep sleep)
     for alarm_pkg in ["com.android.deskclock", "com.google.android.deskclock"]:
