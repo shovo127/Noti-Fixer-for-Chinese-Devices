@@ -99,7 +99,7 @@ def run_adb(cmd: List[str], serial: Optional[str] = None) -> subprocess.Complete
 def restore_multitasking_safety(serial: Optional[str] = None):
     """
     Guarantees 100% multitasking safety, state preservation, floating PiP, and background audio.
-    - Payment apps: Resets AppOps to default & assigns Standby Bucket 10 (ACTIVE).
+    - Payment apps: Resets AppOps to default & assigns Standby Bucket 20 (WORKING_SET).
     - Conferencing apps: Grants RUN_IN_BACKGROUND, WAKE_LOCK, SYSTEM_ALERT_WINDOW, and PiP.
     - Zero idle battery drain: Restricts boot autostart (10008/10021) and removes Doze whitelist for utilities.
     """
@@ -124,7 +124,7 @@ def restore_multitasking_safety(serial: Optional[str] = None):
             # Prevent idle phantom boot autostart (0% battery drain when not in meeting)
             run_adb(["shell", "cmd", "appops", "set", pkg, "10008", "ignore"], serial)
             run_adb(["shell", "cmd", "appops", "set", pkg, "10021", "ignore"], serial)
-            run_adb(["shell", "am", "set-standby-bucket", pkg, "10"], serial)
+            run_adb(["shell", "am", "set-standby-bucket", pkg, "20"], serial)
             print(f"    {Colors.GREEN}✔ [MEETING READY] {name:<20} ({pkg:<28}) -> Multitask: Active | Boot: Ignored{Colors.RESET}")
 
     # 2. Payment, Banking, Audio & Utility Apps
@@ -141,13 +141,13 @@ def restore_multitasking_safety(serial: Optional[str] = None):
             run_adb(["shell", "cmd", "appops", "set", pkg, "10008", "ignore"], serial)
             run_adb(["shell", "cmd", "appops", "set", pkg, "10021", "ignore"], serial)
             
-            # Assign Standby Bucket 10 (ACTIVE) so task switching retains forms & OTP screens
-            run_adb(["shell", "am", "set-standby-bucket", pkg, "10"], serial)
+            # Assign Standby Bucket 20 (WORKING_SET) so Android manages background RAM naturally
+            run_adb(["shell", "am", "set-standby-bucket", pkg, "20"], serial)
             
             # Remove from Doze whitelist to guarantee phone enters deep sleep when idle
             run_adb(["shell", "dumpsys", "deviceidle", "whitelist", f"-{pkg}"], serial)
             
-            print(f"    {Colors.GREEN}✔ [STATE SAFE]    {name:<20} ({pkg:<28}) -> AppOps: default | Bucket: 10{Colors.RESET}")
+            print(f"    {Colors.GREEN}✔ [STATE SAFE]    {name:<20} ({pkg:<28}) -> AppOps: default | Bucket: 20{Colors.RESET}")
 
     print(f"\n{Colors.GREEN}{Colors.BOLD}✔ Successfully verified multitasking & meeting protection for {conf_count + restored_count} apps!{Colors.RESET}")
     print(f"{Colors.CYAN}{'='*76}{Colors.RESET}\n")
