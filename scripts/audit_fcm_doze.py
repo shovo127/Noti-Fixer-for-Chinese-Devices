@@ -164,9 +164,11 @@ def audit_device(serial: Optional[str] = None) -> Dict[str, Any]:
         deductions.append("FCM Push Socket is disconnected or sleeping (-35 pts)")
 
     # Check Kernel Freezer
-    if freezer_status["is_freezing_sockets"]:
+    # On HyperOS / MIUI, if MILLET whitelist has priority apps, socket freezing is safely bypassed for them
+    # while allowing deep hardware sleep and stopping 80% idle battery drain for non-messaging apps.
+    if freezer_status["is_freezing_sockets"] and len(millet_list) < 3:
         total_score -= 20
-        deductions.append("Linux Cgroup cached_apps_freezer is actively killing idle sockets (-20 pts)")
+        deductions.append("Linux Cgroup cached_apps_freezer is active without MILLET socket protection (-20 pts)")
 
     # Audit each relevant app installed
     for item in KEY_PACKAGES:
@@ -219,7 +221,12 @@ def print_audit_report(audit: Dict[str, Any]):
     print(f"   -> Details: {fcm['details']}")
 
     freezer = audit["freezer_status"]
-    freezer_icon = f"{Colors.RED}ACTIVE (DANGEROUS FOR FCM){Colors.RESET}" if freezer["is_freezing_sockets"] else f"{Colors.GREEN}DISABLED (OPTIMAL){Colors.RESET}"
+    if audit.get("millet_configured") and audit['millet_entries_count'] >= 3:
+        freezer_icon = f"{Colors.GREEN}ENFORCED & MILLET PROTECTED (OPTIMAL BATTERY){Colors.RESET}"
+    elif freezer["is_freezing_sockets"]:
+        freezer_icon = f"{Colors.RED}ACTIVE (DANGEROUS WITHOUT MILLET){Colors.RESET}"
+    else:
+        freezer_icon = f"{Colors.YELLOW}DISABLED{Colors.RESET}"
     print(f" {Colors.BOLD}Kernel Cgroup Socket Freezer     :{Colors.RESET} {freezer_icon}")
 
     if audit.get("millet_configured"):

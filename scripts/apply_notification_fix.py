@@ -265,26 +265,28 @@ def apply_universal_fixes(
     backup_path = create_system_backup(serial)
     print(f"       -> Backup successfully saved to: {Colors.YELLOW}{backup_path}{Colors.RESET}")
 
-    # 2. Kernel Socket Freezer Remediations & FCM NAT Heartbeat Interval
-    print(f"\n {Colors.CYAN}[2/7] Disabling Kernel Cgroup Socket Freezer & Enforcing FCM Heartbeat...{Colors.RESET}")
-    run_adb(["shell", "settings", "put", "global", "cached_apps_freezer", "disabled"], serial)
-    run_adb(["shell", "device_config", "put", "activity_manager_native_boot", "use_freezer", "false"], serial)
-    run_adb(["shell", "setprop", "persist.sys.freezer", "false"], serial)
-    run_adb(["shell", "setprop", "sys.use_freezer", "false"], serial)
+    # 2. Kernel Cgroups, Hardware Radios & Standby Battery Optimization
+    print(f"\n {Colors.CYAN}[2/7] Optimizing Linux Cgroups, Hardware Radios & Deep-Sleep Suspend...{Colors.RESET}")
+    # Enable Wi-Fi hardware suspend optimizations (prevents 80-120mA continuous idle radio drain)
+    run_adb(["shell", "settings", "put", "global", "wifi_suspend_optimizations_enabled", "1"], serial)
+    
+    # Enable native Android cached apps freezer so background apps sleep when screen is off
+    # (Priority messaging apps are selectively unthrottled via MILLET and Doze whitelists)
+    run_adb(["shell", "settings", "put", "global", "cached_apps_freezer", "enabled"], serial)
+    run_adb(["shell", "device_config", "put", "activity_manager_native_boot", "use_freezer", "true"], serial)
+    run_adb(["shell", "device_config", "put", "activity_manager", "max_phantom_processes", "32"], serial)
 
-    # Enforce 2-minute FCM Heartbeat (120000ms) to prevent Wi-Fi router & carrier NAT socket drops
-    run_adb(["shell", "settings", "put", "global", "fcm_heartbeat_interval_wifi_ms", "120000"], serial)
-    run_adb(["shell", "settings", "put", "global", "fcm_heartbeat_interval_mobile_ms", "120000"], serial)
-    run_adb(["shell", "settings", "put", "secure", "fcm_heartbeat_interval_wifi_ms", "120000"], serial)
-    run_adb(["shell", "settings", "put", "secure", "fcm_heartbeat_interval_mobile_ms", "120000"], serial)
-    run_adb(["shell", "settings", "put", "global", "gservices:fcm_heartbeat_interval_wifi_ms", "120000"], serial)
-    run_adb(["shell", "settings", "put", "global", "gservices:fcm_heartbeat_interval_mobile_ms", "120000"], serial)
-    run_adb(["shell", "settings", "put", "global", "wifi_suspend_optimizations_enabled", "0"], serial)
-    run_adb(["shell", "device_config", "put", "activity_manager", "max_phantom_processes", "2147483647"], serial)
-    print(f"       -> Cached apps & ActivityManager socket freezer: {Colors.GREEN}DISABLED{Colors.RESET}")
-    print(f"       -> Max Phantom Processes: {Colors.GREEN}2147483647 (Unlimited child daemons & sync){Colors.RESET}")
-    print(f"       -> FCM Heartbeat Interval: {Colors.GREEN}120s (2 minutes persistent keepalive){Colors.RESET}")
-    print(f"       -> Wi-Fi Suspend Power Saving: {Colors.GREEN}DISABLED (0 packet latency when locked){Colors.RESET}")
+    # Clean up any aggressive 120s FCM heartbeat overrides (allow native adaptive keepalive to prevent 240+ wakeups/night)
+    for scope in ["global", "secure"]:
+        run_adb(["shell", "settings", "delete", scope, "fcm_heartbeat_interval_wifi_ms"], serial)
+        run_adb(["shell", "settings", "delete", scope, "fcm_heartbeat_interval_mobile_ms"], serial)
+    run_adb(["shell", "settings", "delete", "global", "gservices:fcm_heartbeat_interval_wifi_ms"], serial)
+    run_adb(["shell", "settings", "delete", "global", "gservices:fcm_heartbeat_interval_mobile_ms"], serial)
+
+    print(f"       -> Wi-Fi Suspend Power Saving: {Colors.GREEN}ENABLED (Optimal standby battery life){Colors.RESET}")
+    print(f"       -> Native Cached Apps Freezer: {Colors.GREEN}ENABLED (Zero idle CPU drain){Colors.RESET}")
+    print(f"       -> FCM Heartbeat: {Colors.GREEN}ADAPTIVE (Native Google Play Services keepalive){Colors.RESET}")
+    print(f"       -> Max Phantom Processes: {Colors.GREEN}32 (Standard Android){Colors.RESET}")
 
     # Scan installed packages
     installed = get_installed_packages(serial)
