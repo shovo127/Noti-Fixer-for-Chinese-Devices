@@ -328,6 +328,7 @@ def apply_universal_fixes(
         run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_IN_BACKGROUND", "allow"], serial)
         run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_ANY_IN_BACKGROUND", "allow"], serial)
         run_adb(["shell", "cmd", "appops", "set", pkg, "WAKE_LOCK", "allow"], serial)
+        run_adb(["shell", "cmd", "appops", "set", pkg, "TURN_SCREEN_ON", "allow"], serial)
         print(f"       • Whitelisted (Bucket 5 / Doze / Netpolicy): {Colors.BOLD}{pkg}{Colors.RESET}")
 
     # 4. Brand-Specific Kernel & Process Injections
@@ -344,6 +345,7 @@ def apply_universal_fixes(
             run_adb(["shell", "cmd", "appops", "set", pkg, "10028", "allow"], serial) # Background popup
             run_adb(["shell", "cmd", "appops", "set", pkg, "10029", "allow"], serial) # Floating window
             run_adb(["shell", "cmd", "appops", "set", pkg, "SYSTEM_ALERT_WINDOW", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", pkg, "TURN_SCREEN_ON", "allow"], serial) # Wake lockscreen for alerts
         
         # Deep HyperOS System & PowerKeeper Whitelists
         pkg_csv = ",".join(active_targets)
