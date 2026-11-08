@@ -38,26 +38,17 @@ class Colors:
     BOLD = '\033[1m'
     RESET = '\033[0m'
 
-# Default Priority Communication Applications
+# Default Priority Communication Applications (Core Instant Messaging)
 DEFAULT_PRIORITY_PACKAGES = [
     "com.google.android.gms",
     "com.google.android.gsf",
-    "com.android.providers.downloads",
     "com.google.android.gm",
     "com.whatsapp",
     "com.whatsapp.w4b",
     "com.imo.android.imoim",
     "com.facebook.orca",
-    "com.instagram.android",
     "org.telegram.messenger",
     "org.telegram.plus",
-    "org.thoughtcrime.securesms",
-    "com.tencent.mm",
-    "com.discord",
-    "com.microsoft.office.outlook",
-    "com.Slack",
-    "com.viber.voip",
-    "com.skype.raider"
 ]
 
 # Candidate Background Drainers (Fintech, Ride-Sharing, E-Commerce, Background Trackers)
@@ -333,8 +324,9 @@ def apply_universal_fixes(
     for pkg in active_targets:
         # Doze Whitelist
         run_adb(["shell", "dumpsys", "deviceidle", "whitelist", f"+{pkg}"], serial)
-        # Standby Bucket Exempted (Bucket 5)
-        run_adb(["shell", "am", "set-standby-bucket", pkg, "5"], serial)
+        # Standby Bucket Active (Bucket 10 for messaging apps, Bucket 5 strictly for GMS/DeskClock)
+        bucket = "5" if pkg in ["com.google.android.gms", "com.google.android.gsf", "com.android.deskclock", "com.google.android.deskclock"] else "10"
+        run_adb(["shell", "am", "set-standby-bucket", pkg, bucket], serial)
         # Allow DND Bypass
         run_adb(["shell", "cmd", "notification", "allow_dnd", pkg], serial)
         # Permissions
