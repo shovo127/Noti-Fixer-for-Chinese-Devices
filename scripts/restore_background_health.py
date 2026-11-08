@@ -79,16 +79,17 @@ def restore_background_health(serial: Optional[str] = None):
                     cleared_count += 1
     print(f"       -> Cleared background network blocks on {cleared_count} app UIDs.")
 
-    # 2. Balance Google Play Store (on-demand app updates without idle battery drain or spam notifications)
-    print(f"\n {Colors.CYAN}[2/3] Balancing Google Play Store permissions (On-demand updates, zero idle drain)...{Colors.RESET}")
-    run_adb(["shell", "pm", "revoke", "com.android.vending", "android.permission.POST_NOTIFICATIONS"], serial)
-    run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "POST_NOTIFICATION", "ignore"], serial)
+    # 2. Balance Google Play Store (smooth background multitasking when updating apps, zero idle drain)
+    print(f"\n {Colors.CYAN}[2/3] Balancing Google Play Store permissions (Multitasking enabled, zero idle drain)...{Colors.RESET}")
+    run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "RUN_IN_BACKGROUND", "allow"], serial)
+    run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "RUN_ANY_IN_BACKGROUND", "allow"], serial)
+    run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "WAKE_LOCK", "allow"], serial)
+    run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "START_FOREGROUND", "allow"], serial)
     run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "10008", "ignore"], serial)
     run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "10021", "ignore"], serial)
-    run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "RUN_ANY_IN_BACKGROUND", "ignore"], serial)
     run_adb(["shell", "am", "set-standby-bucket", "com.android.vending", "20"], serial)
     run_adb(["shell", "dumpsys", "deviceidle", "whitelist", "-com.android.vending"], serial)
-    print(f"       -> Google Play Store: {Colors.GREEN}BALANCED (Bucket 20, No Idle Wakelocks, No Spam Alerts){Colors.RESET}")
+    print(f"       -> Google Play Store: {Colors.GREEN}BALANCED (Bucket 20, Multitasking Safe, Zero Idle Wakelocks){Colors.RESET}")
 
     # 3. Restore all active user applications
     print(f"\n {Colors.CYAN}[3/3] Restoring active user applications (Zoom, bKash, Ride-sharing, Chrome)...{Colors.RESET}")
