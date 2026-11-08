@@ -329,7 +329,21 @@ def apply_universal_fixes(
         run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_ANY_IN_BACKGROUND", "allow"], serial)
         run_adb(["shell", "cmd", "appops", "set", pkg, "WAKE_LOCK", "allow"], serial)
         run_adb(["shell", "cmd", "appops", "set", pkg, "TURN_SCREEN_ON", "allow"], serial)
+        # Unstop package if device recently rebooted to ensure GMS delivers pending broadcasts
+        run_adb(["shell", "am", "broadcast", "-a", "android.intent.action.PACKAGE_UNSTOPPED", "-d", f"package:{pkg}", "--include-stopped-packages"], serial)
         print(f"       • Whitelisted (Bucket 5 / Doze / Netpolicy): {Colors.BOLD}{pkg}{Colors.RESET}")
+
+    # Explicitly protect system alarm clock (guarantees alarms always fire in deep sleep)
+    for alarm_pkg in ["com.android.deskclock", "com.google.android.deskclock"]:
+        if alarm_pkg in installed:
+            run_adb(["shell", "dumpsys", "deviceidle", "whitelist", f"+{alarm_pkg}"], serial)
+            run_adb(["shell", "am", "set-standby-bucket", alarm_pkg, "5"], serial)
+            run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "WAKE_LOCK", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "TURN_SCREEN_ON", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "10008", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "10020", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "10022", "allow"], serial)
+            print(f"       • Protected Alarm Clock: {Colors.GREEN}{alarm_pkg}{Colors.RESET}")
 
     # 4. Brand-Specific Kernel & Process Injections
     print(f"\n {Colors.CYAN}[4/7] Applying Vendor-Specific Engine Injections & Display AppOps...{Colors.RESET}")

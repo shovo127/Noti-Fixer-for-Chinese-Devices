@@ -123,8 +123,18 @@ def check_cached_freezer(serial: Optional[str] = None) -> Dict[str, Any]:
     return {
         "raw_value": val or "default (kernel enabled)",
         "is_freezing_sockets": is_frozen,
-        "recommendation": "Disable cached_apps_freezer via device_config to prevent kernel socket kills." if is_frozen else "Optimal"
+        "recommendation": "Optimal (MILLET protected, zero idle CPU drain)" if is_frozen else "Freezer disabled (Risk of higher standby battery drain)"
     }
+
+def check_wifi_suspend(serial: Optional[str] = None) -> bool:
+    res = run_adb(["shell", "settings", "get", "global", "wifi_suspend_optimizations_enabled"], serial)
+    val = res.stdout.strip()
+    return val != "0" # True if enabled or unset (safe), False if explicitly disabled (100mA drain)
+
+def check_alarm_protection(serial: Optional[str] = None) -> bool:
+    res = run_adb(["shell", "settings", "get", "system", "power_alarm_white_list"], serial)
+    val = res.stdout.strip()
+    return "com.android.deskclock" in val or "deskclock" in val
 
 def check_millet_whitelist(serial: Optional[str] = None) -> List[str]:
     res = run_adb(["shell", "settings", "get", "system", "MILLET_NO_RESTRICT_APP"], serial)
@@ -170,6 +180,16 @@ def audit_device(serial: Optional[str] = None) -> Dict[str, Any]:
         total_score -= 20
         deductions.append("Linux Cgroup cached_apps_freezer is active without MILLET socket protection (-20 pts)")
 
+    # Check Wi-Fi Suspend Power Saving
+    if not check_wifi_suspend(serial):
+        total_score -= 15
+        deductions.append("Wi-Fi Suspend Optimizations are DISABLED (Critical: 100mA continuous radio drain) (-15 pts)")
+
+    # Check Alarm Clock Protection
+    if not check_alarm_protection(serial):
+        total_score -= 10
+        deductions.append("DeskClock Alarm missing from PowerKeeper whitelist (Risk of alarms silenced in deep sleep) (-10 pts)")
+
     # Audit each relevant app installed
     for item in KEY_PACKAGES:
         pkg = item["pkg"]
@@ -197,9 +217,12 @@ def audit_device(serial: Optional[str] = None) -> Dict[str, Any]:
 
     return {
         "status": "success",
+        "serial": serial,
         "health_score": total_score,
         "fcm_status": fcm_status,
         "freezer_status": freezer_status,
+        "wifi_suspend": check_wifi_suspend(serial),
+        "alarm_protected": check_alarm_protection(serial),
         "millet_configured": len(millet_list) > 0,
         "millet_entries_count": len(millet_list),
         "deductions": deductions,
@@ -231,6 +254,14 @@ def print_audit_report(audit: Dict[str, Any]):
 
     if audit.get("millet_configured"):
         print(f" {Colors.BOLD}Xiaomi HyperOS MILLET Whitelist  :{Colors.RESET} {Colors.GREEN}{audit['millet_entries_count']} Apps Whitelisted{Colors.RESET}")
+    
+    wifi_suspend_ok = audit.get("wifi_suspend", True)
+    wifi_icon = f"{Colors.GREEN}ENABLED (Optimal Standby){Colors.RESET}" if wifi_suspend_ok else f"{Colors.RED}DISABLED (High Idle Drain){Colors.RESET}"
+    print(f" {Colors.BOLD}Wi-Fi Hardware Suspend           :{Colors.RESET} {wifi_icon}")
+
+    alarm_ok = audit.get("alarm_protected", True)
+    alarm_icon = f"{Colors.GREEN}PROTECTED (PowerKeeper Whitelisted){Colors.RESET}" if alarm_ok else f"{Colors.RED}VULNERABLE (Missing from Whitelist){Colors.RESET}"
+    print(f" {Colors.BOLD}Hardware DeskClock Alarm         :{Colors.RESET} {alarm_icon}")
     
     if audit["deductions"]:
         print(f"\n {Colors.BOLD}{Colors.RED}Identified Bottlenecks & Suppressions:{Colors.RESET}")
