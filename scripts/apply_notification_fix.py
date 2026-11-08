@@ -42,7 +42,6 @@ class Colors:
 DEFAULT_PRIORITY_PACKAGES = [
     "com.google.android.gms",
     "com.google.android.gsf",
-    "com.android.vending",
     "com.android.providers.downloads",
     "com.google.android.gm",
     "com.whatsapp",
@@ -283,13 +282,23 @@ def apply_universal_fixes(
     run_adb(["shell", "settings", "delete", "global", "gservices:fcm_heartbeat_interval_wifi_ms"], serial)
     run_adb(["shell", "settings", "delete", "global", "gservices:fcm_heartbeat_interval_mobile_ms"], serial)
 
-    # Clean up non-messaging telemetry/sync apps from Doze whitelist to prevent 50+ background wakeups/hour
+    # Clean up non-messaging telemetry/sync/store apps from Doze whitelist to prevent 50+ background wakeups/hour
     for rogue_pkg in [
         "com.xiaomi.xmsf", "com.xiaomi.xmsfkeeper", "com.miui.home", 
         "com.lbe.security.miui", "com.miui.cloudbackup", "com.miui.micloudsync",
-        "com.miui.cloudservice", "com.google.android.googlequicksearchbox"
+        "com.miui.cloudservice", "com.google.android.googlequicksearchbox",
+        "com.android.vending"
     ]:
         run_adb(["shell", "dumpsys", "deviceidle", "whitelist", f"-{rogue_pkg}"], serial)
+
+    # Restrict Google Play Store background wakeups, autostart and spam notifications
+    # Ensures Play Store only runs when opened by user or during explicit user updates
+    run_adb(["shell", "pm", "revoke", "com.android.vending", "android.permission.POST_NOTIFICATIONS"], serial)
+    run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "POST_NOTIFICATION", "ignore"], serial)
+    run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "10008", "ignore"], serial)
+    run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "10021", "ignore"], serial)
+    run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "RUN_ANY_IN_BACKGROUND", "ignore"], serial)
+    run_adb(["shell", "am", "set-standby-bucket", "com.android.vending", "20"], serial)
 
     # Reset software battery stats to calibrate fresh measurements
     run_adb(["shell", "cmd", "battery", "reset"], serial)

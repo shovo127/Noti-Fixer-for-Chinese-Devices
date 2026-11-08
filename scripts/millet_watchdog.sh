@@ -14,7 +14,7 @@ MAX_LOG_LINES=500
 POLL_INTERVAL=60
 
 # Core communication and alarm packages required to never freeze and never drop alerts
-COMM_PACKAGES="com.google.android.gms,com.google.android.gsf,com.google.android.gm,com.android.vending,com.android.providers.downloads,com.whatsapp,com.whatsapp.w4b,com.imo.android.imoim,com.facebook.orca,com.instagram.android,org.telegram.messenger,org.telegram.plus,org.thoughtcrime.securesms,com.tencent.mm,com.discord,com.microsoft.office.outlook,com.viber.voip,com.skype.raider"
+COMM_PACKAGES="com.google.android.gms,com.google.android.gsf,com.google.android.gm,com.android.providers.downloads,com.whatsapp,com.whatsapp.w4b,com.imo.android.imoim,com.facebook.orca,com.instagram.android,org.telegram.messenger,org.telegram.plus,org.thoughtcrime.securesms,com.tencent.mm,com.discord,com.microsoft.office.outlook,com.viber.voip,com.skype.raider"
 ALARM_PACKAGES="com.android.deskclock,com.google.android.deskclock,com.android.providers.calendar"
 
 log_msg() {
