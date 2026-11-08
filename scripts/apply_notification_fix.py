@@ -283,6 +283,25 @@ def apply_universal_fixes(
     run_adb(["shell", "settings", "delete", "global", "gservices:fcm_heartbeat_interval_wifi_ms"], serial)
     run_adb(["shell", "settings", "delete", "global", "gservices:fcm_heartbeat_interval_mobile_ms"], serial)
 
+    # Clean up non-messaging telemetry/sync apps from Doze whitelist to prevent 50+ background wakeups/hour
+    for rogue_pkg in [
+        "com.xiaomi.xmsf", "com.xiaomi.xmsfkeeper", "com.miui.home", 
+        "com.lbe.security.miui", "com.miui.cloudbackup", "com.miui.micloudsync",
+        "com.miui.cloudservice", "com.google.android.googlequicksearchbox"
+    ]:
+        run_adb(["shell", "dumpsys", "deviceidle", "whitelist", f"-{rogue_pkg}"], serial)
+
+    # Reset software battery stats to calibrate fresh measurements
+    run_adb(["shell", "cmd", "battery", "reset"], serial)
+
+    # Optimize excessive screen-off timeout to 1 minute if currently set to >2 minutes
+    try:
+        cur_timeout = run_adb(["shell", "settings", "get", "system", "screen_off_timeout"], serial).stdout.strip()
+        if cur_timeout.isdigit() and int(cur_timeout) > 120000:
+            run_adb(["shell", "settings", "put", "system", "screen_off_timeout", "60000"], serial)
+    except Exception:
+        pass
+
     print(f"       -> Wi-Fi Suspend Power Saving: {Colors.GREEN}ENABLED (Optimal standby battery life){Colors.RESET}")
     print(f"       -> Native Cached Apps Freezer: {Colors.GREEN}ENABLED (Zero idle CPU drain){Colors.RESET}")
     print(f"       -> FCM Heartbeat: {Colors.GREEN}ADAPTIVE (Native Google Play Services keepalive){Colors.RESET}")
