@@ -14,4 +14,4 @@
 ## Immediate Atomic Next Steps
 1. [x] Scaffold and establish `project.md` and `state.md` at workspace root
 2. [x] Synchronize global rules and plugin configuration in `~/.gemini/`
-3. [ ] Commit and push newly initialized GSD files to git repository per global directive
+3. [x] Commit and push newly initialized GSD files to git repository per global directive
