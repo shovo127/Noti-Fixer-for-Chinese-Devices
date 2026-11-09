@@ -17,7 +17,7 @@
   Noti-Fixer scientifically prevents background socket freezes, heals Google FCM push sockets, and curtails idle drain without root, without bootloader unlocking, and with 100% reversibility.
 </p>
 
-[🚀 Start Here in 3 Steps](#-start-here-in-3-steps) • [⚡ 1-Click AI Prompt](#-the-copy-paste-ai-copilot-command) • [📱 Phone Pairing Anatomy](#-phone-pairing-anatomy-pairing-port-vs-connect-port) • [🎮 Human Launcher](#-for-human-users-1-click-interactive-launcher) • [🛡️ Safety Guarantees](#-truthful-safety-guarantees) • [🔧 Troubleshooting](#-troubleshooting-guide) • [FAQ](#-frequently-asked-questions-faq)
+[🚀 Start Here in 3 Steps](#-start-here-in-3-steps) • [⚡ 1-Click AI Prompt](#-the-copy-paste-ai-copilot-command) • [📱 Phone Pairing Anatomy](#-phone-pairing-anatomy-pairing-port-vs-connect-port) • [🎮 Human Launcher](#-for-human-users-1-click-interactive-launcher) • [🛡️ Safety Guarantees](#-truthful-safety-guarantees) • [🌐 Other Projects](#-other-ecosystem-projects-by-the-author) • [🔧 Troubleshooting](#-troubleshooting-guide) • [FAQ](#-frequently-asked-questions-faq)
 
 </div>
 
@@ -240,6 +240,17 @@ When a messaging app (e.g. Messenger or imo) is in the Doze Whitelist, Android d
 <summary><b>What happens when my phone restarts?</b></summary>
 Core system configurations persist across reboots. On Xiaomi HyperOS devices, the lightweight <code>millet_watchdog.sh</code> script monitors and prevents vendor daemons from wiping whitelists.
 </details>
+
+---
+
+## 🌐 Other Ecosystem Projects by the Author
+
+If you find Noti-Fixer useful, explore other open-access web platforms and tools engineered by **Mohammed Thuhidul Islam Shovo**:
+
+| Project | Live Web Platform | Overview |
+| :--- | :--- | :--- |
+| ✉️ **Mail Merge By Shovo** | [**mailmergebyshovo.qzz.io**](https://mailmergebyshovo.qzz.io) | Free, full-featured browser-based Gmail Mail Merge suite with native compose workflow, CSV campaigns, personalized tokens, and productivity utilities — no subscriptions or hidden limits. |
+| 🇩🇪 **Lerne Deutsch Mit Technologie** | [**lernedeutschmittechnologie.tech**](https://lernedeutschmittechnologie.tech) | Next-generation German language learning hub featuring free interactive lessons, Goethe exam preparation labs, speech technology, and advanced grammar practice tools. |
 
 ---
 
