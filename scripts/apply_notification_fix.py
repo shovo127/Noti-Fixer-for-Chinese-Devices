@@ -322,11 +322,25 @@ def apply_universal_fixes(
 
     # Whitelist Priority Communication Apps
     print(f"\n {Colors.CYAN}[3/7] Whitelisting Android Doze, Standby Buckets & Netpolicy...{Colors.RESET}")
+    CORE_INFRA_WHITELIST = {
+        "com.google.android.gms",
+        "com.google.android.gsf",
+        "com.android.deskclock",
+        "com.google.android.deskclock"
+    }
     for pkg in active_targets:
-        # Doze Whitelist
-        run_adb(["shell", "dumpsys", "deviceidle", "whitelist", f"+{pkg}"], serial)
-        # Standby Bucket Active (Bucket 10 for messaging apps, Bucket 5 strictly for GMS/DeskClock)
-        bucket = "5" if pkg in ["com.google.android.gms", "com.google.android.gsf", "com.android.deskclock", "com.google.android.deskclock"] else "10"
+        if pkg in CORE_INFRA_WHITELIST:
+            # Core push infrastructure & system clock MUST be exempted from Doze
+            run_adb(["shell", "dumpsys", "deviceidle", "whitelist", f"+{pkg}"], serial)
+            bucket = "5"
+        else:
+            # Communication apps (Messenger, imo, WhatsApp, Instagram) MUST NOT bypass Doze!
+            # Removing them from Doze whitelist ensures that when Wi-Fi/Mobile Data is turned OFF at night,
+            # aggressive internal TCP/MQTT keepalive alarms will NOT wake the CPU from deep sleep.
+            # When Internet IS ON, notifications are delivered instantly via Google Play Services (GMS FCM).
+            run_adb(["shell", "dumpsys", "deviceidle", "whitelist", f"-{pkg}"], serial)
+            bucket = "10"
+
         run_adb(["shell", "am", "set-standby-bucket", pkg, bucket], serial)
         # Allow DND Bypass
         run_adb(["shell", "cmd", "notification", "allow_dnd", pkg], serial)
@@ -380,7 +394,7 @@ def apply_universal_fixes(
         run_adb(["shell", "settings", "put", "system", "cloud_memory_freeze_whitelist", pkg_csv], serial)
         run_adb(["shell", "settings", "put", "system", "cloud_network_priority_whitelist", pkg_csv], serial)
         run_adb(["shell", "settings", "put", "system", "power_pkg_white_list", f"com.android.deskclock,com.google.android.deskclock,com.google.android.inputmethod.latin,com.google.android.ext.services,com.android.camera,{pkg_csv}"], serial)
-        run_adb(["shell", "settings", "put", "system", "power_alarm_white_list", f"com.android.deskclock,com.google.android.deskclock,com.android.providers.calendar,myapplication,{pkg_csv}"], serial)
+        run_adb(["shell", "settings", "put", "system", "power_alarm_white_list", "com.android.deskclock,com.google.android.deskclock,com.android.providers.calendar,myapplication"], serial)
         run_adb(["shell", "settings", "put", "system", "power_proc_white_list", f"com.google.android.gms.persistent,{pkg_csv}"], serial)
         run_adb(["shell", "settings", "put", "system", "power_service_white_list", pkg_csv], serial)
         run_adb(["shell", "settings", "put", "system", "rt_pkg_white_list", pkg_csv], serial)
