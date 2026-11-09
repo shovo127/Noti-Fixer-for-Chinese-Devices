@@ -204,11 +204,22 @@ The restorer reinstalls debloated packages for User 0, restores kernel freezer s
 | **`device unauthorized` error** | Phone has not approved your PC's ADB cryptographic key. | In Developer Options, tap **"Revoke USB debugging authorizations"**, toggle Wireless Debugging OFF and ON, and approve the popup. |
 | **Xiaomi toggle missing / grayed out** | HyperOS requires a SIM card to enable *"USB debugging (Security settings)"*. | Insert any active SIM card once, toggle the switch ON, and complete Xiaomi's 3-step prompt. SIM can then be removed. |
 | **Cannot connect over Wi-Fi** | Router has **AP / Client Isolation** enabled. | Disable Client Isolation in router settings, connect both to a phone hotspot, or simply use a standard USB cable (Option `[2]`). |
+| **Battery drain at night with Wi-Fi off** | Rogue messaging apps in Doze Whitelist spam offline MQTT keepalives. | Noti-Fixer removes messaging apps from Doze Whitelist while keeping GMS FCM push active. |
 | **Play Store updates pause on lock** | Kernel freezer freezes download manager on screen-off. | Run `python scripts/restore_background_health.py` (Option `[8]`) to restore unthrottled download engine permissions. |
 
 ---
 
 ## ❓ Frequently Asked Questions (FAQ)
+
+<details>
+<summary><b>Will my morning alarm clock (DeskClock) still wake me up in deep sleep?</b></summary>
+<b>Yes, 100% guaranteed.</b> Noti-Fixer enforces triple-layer protection for system alarm clocks (Android Doze Whitelist, Standby Bucket 5 EXEMPTED, and Xiaomi PowerKeeper <code>power_alarm_white_list</code>). Your morning alarm will fire with second-level precision even during the deepest Doze sleep.
+</details>
+
+<details>
+<summary><b>Why shouldn't messaging apps be in the Android Doze Whitelist?</b></summary>
+When a messaging app (e.g. Messenger or imo) is in the Doze Whitelist, Android disables Doze sleep for it. When you turn off Wi-Fi before bed, the app's internal MQTT keepalive alarms wake up the CPU 100+ times trying to reconnect. By keeping only Google Play Services (GMS) in the Doze Whitelist, GMS handles instant push when online, while offline sleep is 100% undisturbed.
+</details>
 
 <details>
 <summary><b>Can this harm my phone or delete my photos?</b></summary>

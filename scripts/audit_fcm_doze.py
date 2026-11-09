@@ -31,6 +31,7 @@ class Colors:
 KEY_PACKAGES = [
     {"name": "Google Play Services", "pkg": "com.google.android.gms", "critical": True},
     {"name": "Google Services Framework", "pkg": "com.google.android.gsf", "critical": True},
+    {"name": "System Alarm Clock", "pkg": "com.android.deskclock", "critical": True},
     {"name": "WhatsApp", "pkg": "com.whatsapp", "critical": False},
     {"name": "WhatsApp Business", "pkg": "com.whatsapp.w4b", "critical": False},
     {"name": "imo", "pkg": "com.imo.android.imoim", "critical": False},
@@ -194,20 +195,30 @@ def audit_device(serial: Optional[str] = None) -> Dict[str, Any]:
     for item in KEY_PACKAGES:
         pkg = item["pkg"]
         name = item["name"]
-        if pkg in installed or item["critical"]:
-            in_doze = any(pkg in d for d in doze_whitelist)
+        is_critical = item.get("critical", False)
+        if pkg in installed or is_critical:
+            in_doze = any(pkg == d for d in doze_whitelist)
             in_millet = pkg in millet_list
             ops = check_appops_for_package(pkg, serial)
 
-            score_pkg = True
-            if not in_doze:
-                total_score -= 4
-                score_pkg = False
+            if is_critical:
+                if not in_doze:
+                    total_score -= 8
+                    deductions.append(f"Critical Infrastructure '{name}' missing from Doze Whitelist (-8 pts)")
+            else:
+                # For communication apps:
+                # 1. Autostart MUST be allowed so incoming FCM broadcasts wake the app
+                if not ops["autostart_10008"]:
+                    total_score -= 4
+                    deductions.append(f"'{name}' Autostart (10008) is NOT allowed (-4 pts)")
+                # 2. Communication apps SHOULD NOT be in Doze Whitelist to prevent offline keepalive alarms (e.g. MQTT_Wakeup)
+                # from draining battery at night when Wi-Fi/Data is turned off.
             
             package_audits.append({
                 "name": name,
                 "package": pkg,
                 "installed": pkg in installed,
+                "critical": is_critical,
                 "doze_whitelisted": in_doze,
                 "millet_whitelisted": in_millet if millet_list else "N/A",
                 "appops": ops
@@ -268,16 +279,23 @@ def print_audit_report(audit: Dict[str, Any]):
         for d in audit["deductions"]:
             print(f"   • {d}")
 
-    print(f"\n {Colors.BOLD}Messaging Applications Status:{Colors.RESET}")
-    print(f" {'App Name':<22} | {'Doze Whitelist':<14} | {'Autostart':<10} | {'Status'}")
-    print(f" {'-'*22}-+-{'-'*14}-+-{'-'*10}-+-{'-'*12}")
+    print(f"\n {Colors.BOLD}Applications & Core Services Status:{Colors.RESET}")
+    print(f" {'App Name':<24} | {'Doze Policy':<18} | {'Autostart':<12} | {'Status'}")
+    print(f" {'-'*24}-+-{'-'*18}-+-{'-'*12}-+-{'-'*20}")
     
     for app in audit["apps_audited"]:
-        doze_str = f"{Colors.GREEN}YES{Colors.RESET}" if app["doze_whitelisted"] else f"{Colors.RED}NO{Colors.RESET}"
-        auto_str = f"{Colors.GREEN}ALLOWED{Colors.RESET}" if app["appops"]["autostart_10008"] else f"{Colors.YELLOW}DEFAULT{Colors.RESET}"
-        
-        status_str = f"{Colors.GREEN}OPTIMIZED{Colors.RESET}" if (app["doze_whitelisted"] and app["appops"]["autostart_10008"]) else f"{Colors.YELLOW}RESTRICTED{Colors.RESET}"
-        print(f" {app['name']:<22} | {doze_str:<23} | {auto_str:<19} | {status_str}")
+        is_crit = app.get("critical", False)
+        if is_crit:
+            doze_str = f"{Colors.GREEN}YES (Whitelisted){Colors.RESET}" if app["doze_whitelisted"] else f"{Colors.RED}NO (Vulnerable){Colors.RESET}"
+            auto_str = f"{Colors.GREEN}SYSTEM{Colors.RESET}"
+            status_str = f"{Colors.GREEN}CORE ACTIVE{Colors.RESET}" if app["doze_whitelisted"] else f"{Colors.RED}ACTION NEEDED{Colors.RESET}"
+        else:
+            # For messaging apps, NO in Doze is optimal (prevents offline keepalive drain while GMS handles push)
+            doze_str = f"{Colors.YELLOW}YES (Drain Risk){Colors.RESET}" if app["doze_whitelisted"] else f"{Colors.GREEN}NO (Zero-Drain){Colors.RESET}"
+            auto_str = f"{Colors.GREEN}ALLOWED{Colors.RESET}" if app["appops"]["autostart_10008"] else f"{Colors.YELLOW}DEFAULT{Colors.RESET}"
+            status_str = f"{Colors.GREEN}FCM READY{Colors.RESET}" if app["appops"]["autostart_10008"] else f"{Colors.YELLOW}RESTRICTED{Colors.RESET}"
+
+        print(f" {app['name']:<24} | {doze_str:<27} | {auto_str:<21} | {status_str}")
 
     print(f"{Colors.CYAN}{'='*68}{Colors.RESET}\n")
 

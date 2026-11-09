@@ -8,10 +8,12 @@
 - [x] Phase 1: Requirements Architecture & Environment Grounding
 - [x] Phase 2: Core Notification Engine & Debloat Integration (`scripts/`)
 - [x] Phase 3: Safety Guardrails & Zero-Destructive Command Filtering (`scripts/safety_guard.py`)
-- [/] Phase 4: Autonomous GSD Framework Integration & Global Synchronization (Current Milestone)
-- [ ] Phase 5: End-to-End Live Wireless ADB Journey Testing
+- [x] Phase 4: Autonomous GSD Framework Integration & Global Synchronization
+- [x] Phase 5: Scientific Offline Zero-Drain Architecture & Live Device Verification (Completed)
 
 ## Immediate Atomic Next Steps
-1. [x] Scaffold and establish `project.md` and `state.md` at workspace root
-2. [x] Synchronize global rules and plugin configuration in `~/.gemini/`
-3. [x] Commit and push newly initialized GSD files to git repository per global directive
+1. [x] Prevent offline messaging keepalive CPU wakeups by removing third-party apps from Doze Whitelist
+2. [x] Secure GMS FCM push and DeskClock morning alarm in Doze Whitelist and Standby Bucket 5
+3. [x] Upgrade `scripts/audit_fcm_doze.py` to distinguish core push infra from zero-drain messaging apps
+4. [x] Update `docs/ARCHITECTURE.md` and `README.md` with deep explanations to protect future users
+5. [x] Commit and push all updates to GitHub repository
