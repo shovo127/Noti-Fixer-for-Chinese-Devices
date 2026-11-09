@@ -13,8 +13,8 @@
 
 ## Immediate Atomic Next Steps
 1. [x] Prevent offline messaging keepalive CPU wakeups by removing third-party apps from Doze Whitelist
-2. [x] Secure GMS FCM push and DeskClock morning alarm in Doze Whitelist and Standby Bucket 5
-3. [x] Upgrade `scripts/audit_fcm_doze.py` to distinguish core push infra from zero-drain messaging apps
+2. [x] Secure GMS FCM push, Gmail background sync, and DeskClock morning alarm in Doze Whitelist
+3. [x] Upgrade `scripts/audit_fcm_doze.py` to recognize Gmail as core active push infrastructure
 4. [x] Update `docs/ARCHITECTURE.md` and `README.md` with deep explanations to protect future users
 5. [x] Complete comprehensive security & data privacy audit (verified zero telemetry, zero leaks)
 6. [x] Professionally integrate ecosystem web platforms (Mail Merge By Shovo & Lerne Deutsch Mit Technologie)

@@ -37,7 +37,7 @@ KEY_PACKAGES = [
     {"name": "imo", "pkg": "com.imo.android.imoim", "critical": False},
     {"name": "Telegram", "pkg": "org.telegram.messenger", "critical": False},
     {"name": "Facebook Messenger", "pkg": "com.facebook.orca", "critical": False},
-    {"name": "Gmail", "pkg": "com.google.android.gm", "critical": False},
+    {"name": "Gmail", "pkg": "com.google.android.gm", "critical": True},
     {"name": "Signal", "pkg": "org.thoughtcrime.securesms", "critical": False},
     {"name": "WeChat", "pkg": "com.tencent.mm", "critical": False},
     {"name": "Instagram", "pkg": "com.instagram.android", "critical": False},

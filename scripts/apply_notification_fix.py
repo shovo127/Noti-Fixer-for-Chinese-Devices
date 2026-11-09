@@ -325,6 +325,7 @@ def apply_universal_fixes(
     CORE_INFRA_WHITELIST = {
         "com.google.android.gms",
         "com.google.android.gsf",
+        "com.google.android.gm",
         "com.android.deskclock",
         "com.google.android.deskclock"
     }
