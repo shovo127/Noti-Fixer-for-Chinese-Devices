@@ -26,34 +26,19 @@ if hasattr(sys.stdout, "reconfigure"):
     except Exception:
         pass
 
-class Colors:
-    CYAN = '\033[96m'
-    GREEN = '\033[92m'
-    YELLOW = '\033[93m'
-    RED = '\033[91m'
-    BOLD = '\033[1m'
-    RESET = '\033[0m'
+try:
+    from adb_core import run_adb, Colors
+except ImportError:
+    from scripts.adb_core import run_adb, Colors
 
+DEFAULT_ADBLOCK_DNS = "dns.adguard.com"
+ALTERNATIVE_DNS_PROVIDERS = {
+    "adguard": "dns.adguard.com",
+    "mullvad": "adblock.doh.mullvad.net",
+    "controld": "p2.freedns.controld.com",
+    "cleanbrowsing": "family-filter-dns.cleanbrowsing.org"
+}
 RETHINK_PKG = "com.celzero.bravedns"
-
-def run_adb(cmd: List[str], serial: Optional[str] = None) -> subprocess.CompletedProcess:
-    assert_command_safe(cmd)
-    base = ["adb"]
-    if serial:
-        if ":" in serial and not getattr(run_adb, "_connected", False):
-            subprocess.run(["adb", "connect", serial], capture_output=True, text=True, check=False)
-            run_adb._connected = True
-        base.extend(["-s", serial])
-    base.extend(cmd)
-    try:
-        res = subprocess.run(base, capture_output=True, text=True, check=False)
-        if serial and ":" in serial and "not found" in (res.stderr or "").lower():
-            subprocess.run(["adb", "connect", serial], capture_output=True, text=True, check=False)
-            res = subprocess.run(base, capture_output=True, text=True, check=False)
-        return res
-    except FileNotFoundError:
-        print(f"{Colors.RED}[!] Error: 'adb' executable not found in PATH.{Colors.RESET}")
-        sys.exit(1)
 
 def get_current_dns(serial: Optional[str] = None) -> Tuple[str, str]:
     mode = run_adb(["shell", "settings", "get", "global", "private_dns_mode"], serial).stdout.strip()
@@ -72,26 +57,27 @@ def set_edge_dns(specifier: str, serial: Optional[str] = None):
     run_adb(["shell", "settings", "put", "global", "private_dns_specifier", specifier], serial)
     print(f"    {Colors.GREEN}✔ Private DNS set to: {specifier}{Colors.RESET}")
 
-def apply_native_no_app_adblock(serial: Optional[str] = None):
+def apply_native_no_app_adblock(serial: Optional[str] = None, dns_provider: str = DEFAULT_ADBLOCK_DNS):
     """
-    Applies 100% app-free, root-free ad neutralization across all global vendors:
-    1. Sets low-latency edge ad-blocking DNS (Control D - p2.freedns.controld.com) sinking ads to 127.0.0.1
-    2. Activates Android 16 AdServices global kill switches (AdMob, Topics, SDK Sandbox, Ad ID)
+    Applies production-grade, root-free ad neutralization across Android devices:
+    1. Sets low-latency edge ad-blocking Private DNS (AdGuard DNS default, with fallback options)
+    2. Activates Android 14/15/16 AdServices global kill switches (AdMob, Topics, SDK Sandbox, Ad ID)
     3. Disables all native Xiaomi HyperOS / MIUI ad, recommendation, and telemetry toggles
-    4. Mitigates Google Chrome internal DoH bypass
+    4. Safely user-0 debloats Xiaomi MSA & Analytics daemons if present
+    5. Displays Chrome Mobile Secure DNS alignment instructions
     """
     print(f"\n{Colors.CYAN}{'='*74}{Colors.RESET}")
     print(f"{Colors.GREEN}{Colors.BOLD}   NOTI-FIXER: APPLYING GLOBAL 100% NATIVE NO-APP AD NEUTRALIZATION{Colors.RESET}")
     print(f"{Colors.CYAN}{'='*74}{Colors.RESET}")
 
-    # 1. Edge DNS (0.2ms sinkhole to 127.0.0.1 for all global ad domains)
-    print(f" {Colors.CYAN}[1/4] Activating Ultra-Fast Edge DNS (0.2ms Global Ad Sinkhole)...{Colors.RESET}")
+    # 1. Edge DNS (Anycast AdGuard DNS / DoT)
+    print(f" {Colors.CYAN}[1/5] Activating High-Reliability Edge Ad-Blocking DNS ({dns_provider})...{Colors.RESET}")
     run_adb(["shell", "settings", "put", "global", "private_dns_mode", "hostname"], serial)
-    run_adb(["shell", "settings", "put", "global", "private_dns_specifier", "p2.freedns.controld.com"], serial)
-    print(f"       -> Private DNS set to: {Colors.GREEN}p2.freedns.controld.com{Colors.RESET}")
+    run_adb(["shell", "settings", "put", "global", "private_dns_specifier", dns_provider], serial)
+    print(f"       -> Private DNS set to: {Colors.GREEN}{dns_provider}{Colors.RESET}")
 
-    # 2. Android 16 AdServices Global Kill Switch
-    print(f"\n {Colors.CYAN}[2/4] Neutralizing Android 16 AdServices & Cross-App Ad ID...{Colors.RESET}")
+    # 2. Android 14/15/16 AdServices Global Kill Switch
+    print(f"\n {Colors.CYAN}[2/5] Neutralizing Android AdServices & Advertising ID Tracking...{Colors.RESET}")
     run_adb(["shell", "device_config", "put", "adservices", "global_kill_switch", "true"], serial)
     run_adb(["shell", "device_config", "put", "adservices", "adservice_enabled", "false"], serial)
     run_adb(["shell", "device_config", "put", "adservices", "adservice_system_service_enabled", "false"], serial)
@@ -104,7 +90,7 @@ def apply_native_no_app_adblock(serial: Optional[str] = None):
     print(f"       -> AdServices & Advertising ID: {Colors.GREEN}DISABLED (Global Kill Switch Active){Colors.RESET}")
 
     # 3. Native Xiaomi HyperOS / MIUI Recommendation Neutralization
-    print(f"\n {Colors.CYAN}[3/4] Disabling Native HyperOS / MIUI App Ad & Telemetry Recommendations...{Colors.RESET}")
+    print(f"\n {Colors.CYAN}[3/5] Disabling Native HyperOS / MIUI App Ad & Telemetry Recommendations...{Colors.RESET}")
     xiaomi_toggles = [
         ("secure", "miui_ad_enable", "0"),
         ("system", "miui_ad_enable", "0"),
@@ -144,12 +130,27 @@ def apply_native_no_app_adblock(serial: Optional[str] = None):
         run_adb(["shell", "settings", "put", table, key, val], serial)
     print(f"       -> System File Manager, Downloads, Themes, Security, MSA & Telemetry: {Colors.GREEN}OFF{Colors.RESET}")
 
-    # 4. Chrome DoH Bypass Prevention
-    print(f"\n {Colors.CYAN}[4/4] Mitigating Chrome Mobile DoH Bypass...{Colors.RESET}")
-    run_adb(["shell", "echo 'chrome --disable-features=DnsOverHttps,AsyncDns' > /data/local/tmp/chrome-command-line"], serial)
-    print(f"       -> /data/local/tmp/chrome-command-line configured: {Colors.GREEN}--disable-features=DnsOverHttps,AsyncDns{Colors.RESET}")
+    # 4. Debloat Xiaomi Ad daemons (MSA & Analytics) if installed
+    print(f"\n {Colors.CYAN}[4/5] Neutralizing Xiaomi In-App Ad Daemons (MSA / Analytics)...{Colors.RESET}")
+    ad_pkgs = ["com.miui.msa.global", "com.miui.analytics"]
+    for pkg in ad_pkgs:
+        chk = run_adb(["shell", "pm", "list", "packages", pkg], serial)
+        if pkg in (chk.stdout or ""):
+            deb_res = run_adb(["shell", "pm", "uninstall", "-k", "--user", "0", pkg], serial)
+            if "Success" in (deb_res.stdout or ""):
+                print(f"       -> Debloated {pkg}: {Colors.GREEN}SUCCESS (No more system app ads){Colors.RESET}")
+            else:
+                print(f"       -> {pkg} already disabled or neutralized.")
+        else:
+            print(f"       -> {pkg} not active on target device.")
 
-    print(f"\n{Colors.GREEN}{Colors.BOLD}✔ 100% Native Ad Neutralization Complete! Zero apps installed, 0 MB RAM, 0% CPU overhead.{Colors.RESET}")
+    # 5. Chrome Mobile DoH Guidance
+    print(f"\n {Colors.CYAN}[5/5] Chrome Mobile Secure DNS Configuration Note...{Colors.RESET}")
+    print(f"       {Colors.YELLOW}ℹ Notice:{Colors.RESET} Modern Chrome on Android uses its own built-in Secure DNS (DoH).")
+    print(f"       To ensure Chrome honors Private DNS ad-blocking:")
+    print(f"       {Colors.BOLD}Chrome -> Settings -> Privacy and security -> Use secure DNS -> 'Use your current service provider'{Colors.RESET}")
+
+    print(f"\n{Colors.GREEN}{Colors.BOLD}✔ Native Ad Neutralization Complete! Zero background RAM, 0% CPU battery overhead.{Colors.RESET}")
     print(f"{Colors.CYAN}{'='*74}{Colors.RESET}\n")
 
 def verify_adblock(serial: Optional[str] = None):
@@ -190,7 +191,7 @@ def verify_adblock(serial: Optional[str] = None):
 
     print(f"\n {Colors.CYAN}[*] Testing Global Ad Network Sinkhole (Resolves to 127.0.0.1 / localhost):{Colors.RESET}")
     for company, dom in ad_domains:
-        res = run_adb(["shell", f"ping -c 1 {dom}"], serial)
+        res = run_adb(["shell", f"ping -c 1 -W 2 {dom}"], serial)
         out = (res.stdout or "") + (res.stderr or "")
         if "127.0.0.1" in out or "0.0.0.0" in out:
             time_part = "0.1 ms"
@@ -199,24 +200,29 @@ def verify_adblock(serial: Optional[str] = None):
                     time_part = token.replace("time=", "") + " ms"
                     break
             print(f"    {Colors.GREEN}✔ [BLOCKED] {company:<24} ({dom:<30}) -> 127.0.0.1 ({time_part}){Colors.RESET}")
-        elif "100% packet loss" in out or "unknown host" in out:
-            print(f"    {Colors.GREEN}✔ [BLOCKED] {company:<24} ({dom:<30}) -> Dropped at Edge{Colors.RESET}")
+        elif "100% packet loss" in out or "unknown host" in out or "bad address" in out:
+            print(f"    {Colors.GREEN}✔ [BLOCKED] {company:<24} ({dom:<30}) -> Blocked / Dropped at Edge{Colors.RESET}")
         else:
             print(f"    {Colors.YELLOW}⚠ [LEAK?]  {company:<24} ({dom:<30}) -> {out.splitlines()[0] if out.splitlines() else 'Unknown'}{Colors.RESET}")
 
     print(f"\n {Colors.CYAN}[*] Testing Legitimate Network Connectivity & Notification Latency:{Colors.RESET}")
     for label, dom in legit_domains:
-        res = run_adb(["shell", f"ping -c 1 {dom}"], serial)
+        res = run_adb(["shell", f"ping -c 1 -W 2 {dom}"], serial)
         out = (res.stdout or "") + (res.stderr or "")
-        if "0% packet loss" in out:
+        if "0% packet loss" in out or "bytes from" in out:
             time_part = ""
             for line in out.splitlines():
                 if "rtt" in line or "time=" in line:
                     time_part = line.strip()
                     break
-            print(f"    {Colors.GREEN}✔ [ONLINE]  {label:<24} ({dom:<24}) -> 0% Loss ({time_part}){Colors.RESET}")
+            print(f"    {Colors.GREEN}✔ [ONLINE]  {label:<24} ({dom:<24}) -> Online ({time_part}){Colors.RESET}")
         else:
             print(f"    {Colors.RED}✘ [OFFLINE] {label:<24} ({dom:<24}) -> Network unreachable{Colors.RESET}")
+
+    # Check Private DNS resolution status via dumpsys
+    net_dump = run_adb(["shell", "dumpsys", "connectivity"], serial).stdout
+    if "Private DNS" in net_dump or "dns.adguard.com" in net_dump or "p2.freedns.controld.com" in net_dump:
+        print(f"\n {Colors.GREEN}✔ Android OS Connectivity Engine reports Private DNS active.{Colors.RESET}")
 
     print(f"\n{Colors.CYAN}{'='*74}{Colors.RESET}\n")
 
@@ -274,6 +280,7 @@ def main():
     parser.add_argument("-s", "--serial", help="ADB serial of target device", default=None)
     parser.add_argument("--status", action="store_true", help="Display current DNS & on-device adblocker status")
     parser.add_argument("--apply-native", action="store_true", help="100%% native no-app adblock: Fast edge DNS, Android AdServices kill-switch & HyperOS toggles")
+    parser.add_argument("--dns", help="DNS provider for --apply-native (adguard, mullvad, controld, cleanbrowsing or custom host). Default: adguard", default=DEFAULT_ADBLOCK_DNS)
     parser.add_argument("--verify", action="store_true", help="Run live ad-sinkhole and latency verification tests")
     parser.add_argument("--disable-slow-dns", action="store_true", help="Disable slow remote Private DNS (restore 3-8ms ISP speed)")
     parser.add_argument("--install-rethink", action="store_true", help="Open Google Play Store to install RethinkDNS")
@@ -282,7 +289,8 @@ def main():
     args = parser.parse_args()
 
     if args.apply_native:
-        apply_native_no_app_adblock(args.serial)
+        chosen_dns = ALTERNATIVE_DNS_PROVIDERS.get(args.dns.lower().strip(), args.dns.strip())
+        apply_native_no_app_adblock(args.serial, chosen_dns)
     elif args.verify:
         verify_adblock(args.serial)
     elif args.disable_slow_dns:

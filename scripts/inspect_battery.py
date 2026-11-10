@@ -19,6 +19,11 @@ try:
 except ImportError:
     from scripts.safety_guard import assert_command_safe
 
+try:
+    from adb_core import run_adb, Colors
+except ImportError:
+    from scripts.adb_core import run_adb, Colors
+
 # Ensure safe UTF-8 output across all environments
 if hasattr(sys.stdout, "reconfigure"):
     try:
@@ -26,35 +31,6 @@ if hasattr(sys.stdout, "reconfigure"):
         sys.stderr.reconfigure(encoding="utf-8", errors="replace")
     except Exception:
         pass
-
-class Colors:
-    HEADER = '\033[95m'
-    BLUE = '\033[94m'
-    CYAN = '\033[96m'
-    GREEN = '\033[92m'
-    YELLOW = '\033[93m'
-    RED = '\033[91m'
-    BOLD = '\033[1m'
-    RESET = '\033[0m'
-
-def run_adb(cmd: List[str], serial: Optional[str] = None) -> subprocess.CompletedProcess:
-    assert_command_safe(cmd)
-    base = ["adb"]
-    if serial:
-        if ":" in serial and not getattr(run_adb, "_connected", False):
-            subprocess.run(["adb", "connect", serial], capture_output=True, text=True, check=False)
-            run_adb._connected = True
-        base.extend(["-s", serial])
-    base.extend(cmd)
-    try:
-        res = subprocess.run(base, capture_output=True, text=True, check=False)
-        if serial and ":" in serial and "not found" in (res.stderr or "").lower():
-            subprocess.run(["adb", "connect", serial], capture_output=True, text=True, check=False)
-            res = subprocess.run(base, capture_output=True, text=True, check=False)
-        return res
-    except FileNotFoundError:
-        print(f"{Colors.RED}[!] Error: 'adb' executable not found in PATH.{Colors.RESET}")
-        sys.exit(1)
 
 def get_uid_package_map(serial: Optional[str] = None) -> Dict[str, str]:
     res = run_adb(["shell", "pm", "list", "packages", "-U"], serial)

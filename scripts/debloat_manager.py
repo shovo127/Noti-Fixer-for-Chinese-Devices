@@ -20,13 +20,10 @@ try:
 except ImportError:
     from scripts.safety_guard import assert_command_safe, is_package_protected, get_restore_command_for_package
 
-class Colors:
-    CYAN = '\033[96m'
-    GREEN = '\033[92m'
-    YELLOW = '\033[93m'
-    RED = '\033[91m'
-    BOLD = '\033[1m'
-    RESET = '\033[0m'
+try:
+    from adb_core import run_adb, Colors, get_installed_packages
+except ImportError:
+    from scripts.adb_core import run_adb, Colors, get_installed_packages
 
 # Curated catalog of non-critical bloatware across Chinese OEM ROMs
 # Each package has a safety level (RECOMMENDED or OPTIONAL) and reason
@@ -38,11 +35,17 @@ DEBLOAT_CATALOG: Dict[str, Dict[str, Any]] = {
         "tier": "RECOMMENDED",
         "reason": "Background telemetry and behavioral ad tracking"
     },
-    "com.miui.personalassistant": {
+    "com.miui.msa.global": {
         "brand": "Xiaomi",
-        "name": "MIUI App Vault",
+        "name": "MSA (MIUI System Ads Global)",
         "tier": "RECOMMENDED",
-        "reason": "Redundant minus-one screen feed and widget consumer"
+        "reason": "System-wide push ads across native Xiaomi apps"
+    },
+    "com.miui.daemon": {
+        "brand": "Xiaomi",
+        "name": "MIUI Daemon Telemetry",
+        "tier": "RECOMMENDED",
+        "reason": "Continuous background metrics and log collector"
     },
     "com.android.quicksearchbox": {
         "brand": "Xiaomi",
@@ -160,6 +163,30 @@ DEBLOAT_CATALOG: Dict[str, Dict[str, Any]] = {
         "tier": "RECOMMENDED",
         "reason": "Lockscreen sponsored promotional wallpapers"
     },
+    "com.bbk.theme": {
+        "brand": "Vivo",
+        "name": "i Theme Store",
+        "tier": "OPTIONAL",
+        "reason": "Proprietary theme marketplace with push promotions"
+    },
+    "com.vivo.gamewatch": {
+        "brand": "Vivo",
+        "name": "Vivo Game Center",
+        "tier": "OPTIONAL",
+        "reason": "Game promotion overlay and background daemon"
+    },
+    "com.vivo.easyshare": {
+        "brand": "Vivo",
+        "name": "EasyShare",
+        "tier": "OPTIONAL",
+        "reason": "Pre-installed file sharing app"
+    },
+    "com.vivo.hiboard": {
+        "brand": "Vivo",
+        "name": "Jovi Home Feed",
+        "tier": "RECOMMENDED",
+        "reason": "Minus-one sponsored card aggregator"
+    },
 
     # --- Oppo / OnePlus / Realme (ColorOS / RealmeUI / OxygenOS) ---
     "com.heytap.market": {
@@ -180,6 +207,30 @@ DEBLOAT_CATALOG: Dict[str, Dict[str, Any]] = {
         "tier": "RECOMMENDED",
         "reason": "Lockscreen news and sponsored wallpapers"
     },
+    "com.heytap.themestore": {
+        "brand": "Oppo",
+        "name": "HeyTap Theme Store",
+        "tier": "OPTIONAL",
+        "reason": "Theme store with commercial banner notifications"
+    },
+    "com.coloros.gamespace": {
+        "brand": "Oppo",
+        "name": "Oppo Game Space",
+        "tier": "OPTIONAL",
+        "reason": "Gaming overlay with online promotional telemetry"
+    },
+    "com.nearme.atlas": {
+        "brand": "Oppo",
+        "name": "NearMe Atlas Telemetry",
+        "tier": "RECOMMENDED",
+        "reason": "China ROM metrics and behavioral log sender"
+    },
+    "com.nearme.statistics": {
+        "brand": "Oppo",
+        "name": "NearMe Statistics",
+        "tier": "RECOMMENDED",
+        "reason": "User telemetry and background usage profiling"
+    },
 
     # --- Huawei / Honor (HarmonyOS / MagicOS) ---
     "com.huawei.appmarket": {
@@ -199,35 +250,26 @@ DEBLOAT_CATALOG: Dict[str, Dict[str, Any]] = {
         "name": "Lockscreen Magazine",
         "tier": "RECOMMENDED",
         "reason": "Lockscreen promotional wallpapers and background data"
+    },
+    "com.huawei.gamebox": {
+        "brand": "Huawei",
+        "name": "Huawei GameCenter",
+        "tier": "OPTIONAL",
+        "reason": "Game launcher and promotional push service"
+    },
+    "com.huawei.fastapp": {
+        "brand": "Huawei",
+        "name": "Huawei Quick Apps",
+        "tier": "RECOMMENDED",
+        "reason": "Ad delivery engine and lightweight web apps"
+    },
+    "com.huawei.hifolder": {
+        "brand": "Huawei",
+        "name": "Huawei Smart Suggestions",
+        "tier": "RECOMMENDED",
+        "reason": "Cloud app recommendation folders on home screen"
     }
 }
-
-def run_adb(cmd: List[str], serial: Optional[str] = None) -> subprocess.CompletedProcess:
-    assert_command_safe(cmd)
-    base = ["adb"]
-    if serial:
-        if ":" in serial and not getattr(run_adb, "_connected", False):
-            subprocess.run(["adb", "connect", serial], capture_output=True, text=True, check=False)
-            run_adb._connected = True
-        base.extend(["-s", serial])
-    base.extend(cmd)
-    try:
-        res = subprocess.run(base, capture_output=True, text=True, check=False)
-        if serial and ":" in serial and "not found" in (res.stderr or "").lower():
-            subprocess.run(["adb", "connect", serial], capture_output=True, text=True, check=False)
-            res = subprocess.run(base, capture_output=True, text=True, check=False)
-        return res
-    except FileNotFoundError:
-        print(f"{Colors.RED}[!] Error: 'adb' executable not found in PATH.{Colors.RESET}")
-        sys.exit(1)
-
-def get_installed_packages(serial: Optional[str] = None) -> List[str]:
-    res = run_adb(["shell", "pm", "list", "packages", "--user", "0"], serial)
-    packages = []
-    for line in res.stdout.splitlines():
-        if line.startswith("package:"):
-            packages.append(line.replace("package:", "").strip())
-    return packages
 
 def scan_bloatware(serial: Optional[str] = None) -> List[Dict[str, Any]]:
     installed = set(get_installed_packages(serial))

@@ -134,17 +134,21 @@ while true; do
             python3 "$SCRIPT_DIR/adblock_manager.py" --status
             echo ""
             echo "Options:"
-            echo "  [1] Open Google Play Store to install RethinkDNS (0ms Local Loopback)"
-            echo "  [2] Optimize RethinkDNS Daemon (Grant Bucket 5 & Autostart)"
-            echo "  [3] Disable Slow Remote Private DNS (Restore 3-8ms ISP speed)"
-            echo "  [4] Return to Main Menu"
+            echo "  [1] Apply 100% Native No-App Adblock (AdGuard Anycast DNS + AdServices Kill + MSA Debloat)"
+            echo "  [2] Verify Ad-Blocking & Network Latency"
+            echo "  [3] Open Google Play Store to install RethinkDNS (0ms Local Loopback)"
+            echo "  [4] Optimize RethinkDNS Daemon (Grant Bucket 5 & Autostart)"
+            echo "  [5] Disable Slow Remote Private DNS (Restore 3-8ms ISP speed)"
+            echo "  [6] Return to Main Menu"
             echo ""
-            echo -n "Enter choice [1-4]: "
+            echo -n "Enter choice [1-6]: "
             read -r ad_choice
             case "$ad_choice" in
-                1) python3 "$SCRIPT_DIR/adblock_manager.py" --install-rethink ;;
-                2) python3 "$SCRIPT_DIR/adblock_manager.py" --optimize-rethink ;;
-                3) python3 "$SCRIPT_DIR/adblock_manager.py" --disable-slow-dns ;;
+                1) python3 "$SCRIPT_DIR/adblock_manager.py" --apply-native ;;
+                2) python3 "$SCRIPT_DIR/adblock_manager.py" --verify ;;
+                3) python3 "$SCRIPT_DIR/adblock_manager.py" --install-rethink ;;
+                4) python3 "$SCRIPT_DIR/adblock_manager.py" --optimize-rethink ;;
+                5) python3 "$SCRIPT_DIR/adblock_manager.py" --disable-slow-dns ;;
             esac
             echo ""
             echo -e "${YELLOW}Press [Enter] to return to menu...${NC}"

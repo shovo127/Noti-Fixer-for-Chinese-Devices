@@ -28,15 +28,10 @@ if hasattr(sys.stdout, "reconfigure"):
     except Exception:
         pass
 
-class Colors:
-    HEADER = '\033[95m'
-    BLUE = '\033[94m'
-    CYAN = '\033[96m'
-    GREEN = '\033[92m'
-    YELLOW = '\033[1m\033[93m'
-    RED = '\033[91m'
-    BOLD = '\033[1m'
-    RESET = '\033[0m'
+try:
+    from adb_core import run_adb, Colors, get_installed_packages, get_package_uid
+except ImportError:
+    from scripts.adb_core import run_adb, Colors, get_installed_packages, get_package_uid
 
 # Default Priority Communication Applications (Core Instant Messaging)
 DEFAULT_PRIORITY_PACKAGES = [
@@ -69,44 +64,6 @@ CANDIDATE_DRAINER_PACKAGES = [
     ("com.alibaba.aliexpresshd", "AliExpress (Shopping)"),
     ("com.amazon.mShop.android.shopping", "Amazon (Shopping)")
 ]
-
-def run_adb(cmd: List[str], serial: Optional[str] = None) -> subprocess.CompletedProcess:
-    assert_command_safe(cmd)
-    base = ["adb"]
-    if serial:
-        if ":" in serial and not getattr(run_adb, "_connected", False):
-            subprocess.run(["adb", "connect", serial], capture_output=True, text=True, check=False)
-            run_adb._connected = True
-        base.extend(["-s", serial])
-    base.extend(cmd)
-    try:
-        res = subprocess.run(base, capture_output=True, text=True, check=False)
-        if serial and ":" in serial and "not found" in (res.stderr or "").lower():
-            subprocess.run(["adb", "connect", serial], capture_output=True, text=True, check=False)
-            res = subprocess.run(base, capture_output=True, text=True, check=False)
-        return res
-    except FileNotFoundError:
-        print(f"{Colors.RED}[!] Error: 'adb' executable not found in PATH.{Colors.RESET}")
-        sys.exit(1)
-
-def get_installed_packages(serial: Optional[str] = None) -> Set[str]:
-    res = run_adb(["shell", "pm", "list", "packages"], serial)
-    installed = set()
-    for line in res.stdout.splitlines():
-        if line.startswith("package:"):
-            installed.add(line.replace("package:", "").strip())
-    return installed
-
-def get_package_uid(pkg: str, serial: Optional[str] = None) -> Optional[int]:
-    res = run_adb(["shell", "pm", "list", "packages", "-U", pkg], serial)
-    for line in res.stdout.splitlines():
-        if f"package:{pkg} " in line and "uid:" in line:
-            try:
-                uid_str = line.split("uid:")[1].strip()
-                return int(uid_str)
-            except Exception:
-                pass
-    return None
 
 def create_system_backup(serial: Optional[str] = None) -> str:
     os.makedirs("backups", exist_ok=True)

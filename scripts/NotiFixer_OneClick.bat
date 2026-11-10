@@ -142,15 +142,19 @@ echo [*] Launching Zero-Latency Ad-Blocker & DNS Manager...
 python "%~dp0adblock_manager.py" --status
 echo.
 echo Options:
-echo   [1] Open Google Play Store to install RethinkDNS (0ms Local Loopback)
-echo   [2] Optimize RethinkDNS Daemon (Grant Bucket 5 & Autostart)
-echo   [3] Disable Slow Remote Private DNS (Restore 3-8ms ISP speed)
-echo   [4] Return to Main Menu
+echo   [1] Apply 100%% Native No-App Adblock (AdGuard Anycast DNS + AdServices Kill + MSA Debloat)
+echo   [2] Verify Ad-Blocking & Network Latency
+echo   [3] Open Google Play Store to install RethinkDNS (0ms Local Loopback)
+echo   [4] Optimize RethinkDNS Daemon (Grant Bucket 5 & Autostart)
+echo   [5] Disable Slow Remote Private DNS (Restore 3-8ms ISP speed)
+echo   [6] Return to Main Menu
 echo.
-set /p ad_choice="Enter choice [1-4]: "
-if "%ad_choice%"=="1" python "%~dp0adblock_manager.py" --install-rethink
-if "%ad_choice%"=="2" python "%~dp0adblock_manager.py" --optimize-rethink
-if "%ad_choice%"=="3" python "%~dp0adblock_manager.py" --disable-slow-dns
+set /p ad_choice="Enter choice [1-6]: "
+if "%ad_choice%"=="1" python "%~dp0adblock_manager.py" --apply-native
+if "%ad_choice%"=="2" python "%~dp0adblock_manager.py" --verify
+if "%ad_choice%"=="3" python "%~dp0adblock_manager.py" --install-rethink
+if "%ad_choice%"=="4" python "%~dp0adblock_manager.py" --optimize-rethink
+if "%ad_choice%"=="5" python "%~dp0adblock_manager.py" --disable-slow-dns
 echo.
 echo Press any key to return to menu...
 pause >nul

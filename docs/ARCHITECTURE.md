@@ -110,3 +110,19 @@ To guarantee that the user's morning wake-up alarm NEVER fails or gets silenced 
 3. Injected into Xiaomi HyperOS `power_alarm_white_list`.
 4. Messaging apps are strictly EXCLUDED from `power_alarm_white_list` so only real clock alarms have hardware RTC wake privileges.
 
+---
+
+### Tier 6: Centralized ADB Core & Non-Destructive Interceptor
+To eliminate code duplication and maintain ironclad safety across all 12 modules:
+1. **Unified ADB Engine (`scripts/adb_core.py`):** Provides DRY command execution, automatic wireless IP:PORT re-connection, device property querying, and timeout containment.
+2. **Deterministic Interception (`scripts/safety_guard.py`):** Intercepts all destructive commands (`recovery`, `master_clear`, `wipe`, `format`, `erase`, `su`, `root`, `pm clear`, non-standard uninstalls) and protects 34+ critical system packages against uninstallation or freezing.
+
+---
+
+### Tier 7: Edge Ad-Blocking & Native System Ad Neutralization
+Provides 0% RAM and 0% CPU ad-blocking without third-party VPN loopbacks:
+1. **AdGuard Anycast Edge DNS:** Configures Android Private DNS to `dns.adguard.com` (with fallback to Mullvad/Control D), sinkholing global ad domains with zero latency.
+2. **Android 14–16 AdServices Global Kill Switches:** Neutralizes AdMob SDK sandbox, Topics API, and Cross-App Advertising ID at the platform level.
+3. **Xiaomi System Ad Daemons Neutralization:** Reversibly debloats `com.miui.msa.global` and `com.miui.analytics` for user 0 while disabling in-app recommendation toggles across File Manager, Themes, and Downloads.
+
+

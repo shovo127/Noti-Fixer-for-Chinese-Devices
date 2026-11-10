@@ -54,6 +54,7 @@ jobs:
 
       - name: Compile Scripts & Check Syntax
         run: |
+          python -m py_compile scripts/adb_core.py
           python -m py_compile scripts/detect_device.py
           python -m py_compile scripts/audit_fcm_doze.py
           python -m py_compile scripts/apply_notification_fix.py
@@ -70,6 +71,10 @@ jobs:
       - name: Run Non-Destructive Safety Guard Verification Tests
         run: |
           python scripts/safety_guard.py
+
+      - name: Run Comprehensive Virtual Mock Unit Tests
+        run: |
+          python -m unittest discover tests/
 
       - name: Verify CLI Help Flags
         run: |
