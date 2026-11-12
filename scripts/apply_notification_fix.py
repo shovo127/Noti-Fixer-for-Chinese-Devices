@@ -408,17 +408,10 @@ def apply_universal_fixes(
         except Exception:
             pass
 
-        # Deploy and launch background persistent MILLET watchdog daemon
-        watchdog_path = os.path.join(os.path.dirname(__file__), "millet_watchdog.sh")
-        if os.path.exists(watchdog_path):
-            run_adb(["push", watchdog_path, "/data/local/tmp/millet_watchdog.sh"], serial)
-            run_adb(["shell", "chmod", "755", "/data/local/tmp/millet_watchdog.sh"], serial)
-            ps_res = run_adb(["shell", "ps", "-ef"], serial)
-            if "millet_watchdog.sh" not in (ps_res.stdout or ""):
-                run_adb(["shell", "setsid", "nohup", "/data/local/tmp/millet_watchdog.sh", "</dev/null", ">/dev/null", "2>&1", "&"], serial)
-                print(f"       -> MILLET & FCM Persistent Watchdog Daemon: {Colors.GREEN}DEPLOYED & RUNNING{Colors.RESET}")
-            else:
-                print(f"       -> MILLET & FCM Persistent Watchdog Daemon: {Colors.GREEN}ALREADY ACTIVE{Colors.RESET}")
+        # Ensure device /data/local/tmp has no runaway background daemon
+        run_adb(["shell", "pkill", "-f", "millet_watchdog.sh"], serial)
+        run_adb(["shell", "rm", "-f", "/data/local/tmp/millet_watchdog.sh", "/data/local/tmp/millet_watchdog.log"], serial)
+        print(f"       -> MILLET & FCM Whitelist Status: {Colors.GREEN}ENFORCED (Zero-Polling Native Architecture){Colors.RESET}")
 
     elif is_vivo:
         print(f"       -> Detected: {Colors.YELLOW}Vivo OriginOS / FuntouchOS Platform{Colors.RESET}")

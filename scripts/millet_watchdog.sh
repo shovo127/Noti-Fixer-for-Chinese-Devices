@@ -33,8 +33,8 @@ log_msg "Noti-Fixer MILLET & Alarm Watchdog Started [PID: $$]"
 log_msg "Safe mode: Hardware suspend preserved, 0% idle battery drain"
 log_msg "========================================================="
 
-# 1. Enforce optimal hardware radios & deep sleep (prevents overnight battery drain)
-settings put global wifi_suspend_optimizations_enabled 1 2>/dev/null
+# 1. Enforce optimal hardware radios & deep sleep (prevents overnight battery drain while keeping push sockets alive)
+settings put global wifi_suspend_optimizations_enabled 0 2>/dev/null
 settings put global wifi_scan_always_enabled 0 2>/dev/null
 settings put global ble_scan_always_enabled 0 2>/dev/null
 settings put global cached_apps_freezer enabled 2>/dev/null
