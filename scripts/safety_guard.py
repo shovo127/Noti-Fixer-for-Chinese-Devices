@@ -102,6 +102,11 @@ PROTECTED_SYSTEM_PACKAGES = {
     "com.xiaomi.market",               # Xiaomi App Store (System App updates & Widgets)
     "com.miui.personalassistant",      # Xiaomi App Vault & System Widgets
     "com.android.htmlviewer",          # Essential: Contains CloudSettingsProvider required by SecurityCenter
+    "com.miui.powerkeeper",            # Essential: Battery, thermals, and power HAL manager
+    "com.miui.securitycenter",         # Core HyperOS security and permission manager
+    "com.miui.securitycore",           # Core HyperOS security services
+    "com.android.deskclock",           # Hardware RTC alarm clock
+    "games.vaveda.militaryoverturn",   # Inviolable user game
     "us.zoom.videomeetings",           # Zoom Meetings (Video conferencing & background call audio)
     "com.google.android.webview",      # Android System WebView
     "com.android.webview",

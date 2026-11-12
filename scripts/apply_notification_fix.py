@@ -42,6 +42,7 @@ DEFAULT_PRIORITY_PACKAGES = [
     "com.whatsapp.w4b",
     "com.imo.android.imoim",
     "com.facebook.orca",
+    "com.viber.voip",
     "com.instagram.android",
     "org.telegram.messenger",
     "org.telegram.plus",
@@ -218,11 +219,18 @@ def apply_universal_fixes(
     # Enable Wi-Fi hardware suspend optimizations (prevents 80-120mA continuous idle radio drain)
     run_adb(["shell", "settings", "put", "global", "wifi_suspend_optimizations_enabled", "1"], serial)
     
+    # Disable hardware radio background scanning (stops background location radio polling)
+    run_adb(["shell", "settings", "put", "global", "wifi_scan_always_enabled", "0"], serial)
+    run_adb(["shell", "settings", "put", "global", "ble_scan_always_enabled", "0"], serial)
+    
     # Enable native Android cached apps freezer so background apps sleep when screen is off
     # (Priority messaging apps are selectively unthrottled via MILLET and Doze whitelists)
     run_adb(["shell", "settings", "put", "global", "cached_apps_freezer", "enabled"], serial)
     run_adb(["shell", "device_config", "put", "activity_manager_native_boot", "use_freezer", "true"], serial)
-    run_adb(["shell", "device_config", "put", "activity_manager", "max_phantom_processes", "32"], serial)
+    
+    # Disable Android 16 Phantom Process Killer limit (allow parallel background transcoding and downloads)
+    run_adb(["shell", "device_config", "put", "activity_manager", "max_phantom_processes", "2147483647"], serial)
+    run_adb(["shell", "settings", "put", "global", "settings_enable_monitor_phantom_procs", "false"], serial)
 
     # Clean up any aggressive 120s FCM heartbeat overrides (allow native adaptive keepalive to prevent 240+ wakeups/night)
     for scope in ["global", "secure"]:
@@ -231,12 +239,16 @@ def apply_universal_fixes(
     run_adb(["shell", "settings", "delete", "global", "gservices:fcm_heartbeat_interval_wifi_ms"], serial)
     run_adb(["shell", "settings", "delete", "global", "gservices:fcm_heartbeat_interval_mobile_ms"], serial)
 
-    # Clean up non-messaging telemetry/sync/store apps from Doze whitelist to prevent 50+ background wakeups/hour
+    # Clean up non-messaging telemetry/sync/store apps and 3rd party messaging apps from Doze whitelist
+    # (Tier 4 Offline Zero-Drain: Only GMS, GSF, GM, DeskClock remain in Doze whitelist)
     for rogue_pkg in [
-        "com.xiaomi.xmsf", "com.xiaomi.xmsfkeeper", "com.miui.home", 
-        "com.lbe.security.miui", "com.miui.cloudbackup", "com.miui.micloudsync",
-        "com.miui.cloudservice", "com.google.android.googlequicksearchbox",
-        "com.android.vending"
+        "com.whatsapp", "com.whatsapp.w4b", "com.imo.android.imoim", "com.facebook.orca",
+        "com.viber.voip", "com.instagram.android", "com.discord", "us.zoom.videomeetings",
+        "com.microsoft.teams", "com.xiaomi.account", "com.xiaomi.xmsf", "com.xiaomi.xmsfkeeper",
+        "com.xiaomi.aicr", "com.miui.home", "com.miui.gallery", "com.miui.micloudsync",
+        "com.miui.cloudservice", "com.miui.cloudbackup", "com.lbe.security.miui",
+        "com.android.providers.downloads", "com.android.mms", "com.android.vending",
+        "com.google.android.googlequicksearchbox"
     ]:
         run_adb(["shell", "dumpsys", "deviceidle", "whitelist", f"-{rogue_pkg}"], serial)
 
@@ -254,9 +266,10 @@ def apply_universal_fixes(
     run_adb(["shell", "cmd", "battery", "reset"], serial)
 
     print(f"       -> Wi-Fi Suspend Power Saving: {Colors.GREEN}ENABLED (Optimal standby battery life){Colors.RESET}")
+    print(f"       -> Hardware Scanning (Wi-Fi/BLE): {Colors.GREEN}DISABLED (0mA background drain){Colors.RESET}")
     print(f"       -> Native Cached Apps Freezer: {Colors.GREEN}ENABLED (Zero idle CPU drain){Colors.RESET}")
     print(f"       -> FCM Heartbeat: {Colors.GREEN}ADAPTIVE (Native Google Play Services keepalive){Colors.RESET}")
-    print(f"       -> Max Phantom Processes: {Colors.GREEN}32 (Standard Android){Colors.RESET}")
+    print(f"       -> Max Phantom Processes: {Colors.GREEN}DISABLED (2147483647 - Multitasking Unthrottled){Colors.RESET}")
 
     # Scan installed packages
     installed = get_installed_packages(serial)
@@ -315,6 +328,9 @@ def apply_universal_fixes(
         run_adb(["shell", "cmd", "appops", "set", pkg, "RUN_ANY_IN_BACKGROUND", "allow"], serial)
         run_adb(["shell", "cmd", "appops", "set", pkg, "WAKE_LOCK", "allow"], serial)
         run_adb(["shell", "cmd", "appops", "set", pkg, "TURN_SCREEN_ON", "allow"], serial)
+        run_adb(["shell", "cmd", "appops", "set", pkg, "POST_NOTIFICATION", "allow"], serial)
+        run_adb(["shell", "cmd", "appops", "set", pkg, "USE_FULL_SCREEN_INTENT", "allow"], serial)
+        run_adb(["shell", "cmd", "appops", "set", pkg, "SYSTEM_ALERT_WINDOW", "allow"], serial)
         # Unstop package if device recently rebooted to ensure GMS delivers pending broadcasts
         run_adb(["shell", "am", "broadcast", "-a", "android.intent.action.PACKAGE_UNSTOPPED", "-d", f"package:{pkg}", "--include-stopped-packages"], serial)
         print(f"       • Whitelisted (Bucket {bucket} / Doze / Netpolicy): {Colors.BOLD}{pkg}{Colors.RESET}")
@@ -324,11 +340,20 @@ def apply_universal_fixes(
         if alarm_pkg in installed:
             run_adb(["shell", "dumpsys", "deviceidle", "whitelist", f"+{alarm_pkg}"], serial)
             run_adb(["shell", "am", "set-standby-bucket", alarm_pkg, "5"], serial)
+            run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "RUN_IN_BACKGROUND", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "RUN_ANY_IN_BACKGROUND", "allow"], serial)
             run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "WAKE_LOCK", "allow"], serial)
             run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "TURN_SCREEN_ON", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "SYSTEM_ALERT_WINDOW", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "USE_FULL_SCREEN_INTENT", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "POST_NOTIFICATION", "allow"], serial)
             run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "10008", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "10017", "allow"], serial)
             run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "10020", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "10021", "allow"], serial)
             run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "10022", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "10028", "allow"], serial)
+            run_adb(["shell", "cmd", "appops", "set", alarm_pkg, "10029", "allow"], serial)
             print(f"       • Protected Alarm Clock: {Colors.GREEN}{alarm_pkg}{Colors.RESET}")
 
     # 4. Brand-Specific Kernel & Process Injections
@@ -346,22 +371,27 @@ def apply_universal_fixes(
             run_adb(["shell", "cmd", "appops", "set", pkg, "10029", "allow"], serial) # Floating window
             run_adb(["shell", "cmd", "appops", "set", pkg, "SYSTEM_ALERT_WINDOW", "allow"], serial)
             run_adb(["shell", "cmd", "appops", "set", pkg, "TURN_SCREEN_ON", "allow"], serial) # Wake lockscreen for alerts
+            run_adb(["shell", "cmd", "appops", "set", pkg, "USE_FULL_SCREEN_INTENT", "allow"], serial)
         
         # Deep HyperOS System & PowerKeeper Whitelists
         pkg_csv = ",".join(active_targets)
-        run_adb(["shell", "settings", "put", "system", "cloud_memory_freeze_whitelist", pkg_csv], serial)
-        run_adb(["shell", "settings", "put", "system", "cloud_network_priority_whitelist", pkg_csv], serial)
-        run_adb(["shell", "settings", "put", "system", "power_pkg_white_list", f"com.android.deskclock,com.google.android.deskclock,com.google.android.inputmethod.latin,com.google.android.ext.services,com.android.camera,{pkg_csv}"], serial)
+        freeze_extra = "com.android.vending,com.android.providers.downloads,com.android.deskclock,com.bKash.customerapp,com.konasl.nagad"
+        full_freeze_csv = f"{pkg_csv},{freeze_extra}"
+        run_adb(["shell", "settings", "put", "system", "cloud_memory_freeze_whitelist", full_freeze_csv], serial)
+        run_adb(["shell", "settings", "put", "system", "cloud_network_priority_whitelist", full_freeze_csv], serial)
+        run_adb(["shell", "settings", "put", "system", "power_pkg_white_list", f"com.android.deskclock,com.google.android.deskclock,com.google.android.inputmethod.latin,com.google.android.ext.services,com.android.camera,{full_freeze_csv}"], serial)
         run_adb(["shell", "settings", "put", "system", "power_alarm_white_list", "com.android.deskclock,com.google.android.deskclock,com.android.providers.calendar,myapplication"], serial)
-        run_adb(["shell", "settings", "put", "system", "power_proc_white_list", f"com.google.android.gms.persistent,{pkg_csv}"], serial)
-        run_adb(["shell", "settings", "put", "system", "power_service_white_list", pkg_csv], serial)
-        run_adb(["shell", "settings", "put", "system", "rt_pkg_white_list", pkg_csv], serial)
+        run_adb(["shell", "settings", "put", "system", "power_proc_white_list", f"com.google.android.gms.persistent,{full_freeze_csv}"], serial)
+        run_adb(["shell", "settings", "put", "system", "power_service_white_list", full_freeze_csv], serial)
+        run_adb(["shell", "settings", "put", "system", "rt_pkg_white_list", full_freeze_csv], serial)
 
         # HyperOS MILLET Injection
         existing_millet = run_adb(["shell", "settings", "get", "system", "MILLET_NO_RESTRICT_APP"], serial).stdout.strip()
         millet_set = set([p.strip() for p in existing_millet.split(",") if p.strip()] if existing_millet != "null" else [])
         for pkg in active_targets:
             millet_set.add(pkg)
+        for extra_p in ["com.android.vending", "com.android.providers.downloads", "com.android.deskclock", "com.bKash.customerapp", "com.konasl.nagad"]:
+            millet_set.add(extra_p)
         millet_val = ",".join(sorted(list(millet_set)))
         run_adb(["shell", "settings", "put", "system", "MILLET_NO_RESTRICT_APP", millet_val], serial)
         print(f"       -> Injected {len(active_targets)} priority apps into PowerKeeper & MILLET whitelists")

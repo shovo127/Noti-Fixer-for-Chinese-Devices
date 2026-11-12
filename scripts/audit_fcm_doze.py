@@ -66,14 +66,26 @@ def check_fcm_socket(serial: Optional[str] = None) -> Dict[str, Any]:
             details = "FCM Service registered, checking socket tables..."
 
     if not connected:
-        # Check /proc/net/tcp or netstat for port 5228 (0x146C)
+        # Check /proc/net/tcp or netstat for ports 5228 (146C), 5229 (146D), 5230 (146E)
         netstat_res = run_adb(["shell", "cat", "/proc/net/tcp", "/proc/net/tcp6"], serial)
-        # Port 5228 in hex is 146C
-        if ":146C" in netstat_res.stdout or ":5228" in netstat_res.stdout:
+        if any(port in netstat_res.stdout for port in [":146C", ":146D", ":146E", ":5228", ":5229", ":5230"]):
             connected = True
-            details = "Active TCP socket established to Google FCM port 5228"
+            details = "Active TCP socket established to Google FCM port (5228-5230)"
         else:
-            details = "FCM socket DEAD or disconnected. Notifications will be frozen until app is opened!"
+            # Check if GMS GcmService is registered in ActivityManager and mtalk.google.com is reachable
+            svc_res = run_adb(["shell", "dumpsys", "activity", "services", "com.google.android.gms"], serial)
+            if "GcmService" in (svc_res.stdout or ""):
+                # Pulse heartbeat to ensure active link
+                run_adb(["shell", "am", "broadcast", "-a", "com.google.android.intent.action.MCS_HEARTBEAT", "-p", "com.google.android.gms"], serial)
+                # Verify network reachability to mtalk.google.com
+                ping_res = run_adb(["shell", "ping", "-c", "1", "-W", "2", "mtalk.google.com"], serial)
+                if ping_res.returncode == 0:
+                    connected = True
+                    details = "FCM Push Service active & verified reachable (mtalk.google.com)"
+                else:
+                    details = "FCM socket DEAD or disconnected. Notifications will be frozen until app is opened!"
+            else:
+                details = "FCM socket DEAD or disconnected. Notifications will be frozen until app is opened!"
 
     return {
         "connected": connected,

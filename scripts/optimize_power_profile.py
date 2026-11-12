@@ -109,6 +109,40 @@ def restore_multitasking_safety(serial: Optional[str] = None):
 
     pkg_list_res = run_adb(["shell", "pm", "list", "packages"], serial).stdout or ""
     
+    # 0. Disable Android 16 Phantom Process Killer limit (unthrottles background processes)
+    run_adb(["shell", "device_config", "put", "activity_manager", "max_phantom_processes", "2147483647"], serial)
+    run_adb(["shell", "settings", "put", "global", "settings_enable_monitor_phantom_procs", "false"], serial)
+    print(f"    {Colors.GREEN}✔ [PHANTOM KILLER DISABLED] max_phantom_processes=2147483647 | monitor_procs=false{Colors.RESET}")
+
+    # Whitelist communication, download, and banking apps in MILLET and cloud memory freeze
+    millet_continuity_apps = [
+        "com.google.android.gms", "com.google.android.gsf", "com.google.android.gm",
+        "com.whatsapp", "com.whatsapp.w4b", "com.imo.android.imoim", "com.facebook.orca",
+        "com.viber.voip", "com.instagram.android", "org.telegram.messenger",
+        "com.android.providers.downloads", "com.android.vending", "com.android.deskclock",
+        "com.bKash.customerapp", "com.konasl.nagad"
+    ]
+    cur_millet = run_adb(["shell", "settings", "get", "system", "MILLET_NO_RESTRICT_APP"], serial).stdout or ""
+    millet_set = set([p.strip() for p in cur_millet.strip().split(",") if p.strip()] if cur_millet.strip() != "null" else [])
+    for app_p in millet_continuity_apps:
+        millet_set.add(app_p)
+    millet_str = ",".join(sorted(list(millet_set)))
+    run_adb(["shell", "settings", "put", "system", "MILLET_NO_RESTRICT_APP", millet_str], serial)
+    run_adb(["shell", "settings", "put", "system", "cloud_memory_freeze_whitelist", millet_str], serial)
+    print(f"    {Colors.GREEN}✔ [MILLET CONTINUITY] Injected {len(millet_set)} packages into MILLET & memory freeze whitelist{Colors.RESET}")
+
+    # Protect Google Play Store at Standby Bucket 20
+    if "package:com.android.vending" in pkg_list_res:
+        run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "RUN_IN_BACKGROUND", "allow"], serial)
+        run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "RUN_ANY_IN_BACKGROUND", "allow"], serial)
+        run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "WAKE_LOCK", "allow"], serial)
+        run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "START_FOREGROUND", "allow"], serial)
+        run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "10008", "ignore"], serial)
+        run_adb(["shell", "cmd", "appops", "set", "com.android.vending", "10021", "ignore"], serial)
+        run_adb(["shell", "am", "set-standby-bucket", "com.android.vending", "20"], serial)
+        run_adb(["shell", "dumpsys", "deviceidle", "whitelist", "-com.android.vending"], serial)
+        print(f"    {Colors.GREEN}✔ [PLAY STORE]       com.android.vending         -> Bucket: 20 | Foreground: Active | Boot: Ignored{Colors.RESET}")
+
     # 1. Conferencing & Meeting Apps (Zoom, Teams, Skype)
     conf_count = 0
     for name, pkg in CONFERENCING_APPS:
@@ -156,6 +190,7 @@ def optimize_hardware_radios(serial: Optional[str] = None):
     print(f"\n{Colors.CYAN}[*] Disabling continuous background Wi-Fi and Bluetooth scanning...{Colors.RESET}")
     run_adb(["shell", "settings", "put", "global", "wifi_scan_always_enabled", "0"], serial)
     run_adb(["shell", "settings", "put", "global", "ble_scan_always_enabled", "0"], serial)
+    run_adb(["shell", "settings", "put", "global", "wifi_suspend_optimizations_enabled", "1"], serial)
     print(f"    {Colors.GREEN}✔ Hardware Wi-Fi/BLE background scanning disabled (eliminates idle battery drain).{Colors.RESET}")
 
 def print_thermal_status(serial: Optional[str] = None):

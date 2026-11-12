@@ -60,6 +60,19 @@ class TestSafetyGuard(unittest.TestCase):
             with self.assertRaises(SecurityViolationError):
                 assert_command_safe(["shell", "pm", "uninstall", "-k", "--user", "0", pkg])
 
+    def test_inviolable_packages_protected(self):
+        inviolables = [
+            "games.vaveda.militaryoverturn",
+            "com.miui.powerkeeper",
+            "com.miui.securitycenter",
+            "com.miui.securitycore",
+            "com.android.deskclock"
+        ]
+        for pkg in inviolables:
+            self.assertTrue(is_package_protected(pkg), f"Inviolable package {pkg} must be protected")
+            with self.assertRaises(SecurityViolationError):
+                assert_command_safe(["shell", "pm", "uninstall", "-k", "--user", "0", pkg])
+
 
 class TestAdbCore(unittest.TestCase):
     """Verifies centralized ADB core functions, parsing logic, and device interrogation."""

@@ -13,8 +13,8 @@ LOG_FILE="/data/local/tmp/millet_watchdog.log"
 MAX_LOG_LINES=500
 POLL_INTERVAL=60
 
-# Core communication and alarm packages required to never freeze and never drop alerts
-COMM_PACKAGES="com.google.android.gms,com.google.android.gsf,com.google.android.gm,com.android.providers.downloads,com.whatsapp,com.whatsapp.w4b,com.imo.android.imoim,com.facebook.orca,com.instagram.android,org.telegram.messenger,org.telegram.plus,org.thoughtcrime.securesms,com.tencent.mm,com.discord,com.microsoft.office.outlook,com.viber.voip,com.skype.raider"
+# Core communication, alarm, and background continuity packages required to never freeze and never drop alerts
+COMM_PACKAGES="com.google.android.gms,com.google.android.gsf,com.google.android.gm,com.android.providers.downloads,com.android.vending,com.whatsapp,com.whatsapp.w4b,com.imo.android.imoim,com.facebook.orca,com.instagram.android,org.telegram.messenger,org.telegram.plus,org.thoughtcrime.securesms,com.tencent.mm,com.discord,com.microsoft.office.outlook,com.viber.voip,com.skype.raider,com.bKash.customerapp,com.konasl.nagad"
 ALARM_PACKAGES="com.android.deskclock,com.google.android.deskclock,com.android.providers.calendar"
 
 log_msg() {
@@ -35,9 +35,12 @@ log_msg "========================================================="
 
 # 1. Enforce optimal hardware radios & deep sleep (prevents overnight battery drain)
 settings put global wifi_suspend_optimizations_enabled 1 2>/dev/null
+settings put global wifi_scan_always_enabled 0 2>/dev/null
+settings put global ble_scan_always_enabled 0 2>/dev/null
 settings put global cached_apps_freezer enabled 2>/dev/null
 device_config put activity_manager_native_boot use_freezer true 2>/dev/null
-device_config put activity_manager max_phantom_processes 32 2>/dev/null
+device_config put activity_manager max_phantom_processes 2147483647 2>/dev/null
+settings put global settings_enable_monitor_phantom_procs false 2>/dev/null
 
 # Clean up any aggressive 120s FCM heartbeat overrides (allow native adaptive keepalive)
 settings delete global fcm_heartbeat_interval_wifi_ms 2>/dev/null
