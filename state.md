@@ -2,7 +2,7 @@
 
 ## Current Phase: Windows PC Performance Optimization Verified & Completed
 - **Current Window Token Depth:** Low
-- **Active Focus:** User-approved optimizations successfully executed and empirically verified. Zero stability regressions. Clipchamp, Google Drive, FxSound, Printers, SysMain, Bijoy, and Defender 100% operational.
+- **Active Focus:** User-approved Option A executed. Bijoy Bayanno converted to strictly On-Demand mode via Windows StartupApproved registry policy (bypasses auto-launch on boot; accessible anytime from Start Menu). Print Spooler left active for seamless instant printing.
 
 ## Milestones & Status
 - [x] Phase 1-14: Mobile Noti-Fixer Complete & Verified (Archived)
@@ -16,8 +16,9 @@
   - [x] Step 6: Deduplicate User PATH Environment Variables (Cleaned 3 redundant paths)
   - [x] Step 7: Safely Purge Temp Junk & Leftover Caches (Freed 441.05 MB, deleted dead cache folders)
   - [x] Step 8: Empirical Post-Execution Verification (All essential apps verified alive and healthy)
+  - [x] Step 9: Configure Bijoy Bayanno to On-Demand Mode via `StartupApproved\StartupFolder`
 - [x] Phase 17: Final Report & Git Commit
 
 ## Immediate Atomic Next Steps
 1. [x] Commit and push verified state to git repository on branch `main`.
-2. [x] Deliver concise, transparent verification summary to user.
+2. [x] Present clean confirmation of Option A setup to the user.
