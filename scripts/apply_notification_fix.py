@@ -216,8 +216,8 @@ def apply_universal_fixes(
 
     # 2. Kernel Cgroups, Hardware Radios & Standby Battery Optimization
     print(f"\n {Colors.CYAN}[2/7] Optimizing Linux Cgroups, Hardware Radios & Deep-Sleep Suspend...{Colors.RESET}")
-    # Enable Wi-Fi hardware suspend optimizations (prevents 80-120mA continuous idle radio drain)
-    run_adb(["shell", "settings", "put", "global", "wifi_suspend_optimizations_enabled", "1"], serial)
+    # Disable Wi-Fi hardware suspend optimizations (prevents Wi-Fi radio drop when screen off; ensures instant push notification arrival)
+    run_adb(["shell", "settings", "put", "global", "wifi_suspend_optimizations_enabled", "0"], serial)
     
     # Disable hardware radio background scanning (stops background location radio polling)
     run_adb(["shell", "settings", "put", "global", "wifi_scan_always_enabled", "0"], serial)

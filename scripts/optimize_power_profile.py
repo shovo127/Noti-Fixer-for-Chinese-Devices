@@ -190,8 +190,8 @@ def optimize_hardware_radios(serial: Optional[str] = None):
     print(f"\n{Colors.CYAN}[*] Disabling continuous background Wi-Fi and Bluetooth scanning...{Colors.RESET}")
     run_adb(["shell", "settings", "put", "global", "wifi_scan_always_enabled", "0"], serial)
     run_adb(["shell", "settings", "put", "global", "ble_scan_always_enabled", "0"], serial)
-    run_adb(["shell", "settings", "put", "global", "wifi_suspend_optimizations_enabled", "1"], serial)
-    print(f"    {Colors.GREEN}✔ Hardware Wi-Fi/BLE background scanning disabled (eliminates idle battery drain).{Colors.RESET}")
+    run_adb(["shell", "settings", "put", "global", "wifi_suspend_optimizations_enabled", "0"], serial)
+    print(f"    {Colors.GREEN}✔ Hardware Wi-Fi/BLE background scanning disabled (eliminates idle battery drain, keeps push socket alive).{Colors.RESET}")
 
 def print_thermal_status(serial: Optional[str] = None):
     res = run_adb(["shell", "dumpsys", "battery"], serial).stdout or ""
