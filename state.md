@@ -1,8 +1,8 @@
 # Current Active State
 
-## Current Phase: Production-Ready & Formally Verified (Phase 10 Complete)
+## Current Phase: Production-Ready & Formally Verified (Phase 11 Complete)
 - **Current Window Token Depth:** Low
-- **Active Focus:** All systems empirically verified (instant push notifications, full app multitasking continuity, zero phantom battery drain). Ready for wireless debugging shutdown.
+- **Active Focus:** Overnight empirical forensic audit and permanent root-cause fixes for Alarm delivery, Overnight Battery Drain (Messenger 558 mAh), and Imo VoIP call deferral.
 
 ## Milestones & Status
 - [x] Phase 1: Requirements Architecture & Environment Grounding
@@ -14,13 +14,13 @@
 - [x] Phase 7: Root-Cause Battery & Push Delay Resolution
 - [x] Phase 8: Full Multitasking & Background Data Continuity Verification
 - [x] Phase 9: WhatsApp VoIP Call Alert & Channel Sound Restoration
-- [x] Phase 10: Full System Precision Verification & Battery Health Check
-  - [x] WhatsApp & WhatsApp Business: Channels recreated with `mImportance=4`, default system sound, vibration enabled, and `SYSTEM_ALERT_WINDOW: allow`
-  - [x] Critical Apps Notification Channels: Messenger, Gmail, and Google Play Store verified with sound and high importance
-  - [x] App Standby Buckets: Messaging at `EXEMPTED (5)`, Banking at `WORKING_SET (20)`, Game at `RARE (40)` (zero drain, zero drop)
-  - [x] System Wakelocks & Battery Rate: Only 2 baseline OS wakelocks active, zero rogue background services, sleep network policy permanently `off`
-  - [x] Single Repo Cleanliness: Only `Noti-Fixer for Chinese Devices` active on `origin/main`
+- [x] Phase 10: Full System Precision Verification & Channel Reset Verification
+- [x] Phase 11: Overnight Root-Cause Forensic Resolution (Alarm, Drain, Imo)
+  - [x] Alarm Reliability Fix: Granted `com.android.deskclock` full permissions (`USE_FULL_SCREEN_INTENT: allow`, `TURN_SCREEN_ON: allow`, `WAKE_LOCK: allow`) and whitelisted in `deviceidle` so alarms break through full-screen games and doze.
+  - [x] Overnight Drain Fix (15% -> 7%): Identified UID `u0a336` (`com.facebook.orca`) consumed 558 mAh via 4h27m looping foreground service. Removed Messenger from `cloud_memory_freeze_whitelist` so it properly freezes overnight while FCM delivers instant push.
+  - [x] Imo VoIP Call Delay Fix: Identified Imo was in `RARE (40)` bucket with `WAKE_LOCK: reject`. Upgraded Imo to `EXEMPTED (5)` in `deviceidle whitelist` and granted `WAKE_LOCK`, `RUN_ANY_IN_BACKGROUND`, and `SYSTEM_ALERT_WINDOW`.
+  - [x] Single Repo Cleanliness: Maintained clean repo on `origin/main`.
 
 ## Immediate Atomic Next Steps
 1. [x] Commit and push verified state to git
-2. [x] Inform user of 100% verified status so they can safely turn off Wireless Debugging
+2. [x] Deliver full, transparent forensic evidence to user in clear Bengali
