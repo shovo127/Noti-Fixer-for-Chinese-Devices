@@ -1,21 +1,17 @@
 # Current Active State
 
-## Current Phase: Clean Revert Verified & Complete
-- **Current Window Token Depth:** High
-- **Active Focus:** Clean revert of Notification Sound System verified live on Xiaomi 13 (`192.168.1.160:39035`).
+## Current Phase: Planning & Background Optimization
+- **Current Window Token Depth:** Medium
+- **Active Focus:** Eliminating heavy background battery drain from Facebook Messenger (595 mAh) and social apps while guaranteeing instant push notifications and zero-offline battery drain.
 
-## Live Verified Outcomes
-1. **Messaging Apps Restored to Doze Whitelist:**
-   - `com.whatsapp`: Verified in `dumpsys deviceidle whitelist`
-   - `com.whatsapp.w4b`: Verified in `dumpsys deviceidle whitelist`
-   - `com.facebook.orca`: Verified in `dumpsys deviceidle whitelist`
-   - `com.imo.android.imoim`: Verified in `dumpsys deviceidle whitelist`
-   - `com.android.mms`: Verified in `dumpsys deviceidle whitelist`
-2. **Notification Sound URIs Restored:**
-   - `system.notification_sound`: Set cleanly to `content://media/internal/audio/media/25?title=Fresh`
-   - `system.notification_sound_cache`: Set cleanly
-   - `sms_received_sound`: Set cleanly
-3. **Screen Wake on Incoming Notifications:**
-   - `system.wakeup_for_keyguard_notification = 1` (Live verified)
-4. **Zero Collateral Changes:**
-   - No debloat, no system apps, no user data, no security settings modified.
+## Milestones & Status
+- [x] Phase 1: Revert Notification Sound System to Clean Defaults
+- [x] Phase 2: Live Battery & Wakelock Forensic Audit (Identified Messenger 595 mAh drain)
+- [/] Phase 3: Background Optimization Plan & User Feedback Approval
+- [ ] Phase 4: Execute Surgical Background Restriction (AppOps RUN_ANY_IN_BACKGROUND ignore, Bucket 20, Kernel Freezer)
+- [ ] Phase 5: Empirical Verification (Live battery measurement & push test)
+
+## Immediate Atomic Next Steps
+1. [x] Authored Implementation Plan artifact: `battery_and_background_optimization_plan.md`
+2. [x] Authored Learning Proposal artifact: `learning_proposal.md`
+3. [/] Awaiting user review and feedback on the proposed optimization plan.
