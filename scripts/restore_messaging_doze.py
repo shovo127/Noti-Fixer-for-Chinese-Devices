@@ -66,3 +66,4 @@ if __name__ == "__main__":
         print("[-] No device connected. Please provide serial or connect via adb connect <IP>:<PORT>")
         sys.exit(1)
     apply_fix(serial)
+

@@ -83,3 +83,4 @@ if __name__ == "__main__":
             sys.exit(1)
         target = devs[0]
     revert_sound_system(target)
+
