@@ -1,16 +1,15 @@
 # Current Active State
 
-## Current Phase: Messaging Push & Screen Wake Restoration
+## Current Phase: Clean Revert of Notification Sound System
 - **Current Window Token Depth:** High
-- **Active Focus:** Identified and remediated the exact cause why WhatsApp stopped ringing and waking the screen when locked. Restored Doze whitelist and screen wake permissions for all core communication apps.
+- **Active Focus:** Clean revert of notification sound system to factory default per user request.
 
-## Root Cause Discovered
-1. **Doze Whitelist Stripping:** In `scripts/apply_notification_fix.py`, lines 256-265 had aggressively removed `com.whatsapp`, `com.whatsapp.w4b`, `com.imo.android.imoim`, and `com.facebook.orca` from the Doze battery whitelist (`dumpsys deviceidle whitelist -<pkg>`).
-2. **Kernel Process Freezing:** When the screen turned off, Android Doze and the Linux cgroups freezer placed WhatsApp into a deep frozen state (`frozen uid ... allow=false`).
-3. **The Consequence:** While the phone was locked, WhatsApp could not maintain its background push socket, could not acquire wake locks, could not wake the display, and could not play incoming message ringtones.
-
-## Remediation Plan
-1. [x] Updated `scripts/apply_notification_fix.py` to permanently whitelist all vital communication suites (`dumpsys deviceidle whitelist +<pkg>`).
-2. [x] Created `scripts/restore_messaging_doze.py` to restore Doze exemption, `WAKE_LOCK`, `TURN_SCREEN_ON`, AppOp `10020` (Lockscreen), AppOp `10017` (Floating), and Standby Bucket 5 (ACTIVE).
-3. [x] Enabled system-level `wake_on_notification = 1` in secure and system settings.
-4. [/] Execute `scripts/restore_messaging_doze.py` as soon as device wireless debugging reconnects.
+## Planned Actions (Surgical Revert Only)
+1. [x] Authored `scripts/revert_notification_system.py` to:
+   - Restore all messaging suites (`com.whatsapp`, `com.whatsapp.w4b`, `com.facebook.orca`, `com.imo.android.imoim`, `com.google.android.gm`, `com.android.mms`) to Doze whitelist (`dumpsys deviceidle whitelist +<pkg>`).
+   - Restore Standby Bucket 5 (ACTIVE).
+   - Revert `notification_sound`, `notification_sound_cache`, `calendar_alert`, `sms_received_sound` to clean system defaults.
+   - Unsnooze system notification alerts (`cmd notification unsnooze`).
+   - Enable screen wake for notifications (`wake_on_notification = 1`).
+   - Restore Messenger AppOp 10028 to allow.
+2. [/] Awaiting active Wireless Debugging port (or USB) from user to apply execution.
