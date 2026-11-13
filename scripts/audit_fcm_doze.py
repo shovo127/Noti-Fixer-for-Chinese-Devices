@@ -118,7 +118,7 @@ def check_cached_freezer(serial: Optional[str] = None) -> Dict[str, Any]:
 def check_wifi_suspend(serial: Optional[str] = None) -> bool:
     res = run_adb(["shell", "settings", "get", "global", "wifi_suspend_optimizations_enabled"], serial)
     val = res.stdout.strip()
-    return val == "0" # True if disabled (0 = socket stays active, instant push delivery)
+    return val == "1" # True if enabled (1 = Wi-Fi radio saves power in sleep, zero overnight drain)
 
 def check_alarm_protection(serial: Optional[str] = None) -> bool:
     res = run_adb(["shell", "settings", "get", "system", "power_alarm_white_list"], serial)
@@ -255,7 +255,7 @@ def print_audit_report(audit: Dict[str, Any]):
         print(f" {Colors.BOLD}Xiaomi HyperOS MILLET Whitelist  :{Colors.RESET} {Colors.GREEN}{audit['millet_entries_count']} Apps Whitelisted{Colors.RESET}")
     
     wifi_suspend_ok = audit.get("wifi_suspend", True)
-    wifi_icon = f"{Colors.GREEN}DISABLED (Optimal Push Delivery){Colors.RESET}" if wifi_suspend_ok else f"{Colors.RED}ENABLED (Wi-Fi Drops in Sleep){Colors.RESET}"
+    wifi_icon = f"{Colors.GREEN}ENABLED (Optimal Deep Sleep Power Saving){Colors.RESET}" if wifi_suspend_ok else f"{Colors.RED}DISABLED (Radio Drains In Sleep){Colors.RESET}"
     print(f" {Colors.BOLD}Wi-Fi Hardware Suspend           :{Colors.RESET} {wifi_icon}")
 
     alarm_ok = audit.get("alarm_protected", True)

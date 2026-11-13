@@ -34,11 +34,11 @@ log_msg "Safe mode: Hardware suspend preserved, 0% idle battery drain"
 log_msg "========================================================="
 
 # 1. Enforce optimal hardware radios & deep sleep (prevents overnight battery drain while keeping push sockets alive)
-settings put global wifi_suspend_optimizations_enabled 0 2>/dev/null
+settings put global wifi_suspend_optimizations_enabled 1 2>/dev/null
 settings put global wifi_scan_always_enabled 0 2>/dev/null
 settings put global ble_scan_always_enabled 0 2>/dev/null
-settings put global cached_apps_freezer enabled 2>/dev/null
-device_config put activity_manager_native_boot use_freezer true 2>/dev/null
+settings put global cached_apps_freezer disabled 2>/dev/null
+device_config put activity_manager_native_boot use_freezer false 2>/dev/null
 device_config put activity_manager max_phantom_processes 2147483647 2>/dev/null
 settings put global settings_enable_monitor_phantom_procs false 2>/dev/null
 

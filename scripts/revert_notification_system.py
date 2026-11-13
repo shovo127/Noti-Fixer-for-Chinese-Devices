@@ -58,8 +58,8 @@ def revert_sound_system(serial):
     run_adb(serial, ["shell", "settings", "put", "system", "notification_sound_cache", "content://settings/system/notification_sound"])
     run_adb(serial, ["shell", "settings", "put", "system", "calendar_alert", "content://settings/system/notification_sound"])
     run_adb(serial, ["shell", "settings", "put", "system", "calendar_alert_cache", "content://settings/system/notification_sound"])
-    run_adb(serial, ["shell", "settings", "put", "system", "sms_received_sound", "content://media/internal/audio/media/16"])
-    run_adb(serial, ["shell", "settings", "put", "system", "sms_received_sound_cache", "content://media/internal/audio/media/16"])
+    run_adb(serial, ["shell", "settings", "put", "system", "sms_received_sound", "content://media/internal/audio/media/25?title=Fresh"])
+    run_adb(serial, ["shell", "settings", "put", "system", "sms_received_sound_cache", "content://media/internal/audio/media/25?title=Fresh"])
 
     # 5. Enable screen wake on notifications
     run_adb(serial, ["shell", "settings", "put", "secure", "wake_on_notification", "1"])

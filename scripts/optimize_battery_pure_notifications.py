@@ -47,7 +47,8 @@ def optimize(serial):
     for pkg, bucket in SOCIAL_CHURNERS:
         # Prevent starting background services / background tasks
         run_adb(serial, ["shell", "cmd", "appops", "set", pkg, "RUN_ANY_IN_BACKGROUND", "ignore"])
-        run_adb(serial, ["shell", "cmd", "appops", "set", pkg, "10021", "ignore"]) # MIUI start in background
+        # Allow background start for VoIP incoming call popups while keeping background service spin controlled
+        run_adb(serial, ["shell", "cmd", "appops", "set", pkg, "10021", "allow"]) # MIUI popup in background (incoming calls)
         run_adb(serial, ["shell", "am", "set-standby-bucket", pkg, bucket])
 
         # GUARANTEE notification display and audio alerts remain 100% active
@@ -57,10 +58,11 @@ def optimize(serial):
         run_adb(serial, ["shell", "cmd", "appops", "set", pkg, "10020", "allow"]) # Lockscreen display
         run_adb(serial, ["shell", "cmd", "appops", "set", pkg, "10022", "allow"]) # Sound & vibration
 
-    # 4. Enable Linux cgroups kernel cached apps freezer (Zero offline drain)
-    print("  -> Enabling Linux cgroups cached apps freezer for offline zero-drain...")
-    run_adb(serial, ["shell", "settings", "put", "global", "cached_apps_freezer", "enabled"])
-    run_adb(serial, ["shell", "device_config", "put", "activity_manager_native_boot", "use_freezer", "true"])
+    # 4. Multitasking retention: Ensure cached apps are not aggressively frozen on high-RAM devices
+    print("  -> Configuring multitasking memory retention & Wi-Fi suspend optimizations...")
+    run_adb(serial, ["shell", "settings", "put", "global", "wifi_suspend_optimizations_enabled", "1"])
+    run_adb(serial, ["shell", "settings", "put", "global", "cached_apps_freezer", "disabled"])
+    run_adb(serial, ["shell", "device_config", "put", "activity_manager_native_boot", "use_freezer", "false"])
 
     # 5. Disable background radio polling when idle
     print("  -> Disabling background radio polling (Wi-Fi/BLE)...")
@@ -72,6 +74,8 @@ def optimize(serial):
     run_adb(serial, ["shell", "settings", "put", "system", "wakeup_for_keyguard_notification", "1"])
     run_adb(serial, ["shell", "settings", "put", "system", "notification_sound", "content://media/internal/audio/media/25?title=Fresh"])
     run_adb(serial, ["shell", "settings", "put", "system", "notification_sound_cache", "content://media/internal/audio/media/25?title=Fresh"])
+    run_adb(serial, ["shell", "settings", "put", "system", "sms_received_sound", "content://media/internal/audio/media/25?title=Fresh"])
+    run_adb(serial, ["shell", "settings", "put", "system", "sms_received_sound_cache", "content://media/internal/audio/media/25?title=Fresh"])
 
     print("\n[✔] Battery & Pure-Notification Optimization Complete!")
     print("     - Messenger / Facebook / Instagram / IMO restricted from background CPU churn.")
@@ -89,3 +93,4 @@ if __name__ == "__main__":
             sys.exit(1)
         target = devs[0]
     optimize(target)
+
