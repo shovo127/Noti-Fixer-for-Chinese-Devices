@@ -235,6 +235,8 @@ def apply_universal_fixes(
     # Ensure USB/Wireless debugging does not chime or spam noisy notifications
     run_adb(["shell", "settings", "put", "global", "adb_notify", "0"], serial)
     run_adb(["shell", "settings", "put", "secure", "adb_notify", "0"], serial)
+    # Snooze persistent wireless debugging notification so it never triggers audio or bubble alerts
+    run_adb(["shell", "cmd", "notification", "snooze", "--for", "8640000000", '"-1|android|62|null|1000"'], serial)
 
     # Heal broken/invalid system notification sound URIs (e.g. WaterDrop_preview which causes NullPointerException in NotificationPlayer)
     curr_sound = run_adb(["shell", "settings", "get", "system", "notification_sound"], serial).stdout.strip()

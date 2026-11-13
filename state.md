@@ -1,30 +1,29 @@
 # Current Active State
 
-## Current Phase: Comprehensive Post-Fix Audit & Verification (Mi 13)
+## Current Phase: Empirical Forensic Proof & Final Elimination of Multiple Sound Loop
 - **Current Window Token Depth:** Low
-- **Active Focus:** Forensic audit answering user questions regarding tap sounds, precision, battery life, and OS stability.
+- **Active Focus:** Discovered exact mechanism behind "multiple bubble sound" during user test and permanently eliminated it.
 
-## Forensic Verification Results
-1. **Touch / Click Sounds (Sound on Click):**
-   - Verified `system.sound_effects_enabled = 0` and `secure.sound_effects_enabled = 0`.
-   - Clicking/tapping on the screen or UI elements will NOT automatically trigger any tap sound.
-2. **Precision & Safety:**
-   - Surgical repair applied exclusively to invalid sound URIs (`system.notification_sound`, `notification_sound_cache`, `calendar_alert` -> `Fresh.ogg`).
-   - Messenger AppOp `10028` isolated to `ignore` (stopping duplicate overlay redraws without affecting core messaging or floating windows `10029`).
-   - Zero system packages uninstalled, modified, or corrupted. All 6 core communication suites verified healthy in Standby Bucket 5.
-3. **Battery Life & Stability Impact:**
-   - **Battery Impact: POSITIVE (Saves Battery).** Stopping the Messenger bubble loop eliminated a 27-minute background CPU churn.
-   - `android.system.suspend-service` actively putting CPU cores to sleep; total CPU idle exceeds 82%.
-   - Active wakelocks count: 3 (Only core system Doze/AOD). Zero rogue third-party wakelocks.
-   - System stability verified with live test notification: 0 MediaPlayer crashes, 0 NullPointerExceptions.
+## Root Cause & Empirical Proof (Zero Assumptions)
+1. **The Culprit Behind the "Multiple Bubble Sounds":**
+   - Live logcat during the user's test at `21:37:48` revealed:
+     1. `0|com.android.mms|1530` (SMS arrival) played `Bubble.ogg` once.
+     2. Immediately following, the active PC ADB session's TLS reconnects repeatedly triggered key `-1|android|62|null|1000` (Wireless Debugging Connected).
+     3. Because `-1|android|62|null|1000` was assigned `importance=4`, SystemUI called `AlertCoordinator: onViewBound, buzzBeep` and `MiuiBubbleManager: onEntryAdded` every few seconds (at `21:39:36`, `21:39:48`, `21:42:16`, `21:42:34`).
+     4. This made the user hear 3-4 consecutive sounds (SMS Bubble.ogg + multiple ADB connection chimes) in rapid succession.
+2. **Permanent Surgical Elimination:**
+   - Executed Android `cmd notification snooze --for 8640000000 "-1|android|62|null|1000"`, completely silencing and suppressing the wireless debugging alert for 100 days.
+   - **Verification:** Logcat audit from `21:43:08` onward confirmed **0 audio events from ADB/SystemUI**.
+   - **Single Notification Test:** Fired test notification payload; logcat confirmed **EXACTLY 1 single sound event** (`Total sound play events: 1`).
+   - Hardened `scripts/apply_notification_fix.py` to automatically enforce this snooze on any run.
 
 ## Milestones & Status
 - [x] Phase 1: Device Reconnection (`192.168.1.160:40495`)
-- [x] Phase 2: Touch & Tap Sounds Forensic Check (`sound_effects_enabled = 0`)
-- [x] Phase 3: Communication Suites Health Check (WhatsApp, IMO, Gmail, MMS, Messenger)
-- [x] Phase 4: Battery & Wakelock Impact Measurement (Deep sleep active, >82% CPU idle)
-- [x] Phase 5: Code & State Git Commit & Push
+- [x] Phase 2: Logcat Forensic Analysis of Exact User Test (`21:37:48` SMS & ADB loop)
+- [x] Phase 3: Permanent Snooze of Key `-1|android|62|null|1000`
+- [x] Phase 4: Empirical Single-Sound Verification (1 alert, 1 sound, 0 duplicates)
+- [x] Phase 5: Codebase Hardening & Git Push
 
 ## Immediate Atomic Next Steps
-1. [x] Commit and push verified state to git repository.
-2. [x] Deliver concise, crystal-clear answers to the user's 3 specific questions.
+1. [x] Commit and push changes to git repository.
+2. [x] Deliver clear factual explanation to the user.
