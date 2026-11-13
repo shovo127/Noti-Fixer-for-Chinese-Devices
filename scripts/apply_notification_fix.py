@@ -232,6 +232,16 @@ def apply_universal_fixes(
     run_adb(["shell", "device_config", "put", "activity_manager", "max_phantom_processes", "2147483647"], serial)
     run_adb(["shell", "settings", "put", "global", "settings_enable_monitor_phantom_procs", "false"], serial)
 
+    # Ensure USB/Wireless debugging does not chime or spam noisy notifications
+    run_adb(["shell", "settings", "put", "global", "adb_notify", "0"], serial)
+    run_adb(["shell", "settings", "put", "secure", "adb_notify", "0"], serial)
+
+    # Heal broken/invalid system notification sound URIs (e.g. WaterDrop_preview which causes NullPointerException in NotificationPlayer)
+    curr_sound = run_adb(["shell", "settings", "get", "system", "notification_sound"], serial).stdout.strip()
+    if not curr_sound or curr_sound == "null" or "WaterDrop" in curr_sound or "/ui/" in curr_sound:
+        run_adb(["shell", "settings", "put", "system", "notification_sound", "content://media/internal/audio/media/25?title=Fresh&canonical=1"], serial)
+        run_adb(["shell", "settings", "put", "system", "notification_sound_cache", "content://media/internal/audio/media/25?title=Fresh&canonical=1"], serial)
+
     # Clean up any aggressive 120s FCM heartbeat overrides (allow native adaptive keepalive to prevent 240+ wakeups/night)
     for scope in ["global", "secure"]:
         run_adb(["shell", "settings", "delete", scope, "fcm_heartbeat_interval_wifi_ms"], serial)
@@ -247,7 +257,7 @@ def apply_universal_fixes(
         "com.microsoft.teams", "com.xiaomi.account", "com.xiaomi.xmsf", "com.xiaomi.xmsfkeeper",
         "com.xiaomi.aicr", "com.miui.home", "com.miui.gallery", "com.miui.micloudsync",
         "com.miui.cloudservice", "com.miui.cloudbackup", "com.lbe.security.miui",
-        "com.android.providers.downloads", "com.android.mms", "com.android.vending",
+        "com.android.providers.downloads", "com.android.vending",
         "com.google.android.googlequicksearchbox"
     ]:
         run_adb(["shell", "dumpsys", "deviceidle", "whitelist", f"-{rogue_pkg}"], serial)
@@ -367,7 +377,11 @@ def apply_universal_fixes(
             run_adb(["shell", "cmd", "appops", "set", pkg, "10017", "allow"], serial) # Float notification / Heads-up
             run_adb(["shell", "cmd", "appops", "set", pkg, "10020", "allow"], serial) # Lock screen display
             run_adb(["shell", "cmd", "appops", "set", pkg, "10022", "allow"], serial) # Sound & vibration alert
-            run_adb(["shell", "cmd", "appops", "set", pkg, "10028", "allow"], serial) # Background popup
+            # Prevent Messenger overlay fighting loops (10028 background popup fights native conversation bubbles)
+            if pkg == "com.facebook.orca":
+                run_adb(["shell", "cmd", "appops", "set", pkg, "10028", "ignore"], serial)
+            else:
+                run_adb(["shell", "cmd", "appops", "set", pkg, "10028", "allow"], serial) # Background popup
             run_adb(["shell", "cmd", "appops", "set", pkg, "10029", "allow"], serial) # Floating window
             run_adb(["shell", "cmd", "appops", "set", pkg, "SYSTEM_ALERT_WINDOW", "allow"], serial)
             run_adb(["shell", "cmd", "appops", "set", pkg, "TURN_SCREEN_ON", "allow"], serial) # Wake lockscreen for alerts
