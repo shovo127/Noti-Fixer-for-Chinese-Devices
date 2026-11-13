@@ -251,15 +251,31 @@ def apply_universal_fixes(
     run_adb(["shell", "settings", "delete", "global", "gservices:fcm_heartbeat_interval_wifi_ms"], serial)
     run_adb(["shell", "settings", "delete", "global", "gservices:fcm_heartbeat_interval_mobile_ms"], serial)
 
-    # Clean up non-messaging telemetry/sync/store apps and 3rd party messaging apps from Doze whitelist
-    # (Tier 4 Offline Zero-Drain: Only GMS, GSF, GM, DeskClock remain in Doze whitelist)
-    for rogue_pkg in [
+    # Ensure vital messaging and communication suites are 100% Doze-whitelisted
+    # so they NEVER get frozen, maintain active push sockets, ring loud, and wake the screen
+    for comm_pkg in [
         "com.whatsapp", "com.whatsapp.w4b", "com.imo.android.imoim", "com.facebook.orca",
-        "com.viber.voip", "com.instagram.android", "com.discord", "us.zoom.videomeetings",
-        "com.microsoft.teams", "com.xiaomi.account", "com.xiaomi.xmsf", "com.xiaomi.xmsfkeeper",
-        "com.xiaomi.aicr", "com.miui.home", "com.miui.gallery", "com.miui.micloudsync",
+        "com.viber.voip", "com.discord", "us.zoom.videomeetings", "com.google.android.gm",
+        "com.android.mms"
+    ]:
+        run_adb(["shell", "dumpsys", "deviceidle", "whitelist", f"+{comm_pkg}"], serial)
+        run_adb(["shell", "cmd", "appops", "set", comm_pkg, "WAKE_LOCK", "allow"], serial)
+        run_adb(["shell", "cmd", "appops", "set", comm_pkg, "RUN_IN_BACKGROUND", "allow"], serial)
+        run_adb(["shell", "cmd", "appops", "set", comm_pkg, "RUN_ANY_IN_BACKGROUND", "allow"], serial)
+        run_adb(["shell", "cmd", "appops", "set", comm_pkg, "TURN_SCREEN_ON", "allow"], serial)
+        run_adb(["shell", "cmd", "appops", "set", comm_pkg, "10020", "allow"], serial) # Lockscreen display
+        run_adb(["shell", "cmd", "appops", "set", comm_pkg, "10017", "allow"], serial) # Floating notification
+        run_adb(["shell", "am", "set-standby-bucket", comm_pkg, "5"], serial) # ACTIVE bucket
+
+    # Enable screen wake on incoming notifications
+    run_adb(["shell", "settings", "put", "secure", "wake_on_notification", "1"], serial)
+    run_adb(["shell", "settings", "put", "system", "wake_on_notification", "1"], serial)
+
+    # Clean up only true background bloat/telemetry apps from Doze whitelist
+    for rogue_pkg in [
+        "com.xiaomi.account", "com.xiaomi.xmsfkeeper",
+        "com.xiaomi.aicr", "com.miui.gallery", "com.miui.micloudsync",
         "com.miui.cloudservice", "com.miui.cloudbackup", "com.lbe.security.miui",
-        "com.android.providers.downloads", "com.android.vending",
         "com.google.android.googlequicksearchbox"
     ]:
         run_adb(["shell", "dumpsys", "deviceidle", "whitelist", f"-{rogue_pkg}"], serial)
